@@ -1,0 +1,3 @@
+import { requireAdmin } from "@/lib/admin/auth";
+import { prisma } from "@/lib/db/prisma";
+export default async function AuditLogPage() { await requireAdmin(); const rows = await prisma.auditLog.findMany({ orderBy: { createdAt: "desc" }, take: 100 }); return <section><h1 className="text-3xl font-black">Audit Log</h1><div className="mt-6 divide-y border-y border-slate-200">{rows.map((row) => <div key={row.id} className="py-4 text-sm"><strong>{row.action}</strong><span className="ml-3">{row.entityType} / {row.entityId}</span><span className="ml-3 text-slate-500">by {row.adminUsername} · {row.createdAt.toISOString()}</span></div>)}</div></section>; }

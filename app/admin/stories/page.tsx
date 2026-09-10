@@ -1,0 +1,4 @@
+import { requireAdmin } from "@/lib/admin/auth";
+import { prisma } from "@/lib/db/prisma";
+import Link from "next/link";
+export default async function AdminStoriesPage() { await requireAdmin(); const rows = await prisma.story.findMany({ orderBy: { updatedAt: "desc" } }); return <section><div className="flex justify-between"><h1 className="text-3xl font-black">Stories</h1><Link href="/admin/stories/new" className="bg-slate-950 px-4 py-2 text-sm font-semibold text-white">New story</Link></div><div className="mt-6 divide-y border-y border-slate-200">{rows.length === 0 ? <p className="py-8 text-sm text-slate-500">No stories yet. Create a story draft to begin.</p> : rows.map((row) => <Link href={`/admin/stories/${row.id}`} key={row.id} className="flex flex-wrap justify-between gap-2 py-4"><strong>{row.title}</strong><span className="text-xs uppercase text-slate-500">{row.status}</span></Link>)}</div></section>; }

@@ -1,0 +1,4 @@
+import { requireAdmin } from "@/lib/admin/auth";
+import { prisma } from "@/lib/db/prisma";
+import Link from "next/link";
+export default async function AdminCategoriesPage() { await requireAdmin(); const rows = await prisma.category.findMany({ orderBy: { name: "asc" } }); return <section><div className="flex justify-between"><h1 className="text-3xl font-black">Categories</h1><Link href="/admin/categories/new" className="bg-slate-950 px-4 py-2 text-sm font-semibold text-white">New category</Link></div><div className="mt-6 divide-y border-y border-slate-200">{rows.length === 0 ? <p className="py-8 text-sm text-slate-500">No categories yet. Create one to organize products.</p> : rows.map((row) => <div key={row.id} className="flex flex-wrap justify-between gap-2 py-4"><Link href={`/admin/categories/${row.id}`}><strong>{row.name}</strong></Link><span className="text-sm text-slate-500">/{row.slug} · {row.status}</span></div>)}</div></section>; }

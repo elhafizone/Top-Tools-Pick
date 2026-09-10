@@ -1,0 +1,345 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id            String     @id @default(cuid())
+  name          String
+  slug          String     @unique
+  description   String?
+  seoTitle      String?
+  seoDescription String?
+  status        PublicationStatus @default(PUBLISHED)
+  parentId      String?
+  parent        Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children      Category[] @relation("CategoryTree")
+  products      Product[]
+  subcategories Product[]  @relation("SubcategoryProducts")
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@index([parentId])
+}
+
+model Product {
+  id                String             @id @default(cuid())
+  name              String
+  slug              String             @unique
+  shortDescription  String
+  description       String
+  websiteUrl        String
+  logoUrl           String?
+  categoryId        String
+  category          Category           @relation(fields: [categoryId], references: [id])
+  subcategoryId     String?
+  subcategory       Category?          @relation("SubcategoryProducts", fields: [subcategoryId], references: [id])
+  pricingModel      PricingModel       @default(CUSTOM)
+  pros              String?
+  cons              String?
+  bestFor           String?
+  seoTitle          String?
+  seoDescription    String?
+  canonicalUrl      String?
+  hasFreePlan       Boolean            @default(false)
+  hasFreeTrial      Boolean            @default(false)
+  rating            Decimal            @default(0) @db.Decimal(3, 2)
+  editorialScore    Int                @default(0)
+  featured          Boolean            @default(false)
+  verified          Boolean            @default(false)
+  status            PublicationStatus  @default(PUBLISHED)
+  affiliatePrograms AffiliateProgram[]
+  tags              ProductTag[]
+  useCases          ProductUseCase[]
+  audiences         ProductAudience[]
+  platforms         ProductPlatform[]
+  pricingPlans      PricingPlan[]
+  reviews           Review[]
+  comparisonsAsA    Comparison[]       @relation("ComparisonProductA")
+  comparisonsAsB    Comparison[]       @relation("ComparisonProductB")
+  editorialItems    EditorialListItem[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@index([categoryId, status])
+  @@index([featured, status])
+  @@index([name])
+}
+
+model Article {
+  id              String            @id @default(cuid())
+  title           String
+  slug            String            @unique
+  excerpt         String?
+  content         String
+  status          PublicationStatus @default(DRAFT)
+  publishedAt     DateTime?
+  author          String?
+  source          String?
+  featuredImage   String?
+  seoTitle        String?
+  seoDescription  String?
+  canonicalUrl    String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([status, publishedAt])
+}
+
+model Tag {
+  id       String       @id @default(cuid())
+  name     String
+  slug     String       @unique
+  products ProductTag[]
+}
+
+model ProductTag {
+  productId String
+  tagId     String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([productId, tagId])
+}
+
+model UseCase {
+  id       String           @id @default(cuid())
+  name     String
+  slug     String           @unique
+  products ProductUseCase[]
+}
+
+model ProductUseCase {
+  productId String
+  useCaseId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  useCase   UseCase @relation(fields: [useCaseId], references: [id], onDelete: Cascade)
+
+  @@id([productId, useCaseId])
+}
+
+model Audience {
+  id       String            @id @default(cuid())
+  name     String
+  slug     String            @unique
+  products ProductAudience[]
+}
+
+model ProductAudience {
+  productId  String
+  audienceId String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  audience   Audience @relation(fields: [audienceId], references: [id], onDelete: Cascade)
+
+  @@id([productId, audienceId])
+}
+
+model Platform {
+  id       String            @id @default(cuid())
+  name     String
+  slug     String            @unique
+  products ProductPlatform[]
+}
+
+model ProductPlatform {
+  productId  String
+  platformId String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  platform   Platform @relation(fields: [platformId], references: [id], onDelete: Cascade)
+
+  @@id([productId, platformId])
+}
+
+model PricingPlan {
+  id           String   @id @default(cuid())
+  productId    String
+  name         String
+  priceAmount  Decimal? @db.Decimal(12, 2)
+  currency     String?
+  billingPeriod String?
+  priceLabel   String
+  description  String?
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+model AffiliateProgram {
+  id              String          @id @default(cuid())
+  productId       String
+  name            String
+  network         String?
+  programUrl      String?
+  applicationUrl  String?
+  termsUrl        String?
+  commissionType  String?
+  commissionValue Decimal?        @db.Decimal(12, 2)
+  recurring       Boolean         @default(false)
+  cookieDuration  Int?
+  paymentMethod   String?
+  minimumPayout   Decimal?        @db.Decimal(12, 2)
+  verifiedAt      DateTime?
+  lastCheckedAt   DateTime?
+  notes           String?
+  status          AffiliateStatus @default(PENDING_VERIFICATION)
+  disclosure      String?
+  product         Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  links           AffiliateLink[]
+
+  @@index([productId, status])
+}
+
+model AffiliateLink {
+  id          String           @id @default(cuid())
+  programId   String
+  label       String
+  url         String
+  region      String?
+  campaignKey String?
+  enabled     Boolean          @default(true)
+  priority    Int              @default(0)
+  program     AffiliateProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@index([programId, region])
+}
+
+model Comparison {
+  id         String  @id @default(cuid())
+  slug       String  @unique
+  title      String
+  productAId String
+  productBId String
+  verdict    String
+  description   String?
+  status        PublicationStatus @default(DRAFT)
+  seoTitle      String?
+  seoDescription String?
+  productA   Product @relation("ComparisonProductA", fields: [productAId], references: [id])
+  productB   Product @relation("ComparisonProductB", fields: [productBId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([productAId, productBId])
+}
+
+model EditorialList {
+  id          String             @id @default(cuid())
+  slug        String             @unique
+  title       String
+  description String
+  status      PublicationStatus  @default(DRAFT)
+  seoTitle    String?
+  seoDescription String?
+  items       EditorialListItem[]
+  publishedAt DateTime?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@index([status, publishedAt])
+}
+
+model EditorialListItem {
+  id        String        @id @default(cuid())
+  listId    String
+  productId String
+  rank      Int
+  rationale String?
+  list      EditorialList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  product   Product       @relation(fields: [productId], references: [id])
+
+  @@unique([listId, productId])
+  @@unique([listId, rank])
+  @@index([productId])
+}
+
+model Story {
+  id          String            @id @default(cuid())
+  slug        String            @unique
+  title       String
+  description String
+  seoTitle    String?
+  seoDescription String?
+  posterImage String?
+  status      PublicationStatus @default(DRAFT)
+  pages       StoryPage[]
+  publishedAt DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model StoryPage {
+  id        String  @id @default(cuid())
+  storyId   String
+  sortOrder Int
+  mediaUrl  String?
+  text      String
+  ctaLabel  String?
+  ctaUrl    String?
+  story     Story   @relation(fields: [storyId], references: [id], onDelete: Cascade)
+
+  @@unique([storyId, sortOrder])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  title     String
+  body      String
+  score     Int
+  author    String
+  published Boolean  @default(false)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId, published])
+}
+
+model AuditLog {
+  id           String   @id @default(cuid())
+  action       AuditAction
+  entityType   String
+  entityId     String
+  adminUsername String
+  metadata     Json?
+  createdAt    DateTime @default(now())
+
+  @@index([entityType, entityId, createdAt])
+  @@index([createdAt])
+}
+
+enum PublicationStatus {
+  DRAFT
+  REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  REORDER
+  PUBLISH
+  UNPUBLISH
+  DELETE
+}
+
+enum AffiliateStatus {
+  ACTIVE
+  PENDING_VERIFICATION
+  INACTIVE
+}
+
+enum PricingModel {
+  FREE
+  FREEMIUM
+  SUBSCRIPTION
+  ONE_TIME
+  LIFETIME
+  USAGE_BASED
+  CUSTOM
+}
