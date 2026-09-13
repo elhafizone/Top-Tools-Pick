@@ -26,6 +26,15 @@ export function assertTransition(from: PublicationStatus, to: WorkflowStatus) {
   if (!allowedWorkflowStatuses(from).includes(to)) throw new Error(`Invalid publication transition: ${from} -> ${to}`);
 }
 
+/**
+ * `publishedAt` records when an item FIRST went live. Re-stamping it on every save
+ * re-dated published content and reshuffled the public listings on a typo fix.
+ */
+export function nextPublishedAt(status: WorkflowStatus, current: Date | null) {
+  if (status !== "PUBLISHED") return current;
+  return current ?? new Date();
+}
+
 export function assertPublishable(fields: Record<string, unknown>) {
   const required = ["title", "slug", "description", "seoTitle", "seoDescription"];
   if (required.some((field) => typeof fields[field] !== "string" || !(fields[field] as string).trim())) {

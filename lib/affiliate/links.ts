@@ -1,5 +1,3 @@
-import type { Prisma } from "@prisma/client";
-
 type ProductWithAffiliatePrograms = {
   websiteUrl: string;
   affiliatePrograms: Array<{
@@ -8,7 +6,7 @@ type ProductWithAffiliatePrograms = {
   }>;
 };
 
-const isSafeHttpUrl = (value: string) => {
+export const isSafeHttpUrl = (value: string) => {
   try {
     const url = new URL(value);
     return url.protocol === "https:" || url.protocol === "http:";
@@ -16,6 +14,16 @@ const isSafeHttpUrl = (value: string) => {
     return false;
   }
 };
+
+/** Display hostname for an arbitrary stored URL. Returns null instead of throwing on malformed input. */
+export function safeHostname(value: string) {
+  try {
+    const host = new URL(value).hostname;
+    return host.startsWith("www.") ? host.slice(4) : host;
+  } catch {
+    return null;
+  }
+}
 
 export function getBestAffiliateLink(product: ProductWithAffiliatePrograms, region?: string) {
   const candidates = product.affiliatePrograms
@@ -26,11 +34,6 @@ export function getBestAffiliateLink(product: ProductWithAffiliatePrograms, regi
   const global = candidates.filter((link) => !link.region || link.region.toLowerCase() === "global");
   const pool = regional.length ? regional : global.length ? global : candidates;
   const selected = pool.sort((a, b) => b.priority - a.priority)[0];
-  return selected?.url ?? product.websiteUrl;
+  // The websiteUrl fallback is validated too, so a malformed value never becomes an href.
+  return selected?.url ?? (isSafeHttpUrl(product.websiteUrl) ? product.websiteUrl : null);
 }
-
-export type AffiliateProductContext = Prisma.ProductGetPayload<{
-  include: {
-    affiliatePrograms: { include: { links: true } };
-  };
-}>;

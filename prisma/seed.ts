@@ -48,6 +48,8 @@ const articles = [
 ] as const;
 
 async function main() {
+  await prisma.auditLog.deleteMany();
+  await prisma.article.deleteMany();
   await prisma.storyPage.deleteMany();
   await prisma.story.deleteMany();
   await prisma.editorialListItem.deleteMany();
@@ -135,6 +137,10 @@ async function main() {
       productAId: createdProducts[0].id,
       productBId: createdProducts[2].id,
       verdict: "These products solve different problems: Notion is a flexible knowledge workspace, while Figma is focused on collaborative product design.",
+      description: "Two very different tools that teams often evaluate at the same moment: one organises what you know, the other shapes what you make.",
+      status: "PUBLISHED",
+      seoTitle: "Notion vs Figma | TopToolsPick",
+      seoDescription: "How Notion and Figma compare for knowledge work and collaborative product design.",
     },
   });
   await prisma.editorialList.create({
@@ -148,7 +154,9 @@ async function main() {
       seoDescription: "A curated development shortlist of AI tools worth exploring.",
       items: {
         create: [
-          { productId: createdProducts[1].id, rank: 1, rationale: "Included as a development example for the AI tools editorial workflow." },
+          { productId: createdProducts[1].id, rank: 1, rationale: "The clearest entry point for high-quality synthetic voice without a studio workflow." },
+          { productId: createdProducts[5].id, rank: 2, rationale: "Text-based video and podcast editing removes the slowest step in most content pipelines." },
+          { productId: createdProducts[0].id, rank: 3, rationale: "Its AI features sit inside the workspace teams already keep their knowledge in." },
         ],
       },
     },
@@ -166,9 +174,15 @@ async function main() {
       title: "Development story draft",
       description: "A draft record for validating the Web Story publishing architecture.",
       status: "DRAFT",
-      pages: { create: [{ sortOrder: 0, text: "Add verified media before publishing this story." }] },
+      pages: { create: [{ sortOrder: 1, text: "Add verified media before publishing this story." }] },
     },
   });
 }
 
-main().catch((error) => { console.error(error); process.exitCode = 1; }).finally(() => prisma.$disconnect());
+main()
+  .then(() => prisma.$disconnect())
+  .catch(async (error) => {
+    console.error(error);
+    await prisma.$disconnect();
+    process.exit(1);
+  });

@@ -125,7 +125,7 @@ export default async function Home() {
               <span><span className="block font-bold group-hover:text-[#7eb8ff]">{comparison.title}</span><span className="mt-1 block text-sm text-[#aeb4c2]">{comparison.productA.name} <span className="text-[#7eb8ff]">vs</span> {comparison.productB.name}</span></span><span className="text-[#7eb8ff]" aria-hidden="true">↗</span>
             </Link>)}
           </DiscoveryColumn>}
-          {editorialLists.length > 0 && <DiscoveryColumn eyebrow="Curated collections" title="A shorter way to choose." href="/best/ai-tools" linkLabel="View best picks">
+          {editorialLists.length > 0 && <DiscoveryColumn eyebrow="Curated collections" title="A shorter way to choose." href="/best" linkLabel="View best picks">
             {editorialLists.slice(0, 3).map((list) => <Link key={list.slug} href={`/best/${list.slug}`} className="group block border-b border-[#303640] py-5 first:pt-0">
               <span className="block font-bold group-hover:text-[#7eb8ff]">{list.title}</span><span className="mt-1 block text-sm leading-6 text-[#aeb4c2]">{list.description}</span>
             </Link>)}

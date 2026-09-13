@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Disclosure } from "@/components/affiliate/Disclosure";
 import { ProductCard } from "@/components/product/ProductCard";
-import { getBestAffiliateLink } from "@/lib/affiliate/links";
+import { getBestAffiliateLink, safeHostname } from "@/lib/affiliate/links";
 import { getProductBySlug, getRelatedProducts } from "@/lib/products";
 import { breadcrumbJsonLd, jsonLd, productMetadata, siteUrl } from "@/lib/seo";
 
@@ -16,6 +16,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   const related = await getRelatedProducts(product.id);
   const ctaUrl = getBestAffiliateLink(product);
+  const websiteHost = safeHostname(product.websiteUrl);
   const isAffiliateLink = ctaUrl !== product.websiteUrl;
   const breadcrumbs = breadcrumbJsonLd([
     { name: "Home", path: "/" },
@@ -67,10 +68,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             </div>
           </div>
           <div className="lg:pb-1">
-            <a href={ctaUrl} target="_blank" rel="nofollow sponsored noopener noreferrer" className="button-primary w-full sm:w-auto lg:w-full">
-              Visit {product.name} <span aria-hidden="true">↗</span>
-            </a>
-            <p className="mt-3 text-xs leading-5 text-[var(--muted)]">Opens the {isAffiliateLink ? "partner" : "official"} website in a new tab.</p>
+            {ctaUrl && <>
+              <a href={ctaUrl} target="_blank" rel="nofollow sponsored noopener noreferrer" className="button-primary w-full sm:w-auto lg:w-full">
+                Visit {product.name} <span aria-hidden="true">↗</span>
+              </a>
+              <p className="mt-3 text-xs leading-5 text-[var(--muted)]">Opens the {isAffiliateLink ? "partner" : "official"} website in a new tab.</p>
+            </>}
           </div>
         </div>
       </div>
@@ -93,7 +96,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <InfoRow label="Pricing model" value={formatLabel(product.pricingModel)} />
             <InfoRow label="Free plan" value={product.hasFreePlan ? "Available" : "Not listed"} />
             <InfoRow label="Free trial" value={product.hasFreeTrial ? "Available" : "Not listed"} />
-            <InfoRow label="Website" value={new URL(product.websiteUrl).hostname.replace(/^www\./, "")} />
+            {websiteHost && <InfoRow label="Website" value={websiteHost} />}
           </dl>
         </section>
 

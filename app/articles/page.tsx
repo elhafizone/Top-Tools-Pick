@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { buildMetadata } from "@/lib/seo";
 import { getPublishedArticles } from "@/lib/articles";
 
@@ -14,6 +15,8 @@ export default async function ArticlesPage({ searchParams }: { searchParams: Pro
   const params = await searchParams;
   const requestedPage = Number.parseInt(params.page ?? "1", 10);
   const { articles, page, totalPages, total } = await getPublishedArticles(requestedPage);
+  // Without this, ?page=999 renders an empty body with a live paginator.
+  if (total > 0 && page > totalPages) notFound();
   const featured = page === 1 ? articles[0] : undefined;
   const remaining = featured ? articles.slice(1) : articles;
 

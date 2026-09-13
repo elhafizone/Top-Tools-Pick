@@ -24,6 +24,6 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       await recordAuditWithClient(tx, previous.status !== status && status === "PUBLISHED" ? "PUBLISH" : previous.status === "PUBLISHED" && status === "DRAFT" ? "UNPUBLISH" : "UPDATE", "Comparison", id, { slug, status, productAId, productBId });
       return comparison;
     });
-    return NextResponse.redirect(new URL(`/admin/comparisons/${result.id}?saved=1`, request.url));
+    return NextResponse.redirect(new URL(`/admin/comparisons/${result.id}?saved=1`, request.url), { status: 303 });
   } catch (error) { return adminErrorResponse(error, "Unable to update comparison.", request, `/admin/comparisons/${(await params).id}`); }
 }

@@ -22,6 +22,6 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       await recordAuditWithClient(tx, previous.status !== status && status === "PUBLISHED" ? "PUBLISH" : previous.status === "PUBLISHED" && status === "DRAFT" ? "UNPUBLISH" : "UPDATE", "Category", id, { slug, status });
       return category;
     });
-    return NextResponse.redirect(new URL(`/admin/categories/${result.id}?saved=1`, request.url));
+    return NextResponse.redirect(new URL(`/admin/categories/${result.id}?saved=1`, request.url), { status: 303 });
   } catch (error) { return adminErrorResponse(error, "Unable to update category.", request, `/admin/categories/${(await params).id}`); }
 }

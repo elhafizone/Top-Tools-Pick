@@ -9,7 +9,7 @@ export function Header() {
   const links = [
     { href: "/tools", label: "Explore" },
     { href: "/categories", label: "Categories" },
-    { href: "/best/ai-tools", label: "Best picks" },
+    { href: "/best", label: "Best picks" },
     { href: "/compare", label: "Compare" },
     { href: "/articles", label: "News" },
   ];

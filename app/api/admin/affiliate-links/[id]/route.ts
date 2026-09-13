@@ -17,7 +17,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     if (!existing) return NextResponse.json({ error: "Affiliate link not found." }, { status: 404 });
     const link = await prisma.affiliateLink.update({ where: { id }, data: { enabled: body.enabled === "true", priority, region } });
     await recordAudit("UPDATE", "AffiliateLink", link.id, { enabled: link.enabled, priority: link.priority, region: link.region });
-    return NextResponse.redirect(new URL("/admin/affiliate-links?saved=1", request.url));
+    return NextResponse.redirect(new URL("/admin/affiliate-links?saved=1", request.url), { status: 303 });
   } catch (error) {
     return adminErrorResponse(error, "Unable to update affiliate link.");
   }

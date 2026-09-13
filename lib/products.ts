@@ -130,6 +130,7 @@ export async function getEditorialListBySlug(slug: string) {
     where: { slug, status: "PUBLISHED" },
     include: {
       items: {
+        where: { product: { status: "PUBLISHED", category: { status: "PUBLISHED" } } },
         orderBy: { rank: "asc" },
         include: { product: { include: { category: true, pricingPlans: true } } },
       },
