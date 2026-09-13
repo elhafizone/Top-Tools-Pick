@@ -1,9 +1,8 @@
-import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { requireAdmin } from "@/lib/admin/auth";
 import { recordAuditWithClient } from "@/lib/admin/audit";
 import { parseWorkflowStatus, assertPublishable, assertTransition } from "@/lib/admin/workflow";
-import { adminErrorResponse, adminFormErrorResponse } from "@/lib/admin/response";
+import { adminRedirect, adminErrorResponse, adminFormErrorResponse } from "@/lib/admin/response";
 const text = (value: unknown) => typeof value === "string" ? value.trim() : "";
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -22,6 +21,6 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       await recordAuditWithClient(tx, previous.status !== status && status === "PUBLISHED" ? "PUBLISH" : previous.status === "PUBLISHED" && status === "DRAFT" ? "UNPUBLISH" : "UPDATE", "Category", id, { slug, status });
       return category;
     });
-    return NextResponse.redirect(new URL(`/admin/categories/${result.id}?saved=1`, request.url), { status: 303 });
+    return adminRedirect(`/admin/categories/${result.id}?saved=1`);
   } catch (error) { return adminErrorResponse(error, "Unable to update category.", request, `/admin/categories/${(await params).id}`); }
 }

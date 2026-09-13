@@ -1,5 +1,15 @@
 import { NextResponse } from "next/server";
 
+/**
+ * Relative Location on purpose. Behind Hostinger's proxy `request.url` inside a route
+ * handler is the internal bind address (http://0.0.0.0:3000), so `NextResponse.redirect`
+ * sent browsers to an unreachable host. RFC 7231 permits a relative Location and every
+ * browser resolves it against the current origin, which is what we want here.
+ */
+export function adminRedirect(path: string, status: 303 | 307 = 303) {
+  return new NextResponse(null, { status, headers: { Location: path } });
+}
+
 /** Prisma P2002 = unique constraint violation, almost always a duplicate slug in this admin. */
 function uniqueConstraintMessage(error: unknown) {
   if (typeof error !== "object" || error === null || !("code" in error) || (error as { code?: unknown }).code !== "P2002") return null;
@@ -10,7 +20,7 @@ function uniqueConstraintMessage(error: unknown) {
 
 export function adminFormErrorResponse(request: Request, redirectPath: string, message: string, status: number) {
   if (!request.headers.get("content-type")?.includes("application/json")) {
-    return NextResponse.redirect(new URL(`${redirectPath}?error=${encodeURIComponent(message)}`, request.url), { status: 303 });
+    return adminRedirect(`${redirectPath}?error=${encodeURIComponent(message)}`);
   }
   return NextResponse.json({ error: message }, { status });
 }
@@ -19,7 +29,7 @@ export function adminErrorResponse(error: unknown, fallback: string, request?: R
   const duplicate = uniqueConstraintMessage(error);
   if (duplicate) {
     if (request && redirectPath && !request.headers.get("content-type")?.includes("application/json")) {
-      return NextResponse.redirect(new URL(`${redirectPath}?error=${encodeURIComponent(duplicate)}`, request.url), { status: 303 });
+      return adminRedirect(`${redirectPath}?error=${encodeURIComponent(duplicate)}`);
     }
     return NextResponse.json({ error: duplicate }, { status: 409 });
   }
@@ -32,7 +42,7 @@ export function adminErrorResponse(error: unknown, fallback: string, request?: R
     ? rawMessage
     : fallback;
   if (request && redirectPath && !request.headers.get("content-type")?.includes("application/json")) {
-    return NextResponse.redirect(new URL(`${redirectPath}?error=${encodeURIComponent(message === "Unauthorized" ? fallback : message)}`, request.url), { status: 303 });
+    return adminRedirect(`${redirectPath}?error=${encodeURIComponent(message === "Unauthorized" ? fallback : message)}`);
   }
   if (error instanceof Error) {
     if (error.message === "Unauthorized") {

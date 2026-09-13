@@ -1,7 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { adminCookieName, isValidAdminSession } from "@/lib/admin/session";
 
-const isPublicAdminPath = (pathname: string) => pathname === "/admin/login" || pathname === "/api/admin/login";
+// Logout is public too: signing out with an already-expired cookie must still clear it
+// rather than 401, otherwise a stale cookie can only be removed by hand.
+const publicAdminPaths = new Set(["/admin/login", "/api/admin/login", "/api/admin/logout"]);
+const isPublicAdminPath = (pathname: string) => publicAdminPaths.has(pathname);
 
 // Named `proxy` (not `middleware`) deliberately: in Next 16 middleware.ts still runs on the
 // Edge runtime, where node:crypto is unavailable and the HMAC check below would fail.

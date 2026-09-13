@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import { createAdminSession, verifyAdminCredentials } from "@/lib/admin/auth";
+import { adminRedirect } from "@/lib/admin/response";
 
 /**
  * Only same-origin, path-absolute targets are accepted. Backslashes are rejected
@@ -19,10 +19,10 @@ export async function POST(request: Request) {
     const next = String(form.get("next") ?? "/admin");
 
     if (!verifyAdminCredentials(username, password)) {
-      return NextResponse.redirect(new URL("/admin/login?error=invalid", request.url), { status: 303 });
+      return adminRedirect("/admin/login?error=invalid");
     }
 
-    const response = NextResponse.redirect(new URL(safeNextPath(next), request.url), { status: 303 });
+    const response = adminRedirect(safeNextPath(next));
     const session = createAdminSession(username);
     response.cookies.set(session.name, session.value, {
       httpOnly: true,
@@ -34,6 +34,6 @@ export async function POST(request: Request) {
     return response;
   } catch {
     // getAdminConfig() throws when the ADMIN_* env vars are missing on the server.
-    return NextResponse.redirect(new URL("/admin/login?error=unavailable", request.url), { status: 303 });
+    return adminRedirect("/admin/login?error=unavailable");
   }
 }

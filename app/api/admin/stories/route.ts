@@ -1,8 +1,7 @@
-import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { requireAdmin } from "@/lib/admin/auth";
 import { recordAuditWithClient } from "@/lib/admin/audit";
-import { adminErrorResponse, adminFormErrorResponse } from "@/lib/admin/response";
+import { adminRedirect, adminErrorResponse, adminFormErrorResponse } from "@/lib/admin/response";
 export async function POST(request: Request) {
   try {
     await requireAdmin();
@@ -13,6 +12,6 @@ export async function POST(request: Request) {
       const story = await tx.story.create({ data: { title, slug, description, posterImage: String(body.posterImage ?? "").trim() || null, seoTitle: String(body.seoTitle ?? "").trim() || null, seoDescription: String(body.seoDescription ?? "").trim() || null, status: "DRAFT", pages: { create: { sortOrder: 1, text: description, mediaUrl: String(body.mediaUrl ?? "").trim() || null } } } });
       await recordAuditWithClient(tx, "CREATE", "Story", story.id, { slug });
     });
-    return NextResponse.redirect(new URL("/admin/stories", request.url), { status: 303 });
+    return adminRedirect("/admin/stories");
   } catch (error) { return adminErrorResponse(error, "Unable to create story.", request, "/admin/stories/new"); }
 }

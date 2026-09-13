@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db/prisma";
 import { requireAdmin } from "@/lib/admin/auth";
 import { recordAudit } from "@/lib/admin/audit";
 import { parseWorkflowStatus, assertPublishable, assertTransition } from "@/lib/admin/workflow";
+import { adminRedirect } from "@/lib/admin/response";
 
 const isHttpUrl = (value: string) => {
   try {
@@ -17,7 +18,7 @@ const text = (value: unknown) => typeof value === "string" ? value.trim() : "";
 
 function errorResponse(request: Request, id: string, message: string, status: number) {
   if (!request.headers.get("content-type")?.includes("application/json")) {
-    return NextResponse.redirect(new URL(`/admin/products/${id}?error=${encodeURIComponent(message)}`, request.url), { status: 303 });
+    return adminRedirect(`/admin/products/${id}?error=${encodeURIComponent(message)}`);
   }
   return NextResponse.json({ error: message }, { status });
 }
@@ -55,7 +56,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     if (data.status === "PUBLISHED") assertPublishable({ title: data.name, slug: data.slug, description: data.description, seoTitle: data.seoTitle, seoDescription: data.seoDescription });
     await prisma.product.update({ where: { id }, data });
     await recordAudit(previous?.status !== data.status && data.status === "PUBLISHED" ? "PUBLISH" : previous?.status === "PUBLISHED" && data.status !== "PUBLISHED" ? "UNPUBLISH" : "UPDATE", "Product", id, { slug: data.slug, status: data.status });
-    if (!request.headers.get("content-type")?.includes("application/json")) return NextResponse.redirect(new URL(`/admin/products/${id}?saved=1`, request.url), { status: 303 });
+    if (!request.headers.get("content-type")?.includes("application/json")) return adminRedirect(`/admin/products/${id}?saved=1`);
     return NextResponse.json({ ok: true });
   } catch (error) {
     if (error instanceof Error && error.message === "Unauthorized") return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
