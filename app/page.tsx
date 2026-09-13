@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Disclosure } from "@/components/affiliate/Disclosure";
+import { RuledGrid } from "@/components/layout/RuledGrid";
 import { getPublishedArticles } from "@/lib/articles";
 import { MAX_COMPARE, MIN_COMPARE, getComparableCategories, getFeaturedProducts, getPublishedCategories, getPublishedEditorialLists } from "@/lib/products";
 import { prisma } from "@/lib/db/prisma";
@@ -69,9 +70,9 @@ export default async function Home() {
         <div className="shell py-20 sm:py-28">
           <SectionIntro eyebrow="Explore by need" title="Start with a direction." />
           {categories.length ? (
-            <div className="mt-10 grid border-t border-[var(--line)] sm:grid-cols-2 lg:grid-cols-3">
+            <RuledGrid className="mt-10" columns="sm:grid-cols-2 lg:grid-cols-3">
               {categories.slice(0, 6).map((category, index) => (
-                <Link key={category.id} href={`/categories/${category.slug}`} className="group border-b border-[var(--line)] py-6 pr-6 sm:nth-[even]:border-l sm:nth-[even]:pl-6 lg:nth-[3n+2]:border-l lg:nth-[3n+2]:pl-6 lg:nth-[3n]:border-l lg:nth-[3n]:pl-6">
+                <Link key={category.id} href={`/categories/${category.slug}`} className="ruled-cell group">
                   <span className="text-xs font-bold tracking-[0.16em] text-[var(--accent)]">{String(index + 1).padStart(2, "0")}</span>
                   <span className="mt-4 flex items-start justify-between gap-4">
                     <span>
@@ -82,7 +83,7 @@ export default async function Home() {
                   </span>
                 </Link>
               ))}
-            </div>
+            </RuledGrid>
           ) : <EmptySection message="Categories are being prepared." href="/tools" />}
         </div>
       </section>

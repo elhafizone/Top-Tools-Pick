@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Disclosure } from "@/components/affiliate/Disclosure";
 import { ProductPicker } from "@/components/compare/ProductPicker";
+import { RuledGrid } from "@/components/layout/RuledGrid";
 import { getBestAffiliateLink, safeHostname } from "@/lib/affiliate/links";
 import {
   MAX_COMPARE,
@@ -109,12 +110,12 @@ function CategoryStep({ categories, invalid }: { categories: Awaited<ReturnType<
     <>
       <div className="mt-12 border-t border-[var(--line)] pt-7"><p className="eyebrow">Step 1 &mdash; choose a category</p></div>
       {invalid && <Notice>That category is not available for comparison. Pick one below.</Notice>}
-      <div className="mt-8 grid border-t border-[var(--line)] sm:grid-cols-2 lg:grid-cols-3">
+      <RuledGrid className="mt-8" columns="sm:grid-cols-2 lg:grid-cols-3">
         {categories.map((category) => (
           <Link
             key={category.slug}
             href={`/compare?category=${encodeURIComponent(category.slug)}`}
-            className="group border-b border-[var(--line)] py-7 pr-6 sm:nth-[even]:border-l sm:nth-[even]:pl-6 lg:nth-[3n+2]:border-l lg:nth-[3n+2]:pl-6 lg:nth-[3n]:border-l lg:nth-[3n]:pl-6"
+            className="ruled-cell group"
           >
             <span className="text-xs font-bold tracking-[0.16em] text-[var(--accent)]">{category._count.products} tools</span>
             <h3 className="mt-4 text-2xl font-bold tracking-[-0.04em] group-hover:text-[var(--accent-deep)]">{category.name}</h3>
@@ -122,7 +123,7 @@ function CategoryStep({ categories, invalid }: { categories: Awaited<ReturnType<
             <span className="mt-7 block text-sm font-semibold">Compare in {category.name} &#8599;</span>
           </Link>
         ))}
-      </div>
+      </RuledGrid>
     </>
   );
 }
