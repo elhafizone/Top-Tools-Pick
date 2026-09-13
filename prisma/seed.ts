@@ -17,13 +17,240 @@ const categories = [
   ["Remote Work", "remote-work", "Collaboration tools for distributed teams."],
 ] as const;
 
+const tags = [
+  ["Collaboration", "collaboration"],
+  ["Creator tools", "creator-tools"],
+  ["SEO", "seo"],
+  ["Developer tools", "developer-tools"],
+  ["AI", "ai"],
+  ["Design", "design"],
+  ["Video", "video"],
+  ["Analytics", "analytics"],
+] as const;
+
+const useCases = [
+  ["Team collaboration", "team-collaboration"],
+  ["Content creation", "content-creation"],
+  ["Web development", "web-development"],
+  ["Research", "research"],
+  ["Marketing analytics", "marketing-analytics"],
+  ["Video editing", "video-editing"],
+] as const;
+
+const audiences = [
+  ["Startups", "startups"],
+  ["Creators", "creators"],
+  ["Developers", "developers"],
+  ["Marketers", "marketers"],
+  ["Enterprise teams", "enterprise-teams"],
+] as const;
+
+const platforms = [
+  ["Web", "web"],
+  ["macOS", "macos"],
+  ["Windows", "windows"],
+  ["iOS", "ios"],
+  ["Android", "android"],
+  ["Linux", "linux"],
+] as const;
+
+/**
+ * Placeholder catalogue. Every category carries at least two tools so the comparison
+ * builder at /compare has something to line up. Copy is intentionally generic and
+ * verifiable at a glance - replace it with real editorial through /admin.
+ */
 const products = [
-  { name: "Notion", slug: "notion", websiteUrl: "https://www.notion.so", description: "A flexible workspace for notes, docs and team knowledge.", category: "business-productivity", pricingModel: PricingModel.FREEMIUM },
-  { name: "ElevenLabs", slug: "elevenlabs", websiteUrl: "https://elevenlabs.io", description: "Natural AI voice generation for creators and product teams.", category: "ai-tools", pricingModel: PricingModel.FREEMIUM },
-  { name: "Figma", slug: "figma", websiteUrl: "https://www.figma.com", description: "Collaborative design and prototyping for modern product teams.", category: "design-creative", pricingModel: PricingModel.FREEMIUM },
-  { name: "Ahrefs", slug: "ahrefs", websiteUrl: "https://ahrefs.com", description: "An SEO toolkit for research, content and growth.", category: "marketing-seo", pricingModel: PricingModel.SUBSCRIPTION },
-  { name: "Vercel", slug: "vercel", websiteUrl: "https://vercel.com", description: "The frontend cloud for shipping fast, scalable web experiences.", category: "development-coding", pricingModel: PricingModel.FREEMIUM },
-  { name: "Descript", slug: "descript", websiteUrl: "https://www.descript.com", description: "Edit video and podcasts by editing text.", category: "video-audio", pricingModel: PricingModel.FREEMIUM },
+  // AI Tools
+  {
+    name: "ChatGPT", slug: "chatgpt", websiteUrl: "https://chatgpt.com", category: "ai-tools",
+    description: "A general-purpose AI assistant for writing, analysis and everyday questions.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.7, editorialScore: 94, featured: true,
+    bestFor: "Broad, everyday assistance across writing, summarising and analysis.",
+    pros: "Wide general capability, a large ecosystem of integrations, and a usable free tier.",
+    cons: "Output still needs review for factual work, and the best models sit behind the paid plan.",
+    entryPlan: "Free plan available", tags: ["ai"], useCases: ["research", "content-creation"], audiences: ["creators", "startups"], platforms: ["web", "ios", "android"],
+  },
+  {
+    name: "Claude", slug: "claude", websiteUrl: "https://claude.ai", category: "ai-tools",
+    description: "An AI assistant built for long documents, careful reasoning and writing.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.7, editorialScore: 93, featured: true,
+    bestFor: "Long-form reading and writing where tone and nuance matter.",
+    pros: "Handles very long inputs well and keeps a consistent, readable writing voice.",
+    cons: "Fewer third-party integrations than the largest incumbents.",
+    entryPlan: "Free plan available", tags: ["ai"], useCases: ["research", "content-creation"], audiences: ["creators", "enterprise-teams"], platforms: ["web", "macos", "ios", "android"],
+  },
+  {
+    name: "Perplexity", slug: "perplexity", websiteUrl: "https://www.perplexity.ai", category: "ai-tools",
+    description: "An answer engine that cites its sources as you research.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.4, editorialScore: 88, featured: false,
+    bestFor: "Research questions where you want to check the sources behind an answer.",
+    pros: "Inline citations make verification fast, and the free tier is genuinely usable.",
+    cons: "Less suited to long-form drafting than a general assistant.",
+    entryPlan: "Free plan available", tags: ["ai", "analytics"], useCases: ["research"], audiences: ["marketers", "startups"], platforms: ["web", "ios", "android"],
+  },
+  {
+    name: "ElevenLabs", slug: "elevenlabs", websiteUrl: "https://elevenlabs.io", category: "ai-tools",
+    description: "Natural AI voice generation for creators and product teams.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.5, editorialScore: 89, featured: false,
+    bestFor: "Adding narration or synthetic voice without booking a studio.",
+    pros: "Strong voice quality across languages, with a straightforward API.",
+    cons: "Usage-based costs climb quickly at production volume.",
+    entryPlan: "Free plan available", tags: ["ai", "creator-tools"], useCases: ["content-creation"], audiences: ["creators"], platforms: ["web"],
+  },
+
+  // Business & Productivity
+  {
+    name: "Notion", slug: "notion", websiteUrl: "https://www.notion.so", category: "business-productivity",
+    description: "A flexible workspace for notes, docs and team knowledge.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.6, editorialScore: 92, featured: true,
+    bestFor: "Teams that want documents, wikis and light databases in one place.",
+    pros: "Very flexible structure and a large template ecosystem.",
+    cons: "That flexibility needs conventions, or workspaces drift into clutter.",
+    entryPlan: "Free plan available", tags: ["collaboration"], useCases: ["team-collaboration"], audiences: ["startups"], platforms: ["web", "macos", "windows", "ios", "android"],
+  },
+  {
+    name: "Airtable", slug: "airtable", websiteUrl: "https://www.airtable.com", category: "business-productivity",
+    description: "A spreadsheet-database hybrid for structured team workflows.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.4, editorialScore: 86, featured: false,
+    bestFor: "Structured, record-based work that a spreadsheet has outgrown.",
+    pros: "Strong relational structure with views and automations built in.",
+    cons: "Per-seat pricing and record limits become the constraint as teams grow.",
+    entryPlan: "Free plan available", tags: ["collaboration", "analytics"], useCases: ["team-collaboration"], audiences: ["startups", "enterprise-teams"], platforms: ["web", "ios", "android"],
+  },
+  {
+    name: "Asana", slug: "asana", websiteUrl: "https://asana.com", category: "business-productivity",
+    description: "Project and task management for cross-functional teams.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.3, editorialScore: 84, featured: false,
+    bestFor: "Coordinating multi-step projects across several teams.",
+    pros: "Clear task ownership, dependencies and timeline views.",
+    cons: "Reporting and automation features are gated to higher tiers.",
+    entryPlan: "Free plan available", tags: ["collaboration"], useCases: ["team-collaboration"], audiences: ["enterprise-teams"], platforms: ["web", "macos", "windows", "ios", "android"],
+  },
+  {
+    name: "Slack", slug: "slack", websiteUrl: "https://slack.com", category: "business-productivity",
+    description: "Channel-based messaging and integrations for teams.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.4, editorialScore: 85, featured: false,
+    bestFor: "Day-to-day team communication with a deep integration ecosystem.",
+    pros: "Excellent search, a huge app directory and reliable clients on every platform.",
+    cons: "The free plan limits message history, and channel sprawl needs active management.",
+    entryPlan: "Free plan available", tags: ["collaboration"], useCases: ["team-collaboration"], audiences: ["startups", "enterprise-teams"], platforms: ["web", "macos", "windows", "linux", "ios", "android"],
+  },
+
+  // Design & Creative
+  {
+    name: "Figma", slug: "figma", websiteUrl: "https://www.figma.com", category: "design-creative",
+    description: "Collaborative design and prototyping for modern product teams.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.8, editorialScore: 95, featured: false,
+    bestFor: "Product design work that several people edit and review together.",
+    pros: "Real-time collaboration, strong component systems and a broad plugin ecosystem.",
+    cons: "Editor seats are priced per person, which adds up for larger teams.",
+    entryPlan: "Free plan available", tags: ["design", "collaboration"], useCases: ["team-collaboration"], audiences: ["developers", "creators"], platforms: ["web", "macos", "windows"],
+  },
+  {
+    name: "Canva", slug: "canva", websiteUrl: "https://www.canva.com", category: "design-creative",
+    description: "Template-driven design for social, documents and presentations.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.5, editorialScore: 87, featured: false,
+    bestFor: "Non-designers producing on-brand assets quickly.",
+    pros: "Very low learning curve with a large template and stock library.",
+    cons: "Less precise than a dedicated design tool for detailed interface work.",
+    entryPlan: "Free plan available", tags: ["design", "creator-tools"], useCases: ["content-creation"], audiences: ["marketers", "creators"], platforms: ["web", "macos", "windows", "ios", "android"],
+  },
+  {
+    name: "Framer", slug: "framer", websiteUrl: "https://www.framer.com", category: "design-creative",
+    description: "Design and publish production websites from a visual canvas.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.3, editorialScore: 83, featured: false,
+    bestFor: "Designers shipping a marketing site without a separate build step.",
+    pros: "Design and publishing live in one tool, with good animation controls.",
+    cons: "Less suited to sites that need heavy custom backend logic.",
+    entryPlan: "Free plan available", tags: ["design"], useCases: ["web-development", "content-creation"], audiences: ["creators", "startups"], platforms: ["web", "macos"],
+  },
+
+  // Development & Coding
+  {
+    name: "Vercel", slug: "vercel", websiteUrl: "https://vercel.com", category: "development-coding",
+    description: "The frontend cloud for shipping fast, scalable web experiences.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.6, editorialScore: 91, featured: false,
+    bestFor: "Deploying frontend applications with minimal infrastructure work.",
+    pros: "Preview deployments per branch and a very short path from commit to live.",
+    cons: "Bandwidth and function usage can get expensive at scale.",
+    entryPlan: "Free plan available", tags: ["developer-tools"], useCases: ["web-development"], audiences: ["developers"], platforms: ["web"],
+  },
+  {
+    name: "GitHub", slug: "github", websiteUrl: "https://github.com", category: "development-coding",
+    description: "Code hosting, review and automation for software teams.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.7, editorialScore: 93, featured: false,
+    bestFor: "Hosting repositories and running CI alongside code review.",
+    pros: "The default home for open source, with Actions built into the same workflow.",
+    cons: "Actions minutes and advanced security features are billed separately.",
+    entryPlan: "Free plan available", tags: ["developer-tools", "collaboration"], useCases: ["web-development", "team-collaboration"], audiences: ["developers"], platforms: ["web", "macos", "windows", "linux"],
+  },
+  {
+    name: "Linear", slug: "linear", websiteUrl: "https://linear.app", category: "development-coding",
+    description: "Issue tracking and planning built for software teams.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.6, editorialScore: 90, featured: false,
+    bestFor: "Engineering teams that want fast, opinionated issue tracking.",
+    pros: "Exceptionally fast interface with keyboard-first navigation.",
+    cons: "Deliberately opinionated, so it flexes less than general project tools.",
+    entryPlan: "Free plan available", tags: ["developer-tools", "collaboration"], useCases: ["team-collaboration"], audiences: ["developers", "startups"], platforms: ["web", "macos", "windows"],
+  },
+
+  // Marketing & SEO
+  {
+    name: "Ahrefs", slug: "ahrefs", websiteUrl: "https://ahrefs.com", category: "marketing-seo",
+    description: "An SEO toolkit for research, content and growth.",
+    pricingModel: PricingModel.SUBSCRIPTION, rating: 4.6, editorialScore: 90, featured: false,
+    bestFor: "Backlink and keyword research backed by a large index.",
+    pros: "Strong link data and a clear, fast interface.",
+    cons: "No free tier, and credit limits apply on lower plans.",
+    entryPlan: "Paid plans only", tags: ["seo", "analytics"], useCases: ["marketing-analytics", "research"], audiences: ["marketers"], platforms: ["web"],
+  },
+  {
+    name: "Semrush", slug: "semrush", websiteUrl: "https://www.semrush.com", category: "marketing-seo",
+    description: "A broad marketing suite spanning SEO, ads and content research.",
+    pricingModel: PricingModel.SUBSCRIPTION, rating: 4.4, editorialScore: 86, featured: false,
+    bestFor: "Teams that want SEO, paid search and content tooling in one subscription.",
+    pros: "Very wide feature coverage across marketing channels.",
+    cons: "The breadth makes it harder to learn, and seats are charged separately.",
+    entryPlan: "Limited free account, paid plans for full access", tags: ["seo", "analytics"], useCases: ["marketing-analytics"], audiences: ["marketers", "enterprise-teams"], platforms: ["web"],
+  },
+  {
+    name: "Mailchimp", slug: "mailchimp", websiteUrl: "https://mailchimp.com", category: "marketing-seo",
+    description: "Email marketing and automation for growing audiences.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.1, editorialScore: 80, featured: false,
+    bestFor: "Running newsletters and basic lifecycle email without a developer.",
+    pros: "Approachable editor with automation and reporting built in.",
+    cons: "Costs scale with contact count, including unsubscribed contacts on some plans.",
+    entryPlan: "Free plan available", tags: ["analytics"], useCases: ["marketing-analytics", "content-creation"], audiences: ["marketers", "startups"], platforms: ["web", "ios", "android"],
+  },
+
+  // Video & Audio
+  {
+    name: "Descript", slug: "descript", websiteUrl: "https://www.descript.com", category: "video-audio",
+    description: "Edit video and podcasts by editing text.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.5, editorialScore: 88, featured: false,
+    bestFor: "Podcast and talking-head editing driven by the transcript.",
+    pros: "Transcript-based editing removes the slowest step in most content pipelines.",
+    cons: "Less capable than a timeline editor for complex visual work.",
+    entryPlan: "Free plan available", tags: ["video", "creator-tools"], useCases: ["video-editing", "content-creation"], audiences: ["creators"], platforms: ["web", "macos", "windows"],
+  },
+  {
+    name: "CapCut", slug: "capcut", websiteUrl: "https://www.capcut.com", category: "video-audio",
+    description: "Fast short-form video editing for social platforms.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.3, editorialScore: 82, featured: false,
+    bestFor: "Turning raw clips into short-form social video quickly.",
+    pros: "Generous free tier with templates, captions and effects ready to go.",
+    cons: "Oriented to social formats rather than long-form production.",
+    entryPlan: "Free plan available", tags: ["video", "creator-tools"], useCases: ["video-editing"], audiences: ["creators"], platforms: ["web", "macos", "windows", "ios", "android"],
+  },
+  {
+    name: "Riverside", slug: "riverside", websiteUrl: "https://riverside.fm", category: "video-audio",
+    description: "Remote recording that captures each guest locally in high quality.",
+    pricingModel: PricingModel.FREEMIUM, rating: 4.2, editorialScore: 81, featured: false,
+    bestFor: "Remote interviews where recording quality must survive a bad connection.",
+    pros: "Local per-participant recording avoids call-quality artefacts.",
+    cons: "Uploads take time after long sessions, and editing tools are lighter than dedicated editors.",
+    entryPlan: "Free plan available", tags: ["video", "creator-tools"], useCases: ["video-editing", "content-creation"], audiences: ["creators"], platforms: ["web", "macos", "windows"],
+  },
 ] as const;
 
 const articles = [
@@ -54,7 +281,6 @@ async function main() {
   await prisma.story.deleteMany();
   await prisma.editorialListItem.deleteMany();
   await prisma.editorialList.deleteMany();
-  await prisma.comparison.deleteMany();
   await prisma.review.deleteMany();
   await prisma.productTag.deleteMany();
   await prisma.productUseCase.deleteMany();
@@ -76,35 +302,37 @@ async function main() {
     categoryIds.set(slug, category.id);
   }
 
-  const tags = await Promise.all(["collaboration", "creator-tools", "seo", "developer-tools"].map((name) => prisma.tag.create({ data: { name, slug: name } })));
-  const useCases = await Promise.all(["team-collaboration", "content-creation", "web-development"].map((name) => prisma.useCase.create({ data: { name: name.replaceAll("-", " "), slug: name } })));
-  const audiences = await Promise.all(["startups", "creators", "developers"].map((name) => prisma.audience.create({ data: { name: name[0].toUpperCase() + name.slice(1), slug: name } })));
-  const platforms = await Promise.all(["web", "macos", "windows"].map((name) => prisma.platform.create({ data: { name: name.toUpperCase(), slug: name } })));
+  const idsBySlug = async <T extends { id: string; slug: string }>(rows: T[]) => new Map(rows.map((row) => [row.slug, row.id]));
+  const tagIds = await idsBySlug(await Promise.all(tags.map(([name, slug]) => prisma.tag.create({ data: { name, slug } }))));
+  const useCaseIds = await idsBySlug(await Promise.all(useCases.map(([name, slug]) => prisma.useCase.create({ data: { name, slug } }))));
+  const audienceIds = await idsBySlug(await Promise.all(audiences.map(([name, slug]) => prisma.audience.create({ data: { name, slug } }))));
+  const platformIds = await idsBySlug(await Promise.all(platforms.map(([name, slug]) => prisma.platform.create({ data: { name, slug } }))));
 
-  const createdProducts = [];
-  for (const [index, item] of products.entries()) {
+  const productIds = new Map<string, string>();
+  for (const item of products) {
+    const isFreemium = item.pricingModel === PricingModel.FREEMIUM;
     const product = await prisma.product.create({
       data: {
         name: item.name,
         slug: item.slug,
         shortDescription: item.description,
-        description: `${item.description} This development listing is editorially curated for the TopToolsPick directory.`,
+        description: `${item.description} This is placeholder editorial copy for the TopToolsPick directory and should be replaced with a first-hand review.`,
         websiteUrl: item.websiteUrl,
         categoryId: categoryIds.get(item.category)!,
         pricingModel: item.pricingModel,
-        hasFreePlan: item.pricingModel === PricingModel.FREEMIUM,
-        hasFreeTrial: item.pricingModel === PricingModel.SUBSCRIPTION,
-        rating: 4.6,
-        editorialScore: 92 - index,
-        featured: index < 3,
+        hasFreePlan: isFreemium,
+        hasFreeTrial: !isFreemium,
+        rating: item.rating,
+        editorialScore: item.editorialScore,
+        featured: item.featured,
         verified: false,
-        pros: null,
-        cons: null,
-        bestFor: null,
+        pros: item.pros,
+        cons: item.cons,
+        bestFor: item.bestFor,
         affiliatePrograms: {
           create: {
-            name: "Development affiliate listing",
-            network: "Unverified development data",
+            name: "Placeholder affiliate listing",
+            network: "Unverified placeholder data",
             status: "PENDING_VERIFICATION",
             disclosure: "Affiliate availability and commercial terms require verification before publication.",
             links: { create: { label: "Visit website", url: item.websiteUrl, region: "global", enabled: false } },
@@ -112,62 +340,49 @@ async function main() {
         },
         pricingPlans: {
           create: {
-            name: item.pricingModel === PricingModel.FREEMIUM ? "Free tier" : "Standard",
-            priceLabel: item.pricingModel === PricingModel.FREEMIUM ? "Free plan available" : "See current plans",
+            name: isFreemium ? "Free tier" : "Standard",
+            priceLabel: item.entryPlan,
             currency: "USD",
-            billingPeriod: item.pricingModel === PricingModel.SUBSCRIPTION ? "monthly" : null,
+            billingPeriod: isFreemium ? null : "monthly",
           },
         },
-        tags: { create: [{ tagId: tags[index % tags.length].id }] },
-        useCases: { create: [{ useCaseId: useCases[index % useCases.length].id }] },
-        audiences: { create: [{ audienceId: audiences[index % audiences.length].id }] },
-        platforms: { create: [{ platformId: platforms[index % platforms.length].id }] },
+        tags: { create: item.tags.map((slug) => ({ tagId: tagIds.get(slug)! })) },
+        useCases: { create: item.useCases.map((slug) => ({ useCaseId: useCaseIds.get(slug)! })) },
+        audiences: { create: item.audiences.map((slug) => ({ audienceId: audienceIds.get(slug)! })) },
+        platforms: { create: item.platforms.map((slug) => ({ platformId: platformIds.get(slug)! })) },
       },
     });
-    createdProducts.push(product);
+    productIds.set(item.slug, product.id);
     await prisma.review.create({
-      data: { productId: product.id, title: "Development editorial note", body: "A development-only editorial note for testing the review architecture.", score: 5, author: "TopToolsPick editorial team", published: true },
+      data: { productId: product.id, title: "Placeholder editorial note", body: "Placeholder review copy. Replace this with a first-hand editorial assessment before relying on it.", score: 5, author: "TopToolsPick editorial team", published: true },
     });
   }
 
-  await prisma.comparison.create({
-    data: {
-      slug: "notion-vs-figma",
-      title: "Notion vs Figma",
-      productAId: createdProducts[0].id,
-      productBId: createdProducts[2].id,
-      verdict: "These products solve different problems: Notion is a flexible knowledge workspace, while Figma is focused on collaborative product design.",
-      description: "Two very different tools that teams often evaluate at the same moment: one organises what you know, the other shapes what you make.",
-      status: "PUBLISHED",
-      seoTitle: "Notion vs Figma | TopToolsPick",
-      seoDescription: "How Notion and Figma compare for knowledge work and collaborative product design.",
-    },
-  });
   await prisma.editorialList.create({
     data: {
       slug: "ai-tools",
       title: "Best AI tools to explore",
-      description: "A development editorial shortlist of AI tools, ranked for practical exploration and ongoing research.",
+      description: "A placeholder editorial shortlist of AI tools, ranked for practical exploration and ongoing research.",
       status: "PUBLISHED",
       publishedAt: new Date(),
       seoTitle: "Best AI tools | TopToolsPick",
-      seoDescription: "A curated development shortlist of AI tools worth exploring.",
+      seoDescription: "A curated shortlist of AI tools worth exploring.",
       items: {
         create: [
-          { productId: createdProducts[1].id, rank: 1, rationale: "The clearest entry point for high-quality synthetic voice without a studio workflow." },
-          { productId: createdProducts[5].id, rank: 2, rationale: "Text-based video and podcast editing removes the slowest step in most content pipelines." },
-          { productId: createdProducts[0].id, rank: 3, rationale: "Its AI features sit inside the workspace teams already keep their knowledge in." },
+          { productId: productIds.get("claude")!, rank: 1, rationale: "Handles long documents without losing the thread, which is where most assistants struggle." },
+          { productId: productIds.get("chatgpt")!, rank: 2, rationale: "The broadest general capability and the widest integration ecosystem." },
+          { productId: productIds.get("perplexity")!, rank: 3, rationale: "Inline citations make it the fastest way to check where an answer came from." },
         ],
       },
     },
   });
+
   for (const [index, article] of articles.entries()) {
-    await prisma.article.upsert({
-      where: { slug: article.slug },
-      update: { ...article, status: "PUBLISHED", publishedAt: new Date(Date.now() - index * 86_400_000), author: null, source: null },
-      create: { ...article, status: "PUBLISHED", publishedAt: new Date(Date.now() - index * 86_400_000), author: null, source: null },
+    await prisma.article.create({
+      data: { ...article, status: "PUBLISHED", publishedAt: new Date(Date.now() - index * 86_400_000), author: null, source: null },
     });
   }
+
   await prisma.story.create({
     data: {
       slug: "development-story-draft",

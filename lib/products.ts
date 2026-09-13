@@ -103,24 +103,6 @@ export async function getRelatedProducts(productId: string) {
   });
 }
 
-export async function getComparisonBySlug(slug: string) {
-  return prisma.comparison.findFirst({
-    where: { slug, status: "PUBLISHED", productA: { status: "PUBLISHED" }, productB: { status: "PUBLISHED" } },
-    include: {
-      productA: { include: { category: true, pricingPlans: true, affiliatePrograms: { where: { status: "ACTIVE" }, include: { links: { where: { enabled: true } } } } } },
-      productB: { include: { category: true, pricingPlans: true, affiliatePrograms: { where: { status: "ACTIVE" }, include: { links: { where: { enabled: true } } } } } },
-    },
-  });
-}
-
-export async function getPublishedComparisons() {
-  return prisma.comparison.findMany({
-    where: { status: "PUBLISHED", productA: { status: "PUBLISHED" }, productB: { status: "PUBLISHED" } },
-    include: { productA: { select: { name: true, slug: true } }, productB: { select: { name: true, slug: true } } },
-    orderBy: { updatedAt: "desc" },
-  });
-}
-
 export async function getPublishedCategories() {
   return prisma.category.findMany({ where: { parentId: null, status: "PUBLISHED" }, orderBy: { name: "asc" } });
 }
@@ -144,4 +126,51 @@ export async function getPublishedEditorialLists() {
     select: { slug: true, title: true, description: true, updatedAt: true },
     orderBy: { updatedAt: "desc" },
   });
+}
+
+export const MIN_COMPARE = 2;
+export const MAX_COMPARE = 3;
+
+/** Only categories with enough published products to actually compare are offered. */
+export async function getComparableCategories() {
+  const categories = await prisma.category.findMany({
+    where: { status: "PUBLISHED" },
+    select: { name: true, slug: true, description: true, _count: { select: { products: { where: { status: "PUBLISHED" } } } } },
+    orderBy: { name: "asc" },
+  });
+  return categories.filter((category) => category._count.products >= MIN_COMPARE);
+}
+
+export async function getCategoryWithComparableProducts(slug: string) {
+  const category = await prisma.category.findFirst({
+    where: { slug, status: "PUBLISHED" },
+    select: {
+      name: true,
+      slug: true,
+      description: true,
+      products: {
+        where: { status: "PUBLISHED" },
+        orderBy: [{ editorialScore: "desc" }, { name: "asc" }],
+        select: { slug: true, name: true, shortDescription: true },
+      },
+    },
+  });
+  return category && category.products.length >= MIN_COMPARE ? category : null;
+}
+
+/** Comparison rows. Scoped to the category so a URL cannot mix products across categories. */
+export async function getProductsForComparison(categorySlug: string, slugs: string[]) {
+  const products = await prisma.product.findMany({
+    where: { slug: { in: slugs }, status: "PUBLISHED", category: { slug: categorySlug, status: "PUBLISHED" } },
+    include: {
+      category: { select: { name: true, slug: true } },
+      pricingPlans: { orderBy: { priceAmount: "asc" } },
+      platforms: { include: { platform: { select: { name: true } } } },
+      useCases: { include: { useCase: { select: { name: true } } } },
+      audiences: { include: { audience: { select: { name: true } } } },
+      affiliatePrograms: { where: { status: "ACTIVE" }, include: { links: { where: { enabled: true }, orderBy: { priority: "desc" } } } },
+    },
+  });
+  // Preserve the order the visitor picked rather than the database's.
+  return slugs.map((slug) => products.find((product) => product.slug === slug)).filter((product) => product !== undefined);
 }

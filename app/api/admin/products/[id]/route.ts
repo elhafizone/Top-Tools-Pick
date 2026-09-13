@@ -77,11 +77,11 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     const { id } = await params;
     const product = await prisma.product.findUnique({
       where: { id },
-      select: { id: true, slug: true, _count: { select: { comparisonsAsA: true, comparisonsAsB: true, editorialItems: true } } },
+      select: { id: true, slug: true, _count: { select: { editorialItems: true } } },
     });
     if (!product) return NextResponse.json({ error: "Product not found." }, { status: 404 });
-    if (product._count.comparisonsAsA || product._count.comparisonsAsB || product._count.editorialItems) {
-      return NextResponse.json({ error: "This product is used by comparisons or editorial lists and cannot be deleted yet." }, { status: 409 });
+    if (product._count.editorialItems) {
+      return NextResponse.json({ error: "This product is used by an editorial list and cannot be deleted yet." }, { status: 409 });
     }
     await prisma.product.delete({ where: { id } });
     await recordAudit("DELETE", "Product", id, { slug: product.slug });

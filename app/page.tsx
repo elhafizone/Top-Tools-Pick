@@ -1,16 +1,16 @@
 import Link from "next/link";
 import { Disclosure } from "@/components/affiliate/Disclosure";
 import { getPublishedArticles } from "@/lib/articles";
-import { getFeaturedProducts, getPublishedCategories, getPublishedComparisons, getPublishedEditorialLists } from "@/lib/products";
+import { MAX_COMPARE, MIN_COMPARE, getComparableCategories, getFeaturedProducts, getPublishedCategories, getPublishedEditorialLists } from "@/lib/products";
 import { prisma } from "@/lib/db/prisma";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [products, categories, comparisons, editorialLists, articles, stories] = await Promise.all([
+  const [products, categories, comparableCategories, editorialLists, articles, stories] = await Promise.all([
     getFeaturedProducts(),
     getPublishedCategories(),
-    getPublishedComparisons(),
+    getComparableCategories(),
     getPublishedEditorialLists(),
     getPublishedArticles(1),
     prisma.story.findMany({ where: { status: "PUBLISHED" }, orderBy: { publishedAt: "desc" }, take: 3 }),
@@ -118,11 +118,12 @@ export default async function Home() {
         </section>
       )}
 
-      {(comparisons.length > 0 || editorialLists.length > 0) && <section className="bg-[var(--ink)] text-white">
+      {(comparableCategories.length > 0 || editorialLists.length > 0) && <section className="bg-[var(--ink)] text-white">
         <div className="shell grid gap-12 py-20 sm:py-28 lg:grid-cols-2">
-          {comparisons.length > 0 && <DiscoveryColumn eyebrow="Make a decision" title="Compare with context." href="/compare" linkLabel="All comparisons">
-            {comparisons.slice(0, 3).map((comparison) => <Link key={comparison.id} href={`/compare/${comparison.slug}`} className="group flex items-center justify-between gap-4 border-b border-[#303640] py-5">
-              <span><span className="block font-bold group-hover:text-[#7eb8ff]">{comparison.title}</span><span className="mt-1 block text-sm text-[#aeb4c2]">{comparison.productA.name} <span className="text-[#7eb8ff]">vs</span> {comparison.productB.name}</span></span><span className="text-[#7eb8ff]" aria-hidden="true">↗</span>
+          {comparableCategories.length > 0 && <DiscoveryColumn eyebrow="Make a decision" title="Compare them yourself." href="/compare" linkLabel="Open the comparison tool">
+            <p className="pb-2 text-sm leading-6 text-[#aeb4c2]">Pick a category, then line up {MIN_COMPARE}&ndash;{MAX_COMPARE} tools on pricing, ratings and platforms.</p>
+            {comparableCategories.slice(0, 3).map((category) => <Link key={category.slug} href={`/compare?category=${encodeURIComponent(category.slug)}`} className="group flex items-center justify-between gap-4 border-b border-[#303640] py-5">
+              <span><span className="block font-bold group-hover:text-[#7eb8ff]">{category.name}</span><span className="mt-1 block text-sm text-[#aeb4c2]">{category._count.products} tools to compare</span></span><span className="text-[#7eb8ff]" aria-hidden="true">↗</span>
             </Link>)}
           </DiscoveryColumn>}
           {editorialLists.length > 0 && <DiscoveryColumn eyebrow="Curated collections" title="A shorter way to choose." href="/best" linkLabel="View best picks">

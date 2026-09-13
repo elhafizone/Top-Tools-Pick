@@ -59,8 +59,6 @@ model Product {
   platforms         ProductPlatform[]
   pricingPlans      PricingPlan[]
   reviews           Review[]
-  comparisonsAsA    Comparison[]       @relation("ComparisonProductA")
-  comparisonsAsB    Comparison[]       @relation("ComparisonProductB")
   editorialItems    EditorialListItem[]
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
@@ -205,25 +203,6 @@ model AffiliateLink {
   program     AffiliateProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
 
   @@index([programId, region])
-}
-
-model Comparison {
-  id         String  @id @default(cuid())
-  slug       String  @unique
-  title      String
-  productAId String
-  productBId String
-  verdict    String
-  description   String?
-  status        PublicationStatus @default(DRAFT)
-  seoTitle      String?
-  seoDescription String?
-  productA   Product @relation("ComparisonProductA", fields: [productAId], references: [id])
-  productB   Product @relation("ComparisonProductB", fields: [productBId], references: [id])
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  @@index([productAId, productBId])
 }
 
 model EditorialList {

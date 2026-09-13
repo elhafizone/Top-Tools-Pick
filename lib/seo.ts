@@ -15,7 +15,6 @@ export function buildMetadata(title: string, description: string, path = "/"): M
 
 export const productMetadata = (name: string, description: string, slug: string) => buildMetadata(`${name} review | TopToolsPick`, description, `/tools/${slug}`);
 export const categoryMetadata = (name: string, description: string, slug: string) => buildMetadata(`${name} tools | TopToolsPick`, description, `/categories/${slug}`);
-export const comparisonMetadata = (title: string, description: string, slug: string) => buildMetadata(`${title} | TopToolsPick`, description, `/compare/${slug}`);
 export const storyMetadata = (title: string, description: string, slug: string) => buildMetadata(`${title} | TopToolsPick`, description, `/stories/${slug}`);
 export const editorialListMetadata = (title: string, description: string, slug: string) => buildMetadata(`${title} | TopToolsPick`, description, `/best/${slug}`);
 
