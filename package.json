@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "db:fill": "tsx prisma/fill-categories.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",

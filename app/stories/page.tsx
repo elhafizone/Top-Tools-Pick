@@ -3,7 +3,7 @@ import { RuledGrid } from "@/components/layout/RuledGrid";
 import { prisma } from "@/lib/db/prisma";
 import { buildMetadata } from "@/lib/seo";
 
-export const metadata = buildMetadata("Stories | TopToolsPick", "Short, visual guides to better digital tools.", "/stories");
+export const metadata = buildMetadata("Stories", "Short, visual guides to better digital tools.", "/stories");
 export const dynamic = "force-dynamic";
 
 export default async function StoriesPage() {

@@ -21,7 +21,13 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     if (!previous) return adminFormErrorResponse(request, `/admin/editorial-lists/${id}`, "Editorial list not found.", 404);
     assertTransition(previous.status, status);
     if (status === "PUBLISHED") assertPublishable({ title, slug, description, seoTitle: text(body.seoTitle), seoDescription: text(body.seoDescription) });
-    await prisma.editorialList.update({ where: { id }, data: { title, slug, description, status, publishedAt: nextPublishedAt(status, previous.publishedAt), seoTitle: text(body.seoTitle) || null, seoDescription: text(body.seoDescription) || null } });
+    // Binding a list to a category is what lets its award slots lead that category page.
+    const categoryId = text(body.categoryId) || null;
+    if (categoryId) {
+      const category = await prisma.category.findUnique({ where: { id: categoryId }, select: { id: true } });
+      if (!category) return adminFormErrorResponse(request, `/admin/editorial-lists/${id}`, "Selected category does not exist.", 400);
+    }
+    await prisma.editorialList.update({ where: { id }, data: { title, slug, description, status, categoryId, publishedAt: nextPublishedAt(status, previous.publishedAt), seoTitle: text(body.seoTitle) || null, seoDescription: text(body.seoDescription) || null } });
     await recordAudit(previous?.status !== status && status === "PUBLISHED" ? "PUBLISH" : previous?.status === "PUBLISHED" && status !== "PUBLISHED" ? "UNPUBLISH" : "UPDATE", "EditorialList", id, { slug, status });
     return adminRedirect(`/admin/editorial-lists/${id}?saved=1`);
   } catch (error) {

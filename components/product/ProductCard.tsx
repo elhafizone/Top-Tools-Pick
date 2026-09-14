@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { Product, Category } from "@prisma/client";
+import { DecisionBadges } from "@/components/decision/DecisionBadges";
+import { truncate } from "@/lib/text";
 
 type ProductWithCategory = Product & { category: Category };
 
@@ -10,7 +12,10 @@ export function ProductCard({ product }: { product: ProductWithCategory }) {
     <p className="eyebrow mt-8 truncate">{product.category.name}</p>
     <h3 className="mt-2 break-words text-2xl font-bold tracking-[-0.04em] text-[var(--ink)]"><Link href={`/tools/${product.slug}`} className="group-hover:text-[var(--accent-deep)]">{product.name}</Link></h3>
     <p className="mt-2 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--muted)]">{pricing}</p>
-    <p className="mt-4 flex-1 text-sm leading-7 text-[var(--muted)]">{product.shortDescription}</p>
-    <div className="mt-7 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] pt-5"><p className="text-xs font-semibold text-[var(--muted)]">Score <span className="text-[var(--ink)]">{product.editorialScore}/100</span></p><Link href={`/tools/${product.slug}`} aria-label={`Read the editorial note about ${product.name}`} className="editorial-link text-sm font-semibold text-[var(--ink)]">Read note <span aria-hidden="true">↗</span></Link></div>
+    <p className="mt-4 text-sm leading-7 text-[var(--muted)]">{product.shortDescription}</p>
+    {product.bestFor && <p className="mt-4 text-sm leading-6 text-[var(--ink)]"><span className="font-semibold">Best for:</span> <span className="text-[var(--muted)]">{truncate(product.bestFor, 90)}</span></p>}
+    <div className="flex-1" />
+    <DecisionBadges hasFreePlan={product.hasFreePlan} hasFreeTrial={product.hasFreeTrial} pricingModel={product.pricingModel} className="mt-5" />
+    <div className="mt-7 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] pt-5"><p className="text-xs font-semibold text-[var(--muted)]">Score <span className="text-[var(--ink)]">{product.editorialScore}/100</span></p><Link href={`/tools/${product.slug}`} aria-label={`See whether ${product.name} fits your needs`} className="editorial-link text-sm font-semibold text-[var(--ink)]">See if it fits <span aria-hidden="true">↗</span></Link></div>
   </article>;
 }

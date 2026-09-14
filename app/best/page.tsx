@@ -5,7 +5,7 @@ import { getPublishedEditorialLists } from "@/lib/products";
 import { buildMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
-export const metadata = buildMetadata("Best picks | TopToolsPick", "Curated shortlists of the digital tools worth your time, ranked with editorial context.", "/best");
+export const metadata = buildMetadata("Best picks", "Curated shortlists of the digital tools worth your time, ranked with editorial context.", "/best");
 
 export default async function EditorialListsPage() {
   const lists = await getPublishedEditorialLists();

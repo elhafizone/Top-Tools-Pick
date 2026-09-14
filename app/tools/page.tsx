@@ -1,39 +1,79 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { ProductCard } from "@/components/product/ProductCard";
-import { getProducts, getPublishedCategories } from "@/lib/products";
+import { ProductGrid } from "@/components/product/ProductGrid";
+import { getAudiences, getProducts, getPublishedCategories, getUseCases } from "@/lib/products";
 import { buildMetadata } from "@/lib/seo";
 import { PricingModel } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
-export const metadata = buildMetadata("Explore digital tools | TopToolsPick", "Browse our curated directory of software, AI tools and digital products.", "/tools");
 
 const pricingModels = new Set(Object.values(PricingModel));
 
-type ToolsSearchParams = { q?: string; category?: string; pricing?: string; freePlan?: string; freeTrial?: string };
+type ToolsSearchParams = {
+  q?: string;
+  category?: string;
+  pricing?: string;
+  freePlan?: string;
+  freeTrial?: string;
+  useCase?: string;
+  audience?: string;
+};
+
+/**
+ * Filtered states are noindex/follow.
+ *
+ * Every filter combination was previously indexable, which is a duplicate-content
+ * surface that multiplies with each new facet. The bare directory stays indexed and
+ * links still flow through to the tool pages.
+ */
+export async function generateMetadata({ searchParams }: { searchParams: Promise<ToolsSearchParams> }): Promise<Metadata> {
+  const params = await searchParams;
+  const isFiltered = Boolean(params.q || params.category || params.pricing || params.freePlan || params.freeTrial || params.useCase || params.audience);
+  return buildMetadata(
+    "Explore digital tools",
+    "Search a curated directory of software, AI tools and digital products by what you need them to do.",
+    "/tools",
+    isFiltered ? { robots: { index: false, follow: true } } : {},
+  );
+}
 
 export default async function ToolsPage({ searchParams }: { searchParams: Promise<ToolsSearchParams> }) {
   const params = await searchParams;
   const pricingModel = pricingModels.has(params.pricing as PricingModel) ? params.pricing as PricingModel : undefined;
   const freePlan = params.freePlan === "true" ? true : undefined;
   const freeTrial = params.freeTrial === "true" ? true : undefined;
-  const [products, categories] = await Promise.all([
-    getProducts({ query: params.q?.trim(), category: params.category, pricingModel, freePlan, freeTrial }),
+
+  const [products, categories, useCases, audiences] = await Promise.all([
+    getProducts({
+      query: params.q?.trim(),
+      category: params.category,
+      pricingModel,
+      freePlan,
+      freeTrial,
+      useCase: params.useCase,
+      audience: params.audience,
+    }),
     getPublishedCategories(),
+    getUseCases(),
+    getAudiences(),
   ]);
-  const hasFilters = Boolean(params.q || params.category || pricingModel || freePlan || freeTrial);
+
+  const hasFilters = Boolean(params.q || params.category || pricingModel || freePlan || freeTrial || params.useCase || params.audience);
 
   return <section className="shell py-20 sm:py-28">
     <header className="max-w-3xl">
       <p className="eyebrow">Curated directory</p>
       <h1 className="section-heading mt-5">Find the right tool for the work.</h1>
-      <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--muted)]">Search a considered catalog of software, AI tools, and digital products. Start broad, then narrow by what matters to you.</p>
+      <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--muted)]">Start with what you need it to do. Search matches names, descriptions, use cases and audiences — not just tool names.</p>
     </header>
 
-    <form action="/tools" className="mt-12 border-y border-[var(--line)] bg-white py-5 sm:mt-16 sm:py-6">
+    {/* A finished panel, not an open band: border-y with no horizontal padding left the
+        controls flush against the white edge, which read as a cut-off background. */}
+    <form action="/tools" className="surface mt-12 p-5 sm:mt-16 sm:p-7">
       <div className="grid gap-4 lg:grid-cols-[minmax(14rem,1.4fr)_1fr_1fr_auto] lg:items-end">
         <label className="block text-sm font-semibold">
           Search
-          <input name="q" defaultValue={params.q} placeholder="Search by name or use" aria-label="Search tools by name or description" className="mt-2 block min-h-12 w-full border border-[var(--line)] bg-[var(--background)] px-4 text-sm outline-none placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[#2180f8]/15" />
+          <input name="q" defaultValue={params.q} placeholder="e.g. invoicing, project management" aria-label="Search tools by name, description or use case" className="mt-2 block min-h-12 w-full border border-[var(--line)] bg-[var(--background)] px-4 text-sm outline-none placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[#2180f8]/15" />
         </label>
         <label className="block text-sm font-semibold">
           Category
@@ -52,6 +92,24 @@ export default async function ToolsPage({ searchParams }: { searchParams: Promis
         </label>
         <button className="button-primary min-h-12 w-full lg:w-auto">Apply filters <span aria-hidden="true">↗</span></button>
       </div>
+
+      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        <label className="block text-sm font-semibold">
+          Use case
+          <select name="useCase" defaultValue={params.useCase ?? ""} className="mt-2 block min-h-12 w-full border border-[var(--line)] bg-[var(--background)] px-3 text-sm outline-none focus:border-[var(--accent)]">
+            <option value="">Any use case</option>
+            {useCases.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}
+          </select>
+        </label>
+        <label className="block text-sm font-semibold">
+          Audience
+          <select name="audience" defaultValue={params.audience ?? ""} className="mt-2 block min-h-12 w-full border border-[var(--line)] bg-[var(--background)] px-3 text-sm outline-none focus:border-[var(--accent)]">
+            <option value="">Any audience</option>
+            {audiences.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}
+          </select>
+        </label>
+      </div>
+
       <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-[var(--muted)]">
         <label className="inline-flex items-center gap-2"><input type="checkbox" name="freePlan" value="true" defaultChecked={freePlan} className="h-4 w-4 accent-[#2180f8]" /> Has a free plan</label>
         <label className="inline-flex items-center gap-2"><input type="checkbox" name="freeTrial" value="true" defaultChecked={freeTrial} className="h-4 w-4 accent-[#2180f8]" /> Has a free trial</label>
@@ -64,15 +122,35 @@ export default async function ToolsPage({ searchParams }: { searchParams: Promis
       {hasFilters && <p className="text-sm text-[var(--muted)]">Showing matches for your current filters</p>}
     </div>
 
-    {products.length ? <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{products.map((product) => <ProductCard key={product.id} product={product} />)}</div> : <EmptyState hasQuery={Boolean(params.q)} />}
-  </section>;
-}
+    <ProductGrid
+      products={products}
+      className="mt-8"
+      emptyTitle="Nothing fits those filters yet."
+      emptyBody={params.q ? "Try a broader term, or clear the filters to browse the full directory." : "Clear one or more filters to see more of the curated directory."}
+      emptyLinkLabel="Clear filters"
+    />
 
-function EmptyState({ hasQuery }: { hasQuery: boolean }) {
-  return <div className="mt-8 border border-dashed border-[var(--line)] bg-white px-6 py-12 sm:px-10">
-    <p className="eyebrow">No matches</p>
-    <h2 className="mt-4 text-2xl font-bold tracking-[-0.04em]">Nothing fits those filters yet.</h2>
-    <p className="mt-3 max-w-xl leading-7 text-[var(--muted)]">{hasQuery ? "Try a broader name or description, or clear the filters to browse the full directory." : "Clear one or more filters to see more of the curated directory."}</p>
-    <Link href="/tools" className="button-secondary mt-7">Clear filters</Link>
-  </div>;
+    {/* Need-first entry points into the taxonomy landings. */}
+    {(useCases.length > 0 || audiences.length > 0) && (
+      <div className="mt-20 border-t border-[var(--line)] pt-10">
+        <p className="eyebrow">Browse by need</p>
+        {useCases.length > 0 && <>
+          <h2 className="mt-4 text-xl font-bold tracking-[-0.03em]">By use case</h2>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {useCases.map((item) => (
+              <Link key={item.slug} href={`/tools/use-case/${item.slug}`} className="tag hover:border-[var(--accent)] hover:text-[var(--accent-deep)]">{item.name} <span className="text-[var(--muted)]">{item._count.products}</span></Link>
+            ))}
+          </div>
+        </>}
+        {audiences.length > 0 && <>
+          <h2 className="mt-8 text-xl font-bold tracking-[-0.03em]">By audience</h2>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {audiences.map((item) => (
+              <Link key={item.slug} href={`/tools/audience/${item.slug}`} className="tag hover:border-[var(--accent)] hover:text-[var(--accent-deep)]">{item.name} <span className="text-[var(--muted)]">{item._count.products}</span></Link>
+            ))}
+          </div>
+        </>}
+      </div>
+    )}
+  </section>;
 }

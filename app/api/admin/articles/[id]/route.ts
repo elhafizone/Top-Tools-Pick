@@ -3,6 +3,15 @@ import { requireAdmin } from "@/lib/admin/auth";
 import { recordAudit } from "@/lib/admin/audit";
 import { parseWorkflowStatus, assertPublishable, assertTransition, nextPublishedAt } from "@/lib/admin/workflow";
 import { adminRedirect, adminErrorResponse, adminFormErrorResponse } from "@/lib/admin/response";
+import { ARTICLE_TOPICS } from "@/lib/articles";
+
+/** Only topics the public routes understand are stored; anything else is cleared. */
+const ALLOWED_TOPICS = new Set<string>(ARTICLE_TOPICS);
+const parseTopic = (value: unknown) => {
+  const raw = typeof value === "string" ? value.trim().toLowerCase() : "";
+  return ALLOWED_TOPICS.has(raw) ? raw : null;
+};
+
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     await requireAdmin();
@@ -16,7 +25,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     assertTransition(previous.status, status);
     const seoTitle = String(body.seoTitle ?? "").trim(), seoDescription = String(body.seoDescription ?? "").trim();
     if (status === "PUBLISHED") assertPublishable({ title, slug, description: content, seoTitle, seoDescription });
-    await prisma.article.update({ where: { id }, data: { title, slug, excerpt: String(body.excerpt ?? "").trim() || null, content, author: String(body.author ?? "").trim() || null, source: String(body.source ?? "").trim() || null, featuredImage: String(body.featuredImage ?? "").trim() || null, canonicalUrl: String(body.canonicalUrl ?? "").trim() || null, seoTitle: seoTitle || null, seoDescription: seoDescription || null, status, publishedAt: nextPublishedAt(status, previous.publishedAt) } });
+    await prisma.article.update({ where: { id }, data: { title, slug, excerpt: String(body.excerpt ?? "").trim() || null, content, author: String(body.author ?? "").trim() || null, source: String(body.source ?? "").trim() || null, featuredImage: String(body.featuredImage ?? "").trim() || null, canonicalUrl: String(body.canonicalUrl ?? "").trim() || null, topic: parseTopic(body.topic), seoTitle: seoTitle || null, seoDescription: seoDescription || null, status, publishedAt: nextPublishedAt(status, previous.publishedAt) } });
     await recordAudit(previous.status !== status && status === "PUBLISHED" ? "PUBLISH" : previous.status === "PUBLISHED" && status === "DRAFT" ? "UNPUBLISH" : "UPDATE", "Article", id, { status });
     return adminRedirect("/admin/articles");
   } catch (error) { return adminErrorResponse(error, "Unable to update article.", request, `/admin/articles/${(await params).id}`); }

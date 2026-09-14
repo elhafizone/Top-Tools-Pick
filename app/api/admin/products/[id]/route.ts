@@ -16,6 +16,17 @@ const isHttpUrl = (value: string) => {
 
 const text = (value: unknown) => typeof value === "string" ? value.trim() : "";
 
+/** A date input posts "" when cleared and "YYYY-MM-DD" otherwise. Anything unparseable is treated as cleared. */
+const optionalDate = (value: unknown) => {
+  const raw = text(value);
+  if (!raw) return null;
+  const parsed = new Date(raw);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+};
+
+/** Slugs that would shadow a real route under /tools/. */
+const RESERVED_SLUGS = new Set(["alternatives", "use-case", "audience", "platform", "go"]);
+
 function errorResponse(request: Request, id: string, message: string, status: number) {
   if (!request.headers.get("content-type")?.includes("application/json")) {
     return adminRedirect(`/admin/products/${id}?error=${encodeURIComponent(message)}`);
@@ -46,10 +57,16 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       pros: text(body.pros) || null,
       cons: text(body.cons) || null,
       bestFor: text(body.bestFor) || null,
+      notFor: text(body.notFor) || null,
+      keyFeatures: text(body.keyFeatures) || null,
+      verdict: text(body.verdict) || null,
+      lastReviewedAt: optionalDate(body.lastReviewedAt),
     } as const;
     if (!data.name || !data.slug || !data.shortDescription || !data.description || !data.websiteUrl) return errorResponse(request, id, "Required product fields are missing.", 400);
     // The public tool page parses this with new URL(); a schemeless value would crash it.
     if (!isHttpUrl(data.websiteUrl)) return errorResponse(request, id, "Website URL must be a full http(s) URL.", 400);
+    // /tools/<slug>/alternatives is a real route, so a product slugged "alternatives" would shadow it.
+    if (RESERVED_SLUGS.has(data.slug.toLowerCase())) return errorResponse(request, id, `"${data.slug}" is reserved and cannot be used as a slug.`, 400);
     const previous = await prisma.product.findUnique({ where: { id }, select: { status: true } });
     if (!previous) return errorResponse(request, id, "Product not found.", 404);
     assertTransition(previous.status, data.status);

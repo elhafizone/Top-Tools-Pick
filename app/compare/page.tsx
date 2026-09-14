@@ -3,7 +3,9 @@ import Link from "next/link";
 import { Disclosure } from "@/components/affiliate/Disclosure";
 import { ProductPicker } from "@/components/compare/ProductPicker";
 import { RuledGrid } from "@/components/layout/RuledGrid";
-import { getBestAffiliateLink, safeHostname } from "@/lib/affiliate/links";
+import { getArticlesByTopic } from "@/lib/articles";
+import { AffiliateCta } from "@/components/affiliate/AffiliateCta";
+import { safeHostname } from "@/lib/affiliate/links";
 import {
   MAX_COMPARE,
   MIN_COMPARE,
@@ -24,7 +26,7 @@ const many = (value: string | string[] | undefined) => (Array.isArray(value) ? v
 export async function generateMetadata({ searchParams }: { searchParams: Promise<Search> }): Promise<Metadata> {
   const params = await searchParams;
   const base = buildMetadata(
-    "Compare tools side by side | TopToolsPick",
+    "Compare tools side by side",
     `Pick a category, then compare ${MIN_COMPARE} to ${MAX_COMPARE} tools on pricing, ratings, platforms and editorial verdicts.`,
     "/compare",
   );
@@ -43,6 +45,8 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
   const valid = category ? requested.filter((slug) => category.products.some((product) => product.slug === slug)) : [];
   const tooMany = valid.length > MAX_COMPARE;
   const products = category && valid.length >= MIN_COMPARE && !tooMany ? await getProductsForComparison(category.slug, valid) : [];
+  const hasResults = products.length >= MIN_COMPARE;
+  const comparisonArticles = await getArticlesByTopic("comparisons", 4);
 
   return (
     <section className="shell py-20 sm:py-28">
@@ -55,14 +59,42 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
 
       <header className="mt-10 max-w-3xl">
         <p className="eyebrow">Build your own comparison</p>
-        <h1 className="section-heading mt-5">Compare tools side by side.</h1>
-        <p className="mt-5 max-w-2xl text-lg leading-8 text-[var(--muted)]">
-          Start with the category you are shopping in, then put {MIN_COMPARE}&ndash;{MAX_COMPARE} tools next to each other. Comparisons stay inside one category so the columns actually line up.
-        </p>
+        <h1 className="section-heading mt-5">{hasResults ? `${category!.name} compared` : "Compare tools side by side."}</h1>
+        {!hasResults && (
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-[var(--muted)]">
+            Start with the category you are shopping in, then put {MIN_COMPARE}&ndash;{MAX_COMPARE} tools next to each other. Comparisons stay inside one category so the columns actually line up.
+          </p>
+        )}
       </header>
 
       {!category ? (
         <CategoryStep categories={categories} invalid={Boolean(categorySlug)} />
+      ) : hasResults ? (
+        /*
+         * Results first. Submitting the picker is a GET, which drops any fragment, so
+         * the reliable way to land people on their comparison is to put it at the top
+         * and demote the picker to an "adjust" step underneath. No JS, no scroll hack.
+         */
+        <>
+          <ComparisonTable products={products} />
+
+          <div className="mt-16 border-t border-[var(--line)] pt-7">
+            <div className="flex flex-wrap items-baseline justify-between gap-4">
+              <div>
+                <p className="eyebrow">Adjust your selection</p>
+                <h2 className="mt-3 text-2xl font-bold tracking-[-0.04em]">Swap a tool in or out</h2>
+              </div>
+              <Link href="/compare" className="editorial-link text-sm font-semibold">Change category &#8599;</Link>
+            </div>
+            <ProductPicker
+              categorySlug={category.slug}
+              options={category.products}
+              initial={valid}
+              min={MIN_COMPARE}
+              max={MAX_COMPARE}
+            />
+          </div>
+        </>
       ) : (
         <>
           <div className="mt-12 flex flex-wrap items-baseline justify-between gap-4 border-t border-[var(--line)] pt-7">
@@ -85,9 +117,30 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
             min={MIN_COMPARE}
             max={MAX_COMPARE}
           />
-
-          {products.length >= MIN_COMPARE && <ComparisonTable products={products} />}
         </>
+      )}
+
+      {/* The indexable counterpart: written comparisons live as articles. */}
+      {comparisonArticles.length > 0 && (
+        <aside className="mt-16 border-t-2 border-[var(--accent)] pt-7">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="eyebrow">Written comparisons</p>
+              <h2 className="mt-3 text-2xl font-bold tracking-[-0.04em]">Want our verdict instead?</h2>
+            </div>
+            <Link href="/comparisons" className="editorial-link text-sm font-semibold">All comparisons &#8599;</Link>
+          </div>
+          <ul className="mt-6 divide-y divide-[var(--line)] border-y border-[var(--line)]">
+            {comparisonArticles.map((article) => (
+              <li key={article.id} className="py-5">
+                <Link href={`/articles/${article.slug}`} className="group block">
+                  <span className="text-lg font-bold tracking-[-0.03em] group-hover:text-[var(--accent-deep)]">{article.title}</span>
+                  {article.excerpt && <span className="mt-1 block max-w-2xl text-sm leading-6 text-[var(--muted)]">{article.excerpt}</span>}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </aside>
       )}
     </section>
   );
@@ -184,20 +237,16 @@ function ComparisonTable({ products }: { products: ComparedProduct[] }) {
             ))}
             <tr className="align-top">
               <th scope="row" className="px-4 py-6 text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted)]">Visit</th>
-              {products.map((product) => {
-                const ctaUrl = getBestAffiliateLink(product);
-                return (
-                  <td key={product.slug} className="border-l border-[var(--line)] px-5 py-6">
-                    {ctaUrl ? (
-                      <a href={ctaUrl} target="_blank" rel="nofollow sponsored noopener noreferrer" className="button-primary">
-                        Visit {product.name} <span aria-hidden="true">&#8599;</span>
-                      </a>
-                    ) : (
-                      <Link href={`/tools/${product.slug}`} className="button-secondary">Read profile</Link>
-                    )}
-                  </td>
-                );
-              })}
+              {/* Same resolution and wording as every other CTA: the outbound button
+                  here is the affiliate link, routed through /go like the rest. */}
+              {products.map((product) => (
+                <td key={product.slug} className="border-l border-[var(--line)] px-5 py-6">
+                  <div className="flex flex-col gap-2">
+                    <AffiliateCta product={product} placement="compare-table" />
+                    <Link href={`/tools/${product.slug}`} className="button-secondary text-center">Read review</Link>
+                  </div>
+                </td>
+              ))}
             </tr>
           </tbody>
         </table>

@@ -4,14 +4,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/brand/Logo";
 
+/**
+ * Four destinations, ordered by decision intent: pick a tool, narrow by need,
+ * read a ranked shortlist, compare finalists. "News" lives in the footer - it is
+ * supporting content and should not compete with the commercial pages here.
+ *
+ * The search field is a plain GET form so it works without JavaScript and the
+ * results page stays server-rendered and crawlable.
+ */
 export function Header() {
   const pathname = usePathname();
   const links = [
-    { href: "/tools", label: "Explore" },
+    { href: "/tools", label: "Tools" },
     { href: "/categories", label: "Categories" },
     { href: "/best", label: "Best picks" },
-    { href: "/compare", label: "Compare" },
-    { href: "/articles", label: "News" },
+    { href: "/comparisons", label: "Comparisons" },
   ];
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
@@ -27,14 +34,35 @@ export function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
+          <form method="get" action="/tools" role="search" className="hidden lg:block">
+            <label htmlFor="header-search" className="sr-only">Search tools</label>
+            <input
+              id="header-search"
+              type="search"
+              name="q"
+              placeholder="What do you need a tool for?"
+              className="h-10 w-60 rounded-[var(--radius-control)] border border-[var(--line)] bg-white px-3.5 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] focus:border-[var(--accent)]"
+            />
+          </form>
           <details className="relative lg:hidden">
             <summary aria-label="Open navigation" className="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-lg border border-[#dfe3ea] bg-white text-[#000000]"><span className="sr-only">Open navigation</span><span aria-hidden="true">☰</span></summary>
-            <nav aria-label="Mobile navigation" className="absolute right-0 top-14 flex w-52 flex-col gap-1 rounded-xl border border-[#e4e7ed] bg-white p-2 text-sm font-semibold shadow-[0_12px_30px_rgba(20,25,45,.1)]">
+            <nav aria-label="Mobile navigation" className="absolute right-0 top-14 flex w-64 flex-col gap-1 rounded-xl border border-[#e4e7ed] bg-white p-2 text-sm font-semibold shadow-[0_12px_30px_rgba(20,25,45,.1)]">
+              <form method="get" action="/tools" role="search" className="p-1 pb-2">
+                <label htmlFor="mobile-search" className="sr-only">Search tools</label>
+                <input
+                  id="mobile-search"
+                  type="search"
+                  name="q"
+                  placeholder="What do you need a tool for?"
+                  className="h-11 w-full rounded-[var(--radius-control)] border border-[var(--line)] bg-white px-3.5 text-sm font-medium text-[var(--ink)] placeholder:text-[var(--muted)] focus:border-[var(--accent)]"
+                />
+              </form>
               {links.map((link) => (
                 <Link key={link.href} href={link.href} aria-current={isActive(link.href) ? "page" : undefined} className="rounded-xl px-3 py-2.5 hover:bg-[#eaf3ff] aria-[current=page]:bg-[#eaf3ff] aria-[current=page]:text-[#155fca]">
                   {link.label}
                 </Link>
               ))}
+              <Link href="/articles" className="rounded-xl px-3 py-2.5 hover:bg-[#eaf3ff]">Guides</Link>
             </nav>
           </details>
         </div>

@@ -4,7 +4,7 @@ import { buildMetadata } from "@/lib/seo";
 import { getPublishedArticles } from "@/lib/articles";
 
 export const dynamic = "force-dynamic";
-export const metadata = buildMetadata("News | TopToolsPick", "Useful ideas, practical guides, and editorial notes for better digital work.", "/articles");
+export const metadata = buildMetadata("News", "Useful ideas, practical guides, and editorial notes for better digital work.", "/articles");
 
 function formatDate(value: Date | null) {
   if (!value) return null;

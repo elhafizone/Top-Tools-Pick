@@ -1,7 +1,7 @@
 import { buildMetadata } from "@/lib/seo";
 import { Logo } from "@/components/brand/Logo";
 
-export const metadata = buildMetadata("Admin login | TopToolsPick", "Protected content management login.");
+export const metadata = buildMetadata("Admin login", "Protected content management login.");
 
 export default async function AdminLogin({ searchParams }: { searchParams: Promise<{ next?: string; error?: string }> }) {
   const params = await searchParams;

@@ -8,7 +8,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   try {
     await requireAdmin();
     const { id } = await params;
-    const body = await request.json() as { items?: Array<{ productId?: string; rank?: number; rationale?: string }> };
+    const body = await request.json() as { items?: Array<{ productId?: string; rank?: number; rationale?: string; award?: string }> };
     const items = body.items;
     if (!Array.isArray(items)) return NextResponse.json({ error: "Items must be an array." }, { status: 400 });
     if (!items.length || items.some((item) => typeof item.productId !== "string" || !Number.isInteger(item.rank) || (item.rank ?? 0) < 1 || (item.rationale !== undefined && typeof item.rationale !== "string"))) return NextResponse.json({ error: "Items require unique products and positive integer ranks." }, { status: 400 });
@@ -19,7 +19,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       const list = await tx.editorialList.findUnique({ where: { id }, select: { id: true } });
       if (!list) throw new Error("Editorial list not found.");
       await tx.editorialListItem.deleteMany({ where: { listId: id } });
-      await tx.editorialListItem.createMany({ data: items.map((item) => ({ listId: id, productId: item.productId!, rank: item.rank!, rationale: item.rationale?.trim() || null })) });
+      await tx.editorialListItem.createMany({ data: items.map((item) => ({ listId: id, productId: item.productId!, rank: item.rank!, rationale: item.rationale?.trim() || null, award: item.award?.trim() || null })) });
       await recordAuditWithClient(tx, "REORDER", "EditorialList", id, { itemCount: items.length, replaced: true });
     });
     return NextResponse.json({ ok: true });
