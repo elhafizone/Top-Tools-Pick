@@ -36,11 +36,35 @@ const productContext = {
 export async function getFeaturedProducts() {
   return prisma.product.findMany({
     where: { status: "PUBLISHED", featured: true },
-    include: { category: true, pricingPlans: true },
+    include: {
+      category: true,
+      pricingPlans: true,
+      // Needed by AffiliateCta on the homepage's featured pick. Scoped the same way as
+      // every other outbound surface: active programmes, enabled links, priority first.
+      affiliatePrograms: { where: { status: "ACTIVE" }, include: { links: { where: { enabled: true }, orderBy: { priority: "desc" } } } },
+    },
     orderBy: [{ editorialScore: "desc" }, { rating: "desc" }],
     take: 6,
   });
 }
+
+/**
+ * Sort orders offered on the directory.
+ *
+ * Every one is a deterministic tiebreak on `name` so two products with the same score
+ * never swap places between requests - a list that reshuffles on reload reads as broken.
+ */
+export const SORT_ORDERS = {
+  recommended: [{ featured: "desc" as const }, { editorialScore: "desc" as const }, { name: "asc" as const }],
+  rating: [{ rating: "desc" as const }, { editorialScore: "desc" as const }, { name: "asc" as const }],
+  name: [{ name: "asc" as const }],
+  newest: [{ createdAt: "desc" as const }, { name: "asc" as const }],
+};
+
+export type SortOrder = keyof typeof SORT_ORDERS;
+
+export const isSortOrder = (value: string | undefined): value is SortOrder =>
+  Boolean(value && Object.prototype.hasOwnProperty.call(SORT_ORDERS, value));
 
 export type ProductFilters = {
   query?: string;
@@ -51,6 +75,7 @@ export type ProductFilters = {
   useCase?: string;
   audience?: string;
   platform?: string;
+  sort?: SortOrder;
 };
 
 /**
@@ -79,7 +104,7 @@ const searchFilter = (query: string) => ({
 });
 
 export async function getProducts(filters: ProductFilters = {}) {
-  const { query, category, pricingModel, freePlan, freeTrial, useCase, audience, platform } = filters;
+  const { query, category, pricingModel, freePlan, freeTrial, useCase, audience, platform, sort } = filters;
   return prisma.product.findMany({
     where: {
       status: "PUBLISHED",
@@ -93,7 +118,7 @@ export async function getProducts(filters: ProductFilters = {}) {
       ...(query ? searchFilter(query) : {}),
     },
     include: { category: true },
-    orderBy: { editorialScore: "desc" },
+    orderBy: SORT_ORDERS[sort ?? "recommended"],
   });
 }
 

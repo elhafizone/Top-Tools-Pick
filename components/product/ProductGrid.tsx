@@ -22,17 +22,17 @@ export function ProductGrid({
 }: Props) {
   if (products.length === 0) {
     return (
-      <div className={`border border-dashed border-[var(--line)] bg-white px-6 py-12 sm:px-10 ${className ?? ""}`}>
+      <div className={`rounded-[var(--radius-surface)] border border-dashed border-[var(--line-strong)] bg-[var(--surface)] px-6 py-12 sm:px-10 ${className ?? ""}`}>
         <p className="eyebrow">No matches</p>
-        <h2 className="mt-4 text-2xl font-bold tracking-[-0.04em]">{emptyTitle}</h2>
+        <h2 className="sub-heading mt-3">{emptyTitle}</h2>
         <p className="mt-3 max-w-xl leading-7 text-[var(--muted)]">{emptyBody}</p>
-        <Link href={emptyHref} className="button-secondary mt-7">{emptyLinkLabel}</Link>
+        <Link href={emptyHref} className="button-secondary mt-6">{emptyLinkLabel}</Link>
       </div>
     );
   }
 
   return (
-    <div className={`grid gap-5 sm:grid-cols-2 lg:grid-cols-3 ${className ?? ""}`}>
+    <div className={`grid gap-4 sm:grid-cols-2 xl:grid-cols-3 ${className ?? ""}`}>
       {products.map((product) => <ProductCard key={product.id} product={product} />)}
     </div>
   );

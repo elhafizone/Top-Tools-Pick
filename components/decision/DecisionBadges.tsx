@@ -11,26 +11,32 @@ type Props = {
 
 /**
  * The single vocabulary for "what does this cost me to start?", shared by the product
- * card, the tool page, the comparison table and category award slots.
+ * card, the product row, the review page, the comparison table and category award slots.
  *
  * Every pill maps to a stored column. Nothing is inferred, so a tool with no free plan
  * and no trial simply shows fewer pills rather than a fabricated offer. Returns null
  * when there is nothing truthful to show.
+ *
+ * Offers are accented, because "free plan" is a reason to click. A price is neutral -
+ * it is information, not an incentive, and colouring it would overstate it.
  */
 export function DecisionBadges({ hasFreePlan, hasFreeTrial, pricingModel, entryPriceLabel, className }: Props) {
-  const badges: string[] = [];
-  if (hasFreePlan) badges.push("Free plan");
-  if (hasFreeTrial) badges.push("Free trial");
-  if (!hasFreePlan && !hasFreeTrial && pricingModel === "FREE") badges.push("Free");
-  if (entryPriceLabel) badges.push(entryPriceLabel);
+  const badges: Array<{ label: string; tone: "accent" | "neutral" }> = [];
+  if (hasFreePlan) badges.push({ label: "Free plan", tone: "accent" });
+  if (hasFreeTrial) badges.push({ label: "Free trial", tone: "accent" });
+  if (!hasFreePlan && !hasFreeTrial && pricingModel === "FREE") badges.push({ label: "Free", tone: "accent" });
+  // A stored label already reads as a phrase ("Free plan available", "$8/user/mo"), so it
+  // is printed verbatim. It is skipped when it would only repeat the pill beside it.
+  const duplicatesFreePill = (hasFreePlan || hasFreeTrial) && /free/i.test(entryPriceLabel ?? "");
+  if (entryPriceLabel && !duplicatesFreePill) badges.push({ label: entryPriceLabel, tone: "neutral" });
 
   if (badges.length === 0) return null;
 
   return (
     <ul className={`flex flex-wrap gap-2 ${className ?? ""}`}>
       {badges.map((badge) => (
-        <li key={badge} className="tag border-[var(--accent)] text-[var(--accent-deep)]">
-          {badge}
+        <li key={badge.label} className={`badge ${badge.tone === "accent" ? "badge-accent" : ""}`}>
+          {badge.label}
         </li>
       ))}
     </ul>

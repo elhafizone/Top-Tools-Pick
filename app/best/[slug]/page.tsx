@@ -2,7 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AffiliateCta } from "@/components/affiliate/AffiliateCta";
 import { Disclosure } from "@/components/affiliate/Disclosure";
-import { DecisionBadges } from "@/components/decision/DecisionBadges";
+import { ProductRow } from "@/components/product/ProductRow";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { ctaSubline } from "@/lib/affiliate/cta";
 import { getEditorialListBySlug } from "@/lib/products";
 import { breadcrumbJsonLd, buildMetadata, editorialListMetadata, jsonLd, siteUrl } from "@/lib/seo";
 
@@ -36,75 +38,91 @@ export default async function EditorialListPage({ params }: { params: Promise<{ 
     })),
   } : null;
 
-  return <article className="shell py-20 sm:py-28">
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumbs)} />
-    {itemListJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(itemListJsonLd)} />}
+  return (
+    <article>
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumbs)} />
+      {itemListJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(itemListJsonLd)} />}
 
-    <nav aria-label="Breadcrumb" className="breadcrumb flex flex-wrap items-center gap-x-2 gap-y-1">
-      <Link href="/" className="hover:text-[var(--ink)]">Home</Link><span aria-hidden="true">/</span>
-      <Link href="/best" className="hover:text-[var(--ink)]">Best picks</Link><span aria-hidden="true">/</span>
-      <span className="text-[var(--ink)]">{list.title}</span>
-    </nav>
+      <section className="band">
+        <div className="shell py-8 sm:py-12">
+          <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Best picks", href: "/best" }, { name: list.title }]} />
 
-    <header className="mt-14 max-w-4xl border-b border-[var(--line)] pb-12">
-      <p className="eyebrow">Curated collection</p>
-      <h1 className="section-heading mt-5">{list.title}</h1>
-      {list.description && <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--muted)]">{list.description}</p>}
-      {list.category && (
-        <p className="mt-5 text-sm text-[var(--muted)]">
-          Part of <Link href={`/categories/${list.category.slug}`} className="editorial-link font-semibold text-[var(--ink)]">{list.category.name}</Link>
-        </p>
-      )}
-      <div className="mt-6"><Disclosure /></div>
-    </header>
-
-    {list.items.length ? (
-      <ol className="mt-12 divide-y divide-[var(--line)] border-b border-[var(--line)]">
-        {list.items.map((item) => (
-          <li key={item.id} className="grid gap-6 py-9 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-start lg:gap-12">
+          <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-end lg:gap-16">
             <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center bg-[var(--accent)] text-sm font-bold text-white">{item.rank}</span>
-                {/* The award slot is the headline claim, so it leads. Curated only. */}
-                {item.award && <span className="tag border-[var(--accent)] font-bold text-[var(--accent-deep)]">{item.award}</span>}
-                <Link href={`/categories/${item.product.category.slug}`} className="tag hover:border-[var(--accent)]">{item.product.category.name}</Link>
-              </div>
-              <h2 className="mt-4 text-3xl font-bold tracking-[-0.05em]">
-                <Link href={`/tools/${item.product.slug}`} className="hover:text-[var(--accent-deep)]">{item.product.name}</Link>
-              </h2>
-              <p className="mt-3 max-w-2xl leading-7 text-[var(--muted)]">{item.product.shortDescription}</p>
-              {item.rationale && (
-                <p className="mt-4 max-w-2xl border-l-2 border-[var(--accent)] pl-5 leading-7 text-[var(--ink)]">
-                  <span className="font-semibold">Why it ranks here:</span> <span className="text-[var(--muted)]">{item.rationale}</span>
+              <p className="eyebrow">Ranked shortlist</p>
+              <h1 className="section-heading mt-3 max-w-3xl">{list.title}</h1>
+              {list.description && <p className="lede mt-5 max-w-2xl">{list.description}</p>}
+              {list.category && (
+                <p className="mt-5 text-sm text-[var(--muted)]">
+                  Part of <Link href={`/categories/${list.category.slug}`} className="editorial-link font-semibold text-[var(--ink)]">{list.category.name}</Link>
                 </p>
               )}
-              {item.product.bestFor && (
-                <p className="mt-4 max-w-2xl leading-7"><span className="font-semibold">Best for:</span> <span className="text-[var(--muted)]">{item.product.bestFor}</span></p>
-              )}
-              <DecisionBadges
-                hasFreePlan={item.product.hasFreePlan}
-                hasFreeTrial={item.product.hasFreeTrial}
-                pricingModel={item.product.pricingModel}
-                className="mt-5"
-              />
             </div>
 
-            {/* The conversion surface this page was missing entirely. */}
-            <div className="flex flex-col gap-3 lg:pt-2">
-              <AffiliateCta product={item.product} placement="best-list" className="w-full text-center" />
-              <Link href={`/tools/${item.product.slug}`} className="button-secondary w-full text-center">Read review</Link>
-              <p className="text-xs leading-5 text-[var(--muted)]">Editorial score {item.product.editorialScore}/100</p>
+            {/* The contents list doubles as the answer for anyone who only wants the
+                names: rank, tool and award slot, before a word of prose. */}
+            {list.items.length > 0 && (
+              <nav aria-label="The picks" className="panel panel-raised p-5">
+                <p className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted)]">The picks</p>
+                <ol className="mt-3 rule-list">
+                  {list.items.map((item) => (
+                    <li key={item.id} className="py-2.5">
+                      <a href={`#pick-${item.rank}`} className="flex items-baseline gap-3 text-sm hover:text-[var(--accent-deep)]">
+                        <span className="w-4 shrink-0 font-bold text-[var(--accent-deep)]">{item.rank}</span>
+                        <span className="min-w-0">
+                          <span className="font-semibold text-[var(--ink)]">{item.product.name}</span>
+                          {item.award && <span className="ml-1.5 text-[var(--muted)]">— {item.award}</span>}
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
+          </div>
+
+          <div className="mt-8 max-w-2xl"><Disclosure /></div>
+        </div>
+      </section>
+
+      <div className="shell py-12 sm:py-16">
+        {list.items.length ? (
+          <ol className="rule-list border-y border-[var(--line)]">
+            {list.items.map((item) => (
+              <li key={item.id} id={`pick-${item.rank}`} className="scroll-mt-24">
+                <ProductRow
+                  product={item.product}
+                  headingLevel="h2"
+                  rank={item.rank}
+                  award={item.award}
+                  reason={item.rationale ? { label: "Why it ranks here:", text: item.rationale } : null}
+                  entryPriceLabel={ctaSubline(item.product.pricingPlans)}
+                  action={<AffiliateCta product={item.product} placement="best-list" className="w-full" />}
+                />
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <div className="rounded-[var(--radius-surface)] border border-dashed border-[var(--line-strong)] bg-[var(--surface)] p-8 text-[var(--muted)]">
+            <p>This collection has no published items yet.</p>
+            <Link href="/tools" className="editorial-link mt-4 inline-block text-sm font-semibold text-[var(--ink)]">Browse tools</Link>
+          </div>
+        )}
+
+        {list.category && list.items.length > 0 && (
+          <div className="mt-12 flex flex-col gap-5 border-t-2 border-[var(--accent)] pt-7 sm:flex-row sm:items-end sm:justify-between sm:gap-10">
+            <div>
+              <p className="eyebrow">Narrow it down</p>
+              <h2 className="section-heading mt-3">Put your finalists side by side.</h2>
             </div>
-          </li>
-        ))}
-      </ol>
-    ) : (
-      <div className="mt-12 border border-dashed border-[var(--line)] p-8 text-[var(--muted)]">
-        <p>This collection has no published items yet.</p>
-        <Link href="/tools" className="editorial-link mt-4 inline-block text-sm font-semibold text-[var(--ink)]">Browse tools ↗</Link>
+            <Link href={`/compare?category=${encodeURIComponent(list.category.slug)}`} className="button-primary shrink-0">
+              Compare {list.category.name}
+            </Link>
+          </div>
+        )}
       </div>
-    )}
-  </article>;
+    </article>
+  );
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

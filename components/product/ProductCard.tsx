@@ -1,21 +1,64 @@
 import Link from "next/link";
 import type { Product, Category } from "@prisma/client";
 import { DecisionBadges } from "@/components/decision/DecisionBadges";
+import { ProductLogo } from "@/components/product/ProductLogo";
+import { Rating } from "@/components/ui/Rating";
 import { truncate } from "@/lib/text";
 
 type ProductWithCategory = Product & { category: Category };
 
+/**
+ * A product as a discovery card.
+ *
+ * Cards are for browsing a set with no inherent order - the directory, a category's
+ * full list, a facet landing. Anywhere the set *is* ordered or curated, `ProductRow`
+ * is used instead, so a ranking is never flattened into an anonymous grid.
+ *
+ * The card leads with identity (logo, name, category) and closes with the two numbers
+ * people actually compare, so a column of cards can be scanned down rather than read.
+ */
 export function ProductCard({ product }: { product: ProductWithCategory }) {
-  const pricing = product.pricingModel.replaceAll("_", " ").toLowerCase().replace(/^\w/, (letter) => letter.toUpperCase());
-  return <article className="surface group flex h-full min-w-0 flex-col p-6 transition hover:-translate-y-1 hover:border-[#9bc7ff] hover:shadow-[0_12px_30px_rgba(21,23,28,.07)] sm:p-7">
-    <div className="flex items-start justify-between gap-4"><div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[var(--blue-wash)] text-lg font-black text-[var(--accent)]" aria-hidden="true">{product.name.slice(0, 1)}</div><span className="tag shrink-0"><span aria-hidden="true">★</span>&nbsp; {Number(product.rating).toFixed(1)}</span></div>
-    <p className="eyebrow mt-8 truncate">{product.category.name}</p>
-    <h3 className="mt-2 break-words text-2xl font-bold tracking-[-0.04em] text-[var(--ink)]"><Link href={`/tools/${product.slug}`} className="group-hover:text-[var(--accent-deep)]">{product.name}</Link></h3>
-    <p className="mt-2 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--muted)]">{pricing}</p>
-    <p className="mt-4 text-sm leading-7 text-[var(--muted)]">{product.shortDescription}</p>
-    {product.bestFor && <p className="mt-4 text-sm leading-6 text-[var(--ink)]"><span className="font-semibold">Best for:</span> <span className="text-[var(--muted)]">{truncate(product.bestFor, 90)}</span></p>}
-    <div className="flex-1" />
-    <DecisionBadges hasFreePlan={product.hasFreePlan} hasFreeTrial={product.hasFreeTrial} pricingModel={product.pricingModel} className="mt-5" />
-    <div className="mt-7 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] pt-5"><p className="text-xs font-semibold text-[var(--muted)]">Score <span className="text-[var(--ink)]">{product.editorialScore}/100</span></p><Link href={`/tools/${product.slug}`} aria-label={`See whether ${product.name} fits your needs`} className="editorial-link text-sm font-semibold text-[var(--ink)]">See if it fits <span aria-hidden="true">↗</span></Link></div>
-  </article>;
+  return (
+    <article className="panel panel-raised panel-hover group flex h-full min-w-0 flex-col p-5 sm:p-6">
+      <div className="flex items-start gap-4">
+        <ProductLogo name={product.name} logoUrl={product.logoUrl} size="md" />
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate text-lg font-bold tracking-[-0.02em] text-[var(--ink)]">
+            <Link href={`/tools/${product.slug}`} className="group-hover:text-[var(--accent-deep)]">{product.name}</Link>
+          </h3>
+          <p className="mt-1 truncate text-xs font-semibold uppercase tracking-[0.1em] text-[var(--muted)]">
+            {product.category.name}
+          </p>
+        </div>
+      </div>
+
+      <p className="mt-4 text-sm leading-6 text-[var(--muted)]">{truncate(product.shortDescription, 120)}</p>
+
+      {product.bestFor && (
+        <p className="mt-3 text-sm leading-6 text-[var(--ink-body)]">
+          <span className="font-semibold text-[var(--ink)]">Best for:</span> {truncate(product.bestFor, 70)}
+        </p>
+      )}
+
+      <div className="flex-1" />
+
+      <DecisionBadges
+        hasFreePlan={product.hasFreePlan}
+        hasFreeTrial={product.hasFreeTrial}
+        pricingModel={product.pricingModel}
+        className="mt-5"
+      />
+
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] pt-4">
+        <Rating value={Number(product.rating)} />
+        <Link
+          href={`/tools/${product.slug}`}
+          aria-label={`Read the ${product.name} review`}
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--accent-deep)]"
+        >
+          Read review <span aria-hidden="true" className="hover-shift">&#8594;</span>
+        </Link>
+      </div>
+    </article>
+  );
 }

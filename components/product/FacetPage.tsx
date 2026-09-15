@@ -1,7 +1,8 @@
-import Link from "next/link";
 import type { Product, Category } from "@prisma/client";
 import { Disclosure } from "@/components/affiliate/Disclosure";
 import { ProductGrid } from "@/components/product/ProductGrid";
+import { SearchForm } from "@/components/search/SearchForm";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { jsonLd, breadcrumbJsonLd, itemListJsonLd } from "@/lib/seo";
 
 type Props = {
@@ -29,7 +30,7 @@ export function FacetPage({ kicker, heading, intro, basePath, facetName, facetSl
   ]);
 
   return (
-    <section className="shell py-20 sm:py-28">
+    <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumbs)} />
       {products.length > 0 && (
         <script
@@ -38,32 +39,39 @@ export function FacetPage({ kicker, heading, intro, basePath, facetName, facetSl
         />
       )}
 
-      <nav aria-label="Breadcrumb" className="breadcrumb flex flex-wrap items-center gap-x-2 gap-y-1">
-        <Link href="/" className="hover:text-[var(--ink)]">Home</Link><span aria-hidden="true">/</span>
-        <Link href="/tools" className="hover:text-[var(--ink)]">Tools</Link><span aria-hidden="true">/</span>
-        <span className="text-[var(--ink)]">{facetName}</span>
-      </nav>
-
-      <header className="mt-10 grid gap-8 border-b border-[var(--line)] pb-12 lg:grid-cols-[1fr_22rem] lg:items-end">
-        <div>
-          <p className="eyebrow">{kicker}</p>
-          <h1 className="section-heading mt-5 max-w-4xl">{heading}</h1>
+      <section className="band">
+        <div className="shell py-8 sm:py-12">
+          <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Tools", href: "/tools" }, { name: facetName }]} />
+          <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-end lg:gap-16">
+            <div className="min-w-0">
+              <p className="eyebrow">{kicker}</p>
+              <h1 className="section-heading mt-3 max-w-3xl">{heading}</h1>
+              <p className="lede mt-5 max-w-2xl">{intro}</p>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-[var(--ink)]">
+                <span className="text-2xl font-bold tracking-[-0.03em]">{products.length}</span>{" "}
+                {products.length === 1 ? "tool" : "tools"} listed
+              </p>
+              <SearchForm
+                id="facet-search"
+                label="Search tools"
+                placeholder="Search all tools"
+                className="mt-4"
+              />
+            </div>
+          </div>
         </div>
-        <p className="leading-7 text-[var(--muted)]">{intro}</p>
-      </header>
+      </section>
 
-      <p className="mt-8 text-sm font-semibold text-[var(--ink)]">
-        <span className="text-[var(--accent-deep)]">{products.length}</span> {products.length === 1 ? "tool" : "tools"}
-      </p>
-
-      <ProductGrid
-        products={products}
-        className="mt-6"
-        emptyTitle="No tools listed here yet."
-        emptyBody="This is a real category in our taxonomy, but nothing is published against it yet."
-      />
-
-      <div className="mt-12"><Disclosure /></div>
-    </section>
+      <section className="shell py-12 sm:py-16">
+        <ProductGrid
+          products={products}
+          emptyTitle="No tools listed here yet."
+          emptyBody="This is a real category in our taxonomy, but nothing is published against it yet."
+        />
+        <div className="mt-12"><Disclosure /></div>
+      </section>
+    </div>
   );
 }

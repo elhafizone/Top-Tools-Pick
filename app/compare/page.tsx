@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Disclosure } from "@/components/affiliate/Disclosure";
+import { ComparisonView } from "@/components/compare/ComparisonView";
 import { ProductPicker } from "@/components/compare/ProductPicker";
 import { RuledGrid } from "@/components/layout/RuledGrid";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 import { getArticlesByTopic } from "@/lib/articles";
-import { AffiliateCta } from "@/components/affiliate/AffiliateCta";
-import { safeHostname } from "@/lib/affiliate/links";
 import {
   MAX_COMPARE,
   MIN_COMPARE,
@@ -49,210 +49,142 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
   const comparisonArticles = await getArticlesByTopic("comparisons", 4);
 
   return (
-    <section className="shell py-20 sm:py-28">
-      <nav aria-label="Breadcrumb" className="breadcrumb flex flex-wrap items-center gap-x-2 gap-y-1">
-        <Link href="/" className="hover:text-[var(--ink)]">Home</Link>
-        <span aria-hidden="true">/</span>
-        {category ? <Link href="/compare" className="hover:text-[var(--ink)]">Compare</Link> : <span className="text-[var(--ink)]">Compare</span>}
-        {category && <><span aria-hidden="true">/</span><span className="text-[var(--ink)]">{category.name}</span></>}
-      </nav>
+    <div>
+      <section className="band">
+        <div className="shell py-8 sm:py-12">
+          <Breadcrumbs
+            items={[
+              { name: "Home", href: "/" },
+              { name: "Compare", href: category ? "/compare" : undefined },
+              ...(category ? [{ name: category.name }] : []),
+            ]}
+          />
+          <div className="mt-8 max-w-3xl">
+            <p className="eyebrow">Build your own comparison</p>
+            <h1 className="section-heading mt-3">{hasResults ? `${category!.name} compared` : "Compare tools side by side."}</h1>
+            <p className="lede mt-5">
+              {hasResults
+                ? "Every value below is recorded against the tool in our own data, so the columns line up and nothing is invented to fill a gap."
+                : `Start with the category you are shopping in, then put ${MIN_COMPARE}-${MAX_COMPARE} tools next to each other. Comparisons stay inside one category so the columns actually line up.`}
+            </p>
+          </div>
+        </div>
+      </section>
 
-      <header className="mt-10 max-w-3xl">
-        <p className="eyebrow">Build your own comparison</p>
-        <h1 className="section-heading mt-5">{hasResults ? `${category!.name} compared` : "Compare tools side by side."}</h1>
-        {!hasResults && (
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-[var(--muted)]">
-            Start with the category you are shopping in, then put {MIN_COMPARE}&ndash;{MAX_COMPARE} tools next to each other. Comparisons stay inside one category so the columns actually line up.
-          </p>
-        )}
-      </header>
+      <section className="shell py-12 sm:py-16">
+        {!category ? (
+          <CategoryStep categories={categories} invalid={Boolean(categorySlug)} />
+        ) : hasResults ? (
+          /*
+           * Results first. Submitting the picker is a GET, which drops any fragment, so
+           * the reliable way to land people on their comparison is to put it at the top
+           * and demote the picker to an "adjust" step underneath. No JS, no scroll hack.
+           */
+          <>
+            <ComparisonView products={products} />
 
-      {!category ? (
-        <CategoryStep categories={categories} invalid={Boolean(categorySlug)} />
-      ) : hasResults ? (
-        /*
-         * Results first. Submitting the picker is a GET, which drops any fragment, so
-         * the reliable way to land people on their comparison is to put it at the top
-         * and demote the picker to an "adjust" step underneath. No JS, no scroll hack.
-         */
-        <>
-          <ComparisonTable products={products} />
-
-          <div className="mt-16 border-t border-[var(--line)] pt-7">
-            <div className="flex flex-wrap items-baseline justify-between gap-4">
-              <div>
-                <p className="eyebrow">Adjust your selection</p>
-                <h2 className="mt-3 text-2xl font-bold tracking-[-0.04em]">Swap a tool in or out</h2>
-              </div>
-              <Link href="/compare" className="editorial-link text-sm font-semibold">Change category &#8599;</Link>
+            <div className="mt-16">
+              <SectionHeader
+                eyebrow="Adjust your selection"
+                title="Swap a tool in or out"
+                href="/compare"
+                linkLabel="Change category"
+              />
+              <ProductPicker
+                categorySlug={category.slug}
+                options={category.products}
+                initial={valid}
+                min={MIN_COMPARE}
+                max={MAX_COMPARE}
+              />
             </div>
+          </>
+        ) : (
+          <>
+            <SectionHeader
+              eyebrow={`Step 2 — choose ${MIN_COMPARE}-${MAX_COMPARE} tools`}
+              title={category.name}
+              href="/compare"
+              linkLabel="Change category"
+            />
+
+            {tooMany && <Notice>You picked {valid.length} tools. Compare at most {MAX_COMPARE} at a time.</Notice>}
+            {!tooMany && requested.length > 0 && valid.length < MIN_COMPARE && (
+              <Notice>Select at least {MIN_COMPARE} tools from {category.name} to build a comparison.</Notice>
+            )}
+
             <ProductPicker
               categorySlug={category.slug}
               options={category.products}
-              initial={valid}
+              initial={tooMany ? [] : valid}
               min={MIN_COMPARE}
               max={MAX_COMPARE}
             />
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="mt-12 flex flex-wrap items-baseline justify-between gap-4 border-t border-[var(--line)] pt-7">
-            <div>
-              <p className="eyebrow">Step 2 &mdash; choose tools</p>
-              <h2 className="mt-3 text-2xl font-bold tracking-[-0.04em]">{category.name}</h2>
-            </div>
-            <Link href="/compare" className="editorial-link text-sm font-semibold">Change category &#8599;</Link>
-          </div>
-
-          {tooMany && <Notice>You picked {valid.length} tools. Compare at most {MAX_COMPARE} at a time.</Notice>}
-          {!tooMany && requested.length > 0 && valid.length < MIN_COMPARE && (
-            <Notice>Select at least {MIN_COMPARE} tools from {category.name} to build a comparison.</Notice>
-          )}
-
-          <ProductPicker
-            categorySlug={category.slug}
-            options={category.products}
-            initial={tooMany ? [] : valid}
-            min={MIN_COMPARE}
-            max={MAX_COMPARE}
-          />
-        </>
-      )}
+          </>
+        )}
+      </section>
 
       {/* The indexable counterpart: written comparisons live as articles. */}
       {comparisonArticles.length > 0 && (
-        <aside className="mt-16 border-t-2 border-[var(--accent)] pt-7">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="eyebrow">Written comparisons</p>
-              <h2 className="mt-3 text-2xl font-bold tracking-[-0.04em]">Want our verdict instead?</h2>
-            </div>
-            <Link href="/comparisons" className="editorial-link text-sm font-semibold">All comparisons &#8599;</Link>
+        <section className="band-sunken">
+          <div className="shell py-14 sm:py-16">
+            <SectionHeader
+              eyebrow="Written comparisons"
+              title="Want our verdict instead?"
+              href="/comparisons"
+              linkLabel="All comparisons"
+            />
+            <ul className="mt-6 rule-list border-b border-[var(--line)]">
+              {comparisonArticles.map((article) => (
+                <li key={article.id}>
+                  <Link href={`/articles/${article.slug}`} className="group block py-5">
+                    <span className="text-lg font-bold tracking-[-0.02em] group-hover:text-[var(--accent-deep)]">{article.title}</span>
+                    {article.excerpt && <span className="mt-1 block max-w-2xl text-sm leading-6 text-[var(--muted)]">{article.excerpt}</span>}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul className="mt-6 divide-y divide-[var(--line)] border-y border-[var(--line)]">
-            {comparisonArticles.map((article) => (
-              <li key={article.id} className="py-5">
-                <Link href={`/articles/${article.slug}`} className="group block">
-                  <span className="text-lg font-bold tracking-[-0.03em] group-hover:text-[var(--accent-deep)]">{article.title}</span>
-                  {article.excerpt && <span className="mt-1 block max-w-2xl text-sm leading-6 text-[var(--muted)]">{article.excerpt}</span>}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </aside>
+        </section>
       )}
-    </section>
+    </div>
   );
 }
 
 function Notice({ children }: { children: React.ReactNode }) {
-  return <p role="status" className="mt-8 border-l-2 border-[var(--accent)] bg-[var(--blue-wash)] px-5 py-4 text-sm font-semibold text-[var(--accent-deep)]">{children}</p>;
+  return (
+    <p role="status" className="mt-8 rounded-[var(--radius-control)] border border-[var(--accent-line)] bg-[var(--accent-soft)] px-5 py-4 text-sm font-semibold text-[var(--accent-deep)]">
+      {children}
+    </p>
+  );
 }
 
 function CategoryStep({ categories, invalid }: { categories: Awaited<ReturnType<typeof getComparableCategories>>; invalid: boolean }) {
   if (!categories.length) {
     return (
-      <div className="mt-12 border border-dashed border-[var(--line)] p-8 text-[var(--muted)]">
+      <div className="rounded-[var(--radius-surface)] border border-dashed border-[var(--line-strong)] bg-[var(--surface)] p-8 text-[var(--muted)]">
         <p>No category has {MIN_COMPARE} or more published tools yet, so there is nothing to compare.</p>
-        <Link href="/tools" className="editorial-link mt-4 inline-block text-sm font-semibold text-[var(--ink)]">Browse all tools &#8599;</Link>
+        <Link href="/tools" className="editorial-link mt-4 inline-block text-sm font-semibold text-[var(--ink)]">Browse all tools</Link>
       </div>
     );
   }
+
   return (
     <>
-      <div className="mt-12 border-t border-[var(--line)] pt-7"><p className="eyebrow">Step 1 &mdash; choose a category</p></div>
+      <SectionHeader eyebrow="Step 1" title="Choose a category" intro="Comparisons stay inside one category, so every column means the same thing." />
       {invalid && <Notice>That category is not available for comparison. Pick one below.</Notice>}
       <RuledGrid className="mt-8" columns="sm:grid-cols-2 lg:grid-cols-3">
         {categories.map((category) => (
-          <Link
-            key={category.slug}
-            href={`/compare?category=${encodeURIComponent(category.slug)}`}
-            className="ruled-cell group"
-          >
-            <span className="text-xs font-bold tracking-[0.16em] text-[var(--accent)]">{category._count.products} tools</span>
-            <h3 className="mt-4 text-2xl font-bold tracking-[-0.04em] group-hover:text-[var(--accent-deep)]">{category.name}</h3>
-            {category.description && <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{category.description}</p>}
-            <span className="mt-7 block text-sm font-semibold">Compare in {category.name} &#8599;</span>
+          <Link key={category.slug} href={`/compare?category=${encodeURIComponent(category.slug)}`} className="ruled-cell group flex flex-col">
+            <span className="flex items-center justify-between gap-3">
+              <span className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--muted)]">{category._count.products} tools</span>
+              <span className="text-[var(--accent)] hover-shift" aria-hidden="true">&#8594;</span>
+            </span>
+            <h3 className="mt-4 text-xl font-bold tracking-[-0.025em] group-hover:text-[var(--accent-deep)]">{category.name}</h3>
+            {category.description && <p className="mt-2 flex-1 text-sm leading-6 text-[var(--muted)]">{category.description}</p>}
           </Link>
         ))}
       </RuledGrid>
     </>
-  );
-}
-
-type ComparedProduct = Awaited<ReturnType<typeof getProductsForComparison>>[number];
-
-const sentence = (value: string | null) => (value && value.trim() ? value : "—");
-const list = (values: string[]) => (values.length ? values.join(", ") : "—");
-
-function ComparisonTable({ products }: { products: ComparedProduct[] }) {
-  const rows: Array<{ label: string; render: (product: ComparedProduct) => React.ReactNode }> = [
-    { label: "Summary", render: (p) => p.shortDescription },
-    { label: "Rating", render: (p) => `${Number(p.rating).toFixed(1)} / 5` },
-    { label: "Editorial score", render: (p) => `${p.editorialScore} / 100` },
-    { label: "Pricing model", render: (p) => <span className="capitalize">{p.pricingModel.replaceAll("_", " ").toLowerCase()}</span> },
-    { label: "Free plan", render: (p) => (p.hasFreePlan ? "Yes" : "No") },
-    { label: "Free trial", render: (p) => (p.hasFreeTrial ? "Yes" : "No") },
-    { label: "Entry plan", render: (p) => sentence(p.pricingPlans[0]?.priceLabel ?? null) },
-    { label: "Best for", render: (p) => sentence(p.bestFor) },
-    { label: "Strengths", render: (p) => sentence(p.pros) },
-    { label: "Trade-offs", render: (p) => sentence(p.cons) },
-    { label: "Platforms", render: (p) => list(p.platforms.map((item) => item.platform.name)) },
-    { label: "Use cases", render: (p) => list(p.useCases.map((item) => item.useCase.name)) },
-    { label: "Built for", render: (p) => list(p.audiences.map((item) => item.audience.name)) },
-    { label: "Website", render: (p) => safeHostname(p.websiteUrl) ?? "—" },
-  ];
-
-  const names = products.map((product) => product.name);
-
-  return (
-    <section aria-labelledby="comparison-heading" className="mt-16">
-      <div className="flex flex-wrap items-baseline justify-between gap-4 border-t-2 border-[var(--accent)] pt-7">
-        <h2 id="comparison-heading" className="text-2xl font-bold tracking-[-0.04em]">{names.join(" vs ")}</h2>
-        <p className="text-sm text-[var(--muted)]">{products.length} tools &middot; {products[0].category.name}</p>
-      </div>
-
-      <div className="mt-8 overflow-x-auto">
-        <table className="w-full min-w-[44rem] border-collapse text-left text-sm">
-          <caption className="sr-only">Feature comparison of {names.join(", ")}</caption>
-          <thead>
-            <tr>
-              <th scope="col" className="w-40 border-b border-[var(--line)] px-4 py-5 align-bottom text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted)]">Attribute</th>
-              {products.map((product) => (
-                <th key={product.slug} scope="col" className="border-b border-l border-[var(--line)] px-5 py-5 align-bottom">
-                  <Link href={`/tools/${product.slug}`} className="text-xl font-bold tracking-[-0.03em] hover:text-[var(--accent-deep)]">{product.name}</Link>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.label} className="align-top">
-                <th scope="row" className="border-b border-[var(--line)] px-4 py-4 text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted)]">{row.label}</th>
-                {products.map((product) => (
-                  <td key={product.slug} className="border-b border-l border-[var(--line)] px-5 py-4 leading-6">{row.render(product)}</td>
-                ))}
-              </tr>
-            ))}
-            <tr className="align-top">
-              <th scope="row" className="px-4 py-6 text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted)]">Visit</th>
-              {/* Same resolution and wording as every other CTA: the outbound button
-                  here is the affiliate link, routed through /go like the rest. */}
-              {products.map((product) => (
-                <td key={product.slug} className="border-l border-[var(--line)] px-5 py-6">
-                  <div className="flex flex-col gap-2">
-                    <AffiliateCta product={product} placement="compare-table" />
-                    <Link href={`/tools/${product.slug}`} className="button-secondary text-center">Read review</Link>
-                  </div>
-                </td>
-              ))}
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div className="mt-8"><Disclosure /></div>
-    </section>
   );
 }

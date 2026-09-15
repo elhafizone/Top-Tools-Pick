@@ -1,40 +1,69 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   Design tokens
+   ---------------------------------------------------------------------------
+   Four families only: near-black, white, brand blue, neutral greys. Nothing else
+   is allowed into the palette - a buying-decision site earns trust by looking
+   restrained, and every extra hue is one more thing that reads as promotional.
+   The "yes / no" vocabulary in comparison tables is blue and grey for the same
+   reason, not the usual green/red traffic lights.
+--------------------------------------------------------------------------- */
 :root {
-  --background: #f7f8fa;
-  --foreground: #101216;
-  --ink: #000000;
-  --muted: #5f6875;
-  --line: #dfe3e9;
+  /* Neutrals */
+  --ink: #0b0d12;
+  --ink-body: #2b3340;
+  --foreground: #14171c;
+  --muted: #59626f;
+  --muted-soft: #666e7c;
+  --line: #e3e7ec;
+  --line-strong: #ccd3dc;
   --surface: #ffffff;
+  --surface-sunken: #f4f6f9;
+  --background: #f6f7f9;
+
+  /* Brand */
   --accent: #2180f8;
-  --accent-deep: #155fca;
-  --sage: #eaf3ff;
-  --lavender: #eaf3ff;
-  --blue-wash: #f1f8ff;
-  --content-width: 80rem;
+  /* Filled surfaces that carry white text. #2180f8 behind white is 3.81:1 and fails AA;
+     this is the same blue one step deeper, at 4.63:1. */
+  --accent-cta: #1d72e0;
+  --accent-deep: #1259c3;
+  --accent-soft: #eaf3ff;
+  --accent-line: #b7d5ff;
+
+  /* Inverted surfaces (dark editorial bands) */
+  --ink-line: #2b313c;
+  --ink-muted: #a7aebc;
+  --ink-accent: #7eb8ff;
+
+  /* Layout */
+  --content-width: 82rem;
+  --reading-width: 44rem;
   --focus-ring: #2180f8;
-  --radius-control: 0.625rem;
-  --radius-surface: 0.875rem;
+  --ruled-gutter: 1.5rem;
+  --radius-control: 0.5rem;
+  --radius-surface: 0.75rem;
+  --shadow-sm: 0 1px 2px rgb(11 13 18 / 4%);
+  --shadow-md: 0 10px 28px -12px rgb(11 13 18 / 14%);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-editorial-serif);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), sans-serif;
-  letter-spacing: -0.012em;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.006em;
   overflow-x: hidden;
 }
 
 ::selection {
-  background: #d9ebff;
+  background: #d3e7ff;
   color: var(--ink);
 }
 
@@ -43,7 +72,7 @@ button,
 input,
 select,
 textarea {
-  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+  transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
 }
 
 button,
@@ -60,46 +89,498 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
-summary:focus-visible {
+summary:focus-visible,
+[tabindex]:focus-visible {
   outline: 3px solid var(--focus-ring);
-  outline-offset: 3px;
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
-.eyebrow {
-  color: var(--accent-deep);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
+/* ---------------------------------------------------------------------------
+   Layout primitives
+--------------------------------------------------------------------------- */
 .shell {
   width: min(100% - 3rem, var(--content-width));
   margin-inline: auto;
 }
 
-.site-header {
-  border-color: color-mix(in srgb, var(--line) 82%, transparent);
-  background: color-mix(in srgb, var(--surface) 94%, transparent);
-  backdrop-filter: blur(14px);
+/* A measured column for long-form editorial. Sits inside .shell. */
+.reading-column {
+  max-width: var(--reading-width);
 }
 
-.site-nav-link {
-  position: relative;
+/* Alternating bands separate sections without wrapping everything in cards. */
+.band {
+  background: var(--surface);
+  border-block: 1px solid var(--line);
+}
+
+.band-sunken {
+  background: var(--surface-sunken);
+  border-block: 1px solid var(--line);
+}
+
+.band-ink {
+  background: var(--ink);
+  color: #ffffff;
+}
+
+/* ---------------------------------------------------------------------------
+   Typography
+   ---------------------------------------------------------------------------
+   Headlines are sans and tightly set, but no longer compressed to the point of
+   reading as fashion editorial. Long-form body copy is serif, which is what
+   makes a review feel like a publication rather than a directory entry.
+--------------------------------------------------------------------------- */
+.eyebrow {
+  color: var(--accent-deep);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.eyebrow-muted {
   color: var(--muted);
 }
 
+.display-heading {
+  font-size: clamp(2.5rem, 5.4vw, 4.25rem);
+  font-weight: 800;
+  line-height: 1.03;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.section-heading {
+  font-size: clamp(1.75rem, 2.9vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.028em;
+  text-wrap: balance;
+}
+
+.sub-heading {
+  font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.lede {
+  color: var(--muted);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+
+@media (min-width: 640px) {
+  .lede {
+    font-size: 1.125rem;
+    line-height: 1.75;
+  }
+}
+
+.metadata {
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.breadcrumb {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.breadcrumb a:hover {
+  color: var(--ink);
+}
+
+.editorial-link {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+}
+
+.editorial-link:hover {
+  color: var(--accent-deep);
+}
+
+/* Long-form prose: reviews, verdicts, guides, policy pages. */
+.article-content {
+  color: var(--ink-body);
+  font-family: var(--font-editorial-serif), Georgia, "Times New Roman", serif;
+  font-size: 1.125rem;
+  line-height: 1.78;
+  letter-spacing: 0;
+}
+
+.article-content p + p {
+  margin-top: 1.35em;
+}
+
+.article-content strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .article-content {
+    font-size: 1.1875rem;
+  }
+}
+
+/* A single highlighted passage - the verdict, a recommendation, a caveat. */
+.pull-quote {
+  border-left: 3px solid var(--accent);
+  color: var(--ink);
+  font-family: var(--font-editorial-serif), Georgia, serif;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  padding-left: 1.5rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Surfaces
+--------------------------------------------------------------------------- */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-surface);
+}
+
+.panel-raised {
+  box-shadow: var(--shadow-sm);
+}
+
+.panel-hover {
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.panel-hover:hover {
+  border-color: var(--accent-line);
+  box-shadow: var(--shadow-md);
+}
+
+/* One cell of a RuledGrid: the left border and gutter of the first column are
+   clipped by the wrapper, so every column ends up evenly inset.
+   The gutter and the wrapper's negative margin must stay equal - if the cell's
+   horizontal padding is smaller than the shift, the first column's text is clipped
+   too. Both read the same token so they cannot drift apart. */
+.ruled-cell {
+  border-bottom: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  padding: 1.75rem var(--ruled-gutter);
+}
+
+.ruled-grid {
+  display: grid;
+  margin-left: calc(-1 * (var(--ruled-gutter) + 1px));
+  width: calc(100% + var(--ruled-gutter) + 1px);
+}
+
+/* A hairline-separated list - the default way to present a set of products.
+   Rows, not cards: easier to scan and compare down a column. */
+.rule-list > * + * {
+  border-top: 1px solid var(--line);
+}
+
+/* ---------------------------------------------------------------------------
+   Product identity
+--------------------------------------------------------------------------- */
+.logo-tile {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 0.625rem;
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.logo-tile img {
+  height: 100%;
+  object-fit: contain;
+  padding: 14%;
+  width: 100%;
+}
+
+.logo-tile-fallback {
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+  color: var(--accent-deep);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+/* ---------------------------------------------------------------------------
+   Badges and pills
+--------------------------------------------------------------------------- */
+.badge {
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  display: inline-flex;
+  font-size: 0.75rem;
+  font-weight: 600;
+  gap: 0.35rem;
+  line-height: 1;
+  padding: 0.4rem 0.7rem;
+  white-space: nowrap;
+}
+
+.badge-accent {
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+  color: var(--accent-deep);
+}
+
+/* The strongest label on a page: "Best overall", "Our pick". Use once. */
+.badge-solid {
+  background: var(--accent-cta);
+  border-color: var(--accent-cta);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.badge-ink {
+  border-color: var(--ink-line);
+  color: var(--ink-muted);
+}
+
+/* ---------------------------------------------------------------------------
+   Controls
+--------------------------------------------------------------------------- */
+.button-primary,
+.button-secondary,
+.button-ghost {
+  align-items: center;
+  border-radius: var(--radius-control);
+  display: inline-flex;
+  font-size: 0.875rem;
+  font-weight: 650;
+  gap: 0.4rem;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.7rem 1.15rem;
+  text-align: center;
+}
+
+.button-primary {
+  background: var(--accent-cta);
+  border: 1px solid var(--accent-cta);
+  color: #ffffff;
+}
+
+.button-primary:hover {
+  background: var(--accent-deep);
+  border-color: var(--accent-deep);
+}
+
+.button-secondary {
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+}
+
+.button-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent-deep);
+}
+
+.button-ghost {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--ink);
+}
+
+.button-ghost:hover {
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+}
+
+.button-lg {
+  font-size: 0.9375rem;
+  min-height: 3rem;
+  padding-inline: 1.5rem;
+}
+
+/* Form fields. One look for search, filters and selects everywhere. */
+.field {
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-control);
+  color: var(--ink);
+  font-size: 0.9375rem;
+  min-height: 2.875rem;
+  padding: 0.5rem 0.875rem;
+  width: 100%;
+}
+
+.field::placeholder {
+  color: var(--muted-soft);
+}
+
+.field:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgb(33 128 248 / 14%);
+  outline: none;
+}
+
+.field-lg {
+  font-size: 1rem;
+  min-height: 3.25rem;
+  padding-inline: 1.125rem;
+}
+
+.field-sm {
+  font-size: 0.875rem;
+  min-height: 2.5rem;
+  padding-block: 0.35rem;
+}
+
+/* Room for the leading search glyph. Declared after the size modifiers so it wins
+   over their shorthand padding rather than being silently overridden. */
+.field-icon {
+  padding-left: 2.6rem;
+}
+
+.field-sm.field-icon {
+  padding-left: 2.35rem;
+}
+
+.field-lg.field-icon {
+  padding-left: 3rem;
+}
+
+.field-label {
+  color: var(--ink);
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 650;
+  margin-bottom: 0.4rem;
+}
+
+select.field {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 1.05rem) 55%, calc(100% - 0.75rem) 55%;
+  background-repeat: no-repeat;
+  background-size: 0.3rem 0.3rem, 0.3rem 0.3rem;
+  padding-right: 2.25rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Comparison tables
+   ---------------------------------------------------------------------------
+   The attribute column stays pinned while the product columns scroll, so a row
+   never loses its label on a narrow screen.
+--------------------------------------------------------------------------- */
+.table-scroll {
+  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+/* A horizontal scroller without the scrollbar furniture - used where the overflow
+   is incidental (a row of section links) rather than the point (a wide table). */
+.scroll-x-quiet {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.scroll-x-quiet::-webkit-scrollbar {
+  display: none;
+}
+
+.data-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+  width: 100%;
+}
+
+.data-table th,
+.data-table td {
+  vertical-align: top;
+}
+
+.data-table thead th {
+  border-bottom: 1px solid var(--line-strong);
+  padding: 1.25rem 1.25rem 1.1rem;
+}
+
+.data-table tbody th {
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 1rem 1.25rem 1rem 0;
+  text-transform: uppercase;
+}
+
+.data-table tbody td {
+  border-bottom: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  color: var(--ink-body);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  padding: 1rem 1.25rem;
+}
+
+/* Pin the label column. Needs an opaque background or scrolled cells show through. */
+.data-table .col-sticky {
+  background: var(--background);
+  left: 0;
+  position: sticky;
+  z-index: 2;
+}
+
+.data-table thead .col-sticky {
+  z-index: 3;
+}
+
+.yes-mark {
+  color: var(--accent-deep);
+  font-weight: 700;
+}
+
+.no-mark {
+  color: var(--muted-soft);
+}
+
+/* ---------------------------------------------------------------------------
+   Header, nav, footer
+--------------------------------------------------------------------------- */
+.site-header {
+  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border-color: var(--line);
+}
+
+.site-nav-link {
+  color: var(--muted);
+  font-weight: 550;
+  position: relative;
+}
+
 .site-nav-link::after {
+  background: var(--accent);
+  bottom: -0.55rem;
+  content: "";
+  height: 2px;
+  left: 0;
+  opacity: 0;
   position: absolute;
   right: 0;
-  bottom: -0.65rem;
-  left: 0;
-  height: 2px;
-  background: var(--accent);
-  content: "";
-  opacity: 0;
-  transform: scaleX(0.5);
-  transition: opacity 180ms ease, transform 180ms ease;
+  transform: scaleX(0.4);
+  transition: opacity 160ms ease, transform 160ms ease;
 }
 
 .site-nav-link:hover,
@@ -118,147 +599,12 @@ summary:focus-visible {
   color: var(--ink);
 }
 
-.editorial-link {
-  text-decoration: underline;
-  text-decoration-color: #2180F8;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 5px;
-}
-
-.editorial-link:hover {
-  color: var(--accent-deep);
-}
-
-.surface {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-surface);
-  box-shadow: 0 1px 2px rgb(21 23 28 / 3%);
-}
-
-/* One cell of a RuledGrid: the left border and gutter of the first column are
-   clipped by the wrapper, so every column ends up evenly inset. */
-.ruled-cell {
-  border-bottom: 1px solid var(--line);
-  border-left: 1px solid var(--line);
-  padding: 1.75rem 1.5rem;
-}
-
-.metadata {
-  color: var(--muted);
-  font-size: 0.75rem;
-  line-height: 1.5;
-}
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 650;
-  line-height: 1;
-  padding: 0.4rem 0.65rem;
-}
-
-.breadcrumb {
-  color: var(--muted);
-  font-size: 0.8125rem;
-}
-
-.breadcrumb a:hover {
-  color: var(--ink);
-}
-
-.surface-hover {
-  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
-}
-
-.surface-hover:hover {
-  transform: translateY(-0.25rem);
-  border-color: #9bc7ff;
-  box-shadow: 0 12px 30px rgb(21 23 28 / 7%);
-}
-
-.quiet-grid {
-  background:
-    radial-gradient(circle at 78% 15%, rgba(214, 232, 255, .72), transparent 33rem),
-    linear-gradient(135deg, #ffffff 0%, #f7f8fb 58%, #f1f8ff 100%);
-}
-
-.hero-atmosphere {
-  background:
-    radial-gradient(circle at 80% 20%, rgba(194, 222, 255, .75), transparent 30rem),
-    radial-gradient(circle at 15% 80%, rgba(222, 240, 255, .8), transparent 32rem),
-    linear-gradient(135deg, #ffffff 0%, #f8f9fc 100%);
-}
-
-.display-heading {
-  font-size: clamp(3.2rem, 8vw, 7.5rem);
-  line-height: .94;
-  letter-spacing: -.085em;
-  text-wrap: balance;
-}
-
-.section-heading {
-  font-size: clamp(2.2rem, 4vw, 4rem);
-  line-height: .98;
-  letter-spacing: -.07em;
-  text-wrap: balance;
-}
-
-.article-content {
-  color: var(--muted);
-  font-size: 1.125rem;
-  line-height: 2;
-}
-
-.article-content p + p {
-  margin-top: 1.5rem;
-}
-
-.button-primary,
-.button-secondary {
-  display: inline-flex;
-  min-height: 2.75rem;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  border-radius: var(--radius-control);
-  padding: 0.7rem 1.15rem;
-  font-size: 0.875rem;
-  font-weight: 650;
-  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
-}
-
-.button-primary {
-  background: var(--accent);
-  color: #fff;
-}
-
-.button-primary:hover {
-  background: var(--accent-deep);
-  transform: translateY(-1px);
-}
-
-.button-secondary {
-  border: 1px solid var(--line);
-  background: var(--surface);
-  color: var(--ink);
-}
-
-.button-secondary:hover {
-  border-color: #9bc7ff;
-  color: var(--accent-deep);
-}
-
 .site-footer {
-  border-color: #2d333d;
+  border-color: var(--ink-line);
 }
 
 .site-footer a {
-  color: #cbd0da;
+  color: #c8cedb;
 }
 
 .site-footer a:hover,
@@ -266,34 +612,75 @@ summary:focus-visible {
   color: #ffffff;
 }
 
-@media (max-width: 640px) {
-  .button-primary,
-  .button-secondary {
-    min-height: 2.875rem;
-  }
+/* ---------------------------------------------------------------------------
+   Restrained atmosphere
+   ---------------------------------------------------------------------------
+   One soft wash behind the hero and nothing else. No glass, no glow, no floating
+   shapes: the page should look like a publication, not a product launch.
+--------------------------------------------------------------------------- */
+.hero-wash {
+  background:
+    radial-gradient(90rem 40rem at 85% -15%, rgb(33 128 248 / 7%), transparent 60%),
+    var(--surface);
+}
+
+/* ---------------------------------------------------------------------------
+   Motion
+--------------------------------------------------------------------------- */
+.hover-shift {
+  transition: transform 160ms ease;
+}
+
+.group:hover .hover-shift {
+  transform: translateX(2px);
 }
 
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Narrow screens
+--------------------------------------------------------------------------- */
 @media (max-width: 640px) {
   .shell {
-    width: min(100% - 2rem, 80rem);
+    width: min(100% - 2rem, var(--content-width));
   }
 
-  .display-heading {
-    font-size: clamp(3rem, 15vw, 4.6rem);
+  :root {
+    /* Narrower gutter on small screens. The grid reads the same token, so the
+       cell padding and the wrapper offset stay in step. */
+    --ruled-gutter: 1.25rem;
+  }
+
+  .ruled-cell {
+    padding-block: 1.5rem;
+  }
+
+  .button-primary,
+  .button-secondary,
+  .button-ghost {
+    min-height: 2.875rem;
   }
 
   .site-nav-link::after {
     display: none;
+  }
+
+  .article-content {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+  }
+
+  .pull-quote {
+    font-size: 1.125rem;
+    padding-left: 1.125rem;
   }
 }

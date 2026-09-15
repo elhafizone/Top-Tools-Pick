@@ -14,12 +14,17 @@
  * indent; and a single `col-span-2` card shifted every following card's visual column away
  * from its DOM index, inverting the dividers entirely at tablet width.
  *
+ * The shift lives in `.ruled-grid` rather than in a utility class so it reads the same
+ * `--ruled-gutter` token as `.ruled-cell`'s padding. When the two were written out
+ * separately, narrowing the cell padding at mobile left the shift wider than the padding
+ * and the single column's own text was clipped off the left edge.
+ *
  * Cells are expected to carry `ruled-cell` (see globals.css) for the border and padding.
  */
 export function RuledGrid({ columns, className = "", children }: { columns: string; className?: string; children: React.ReactNode }) {
   return (
     <div className={`overflow-hidden border-t border-[var(--line)] ${className}`}>
-      <div className={`-ml-[calc(1.5rem+1px)] grid w-[calc(100%+1.5rem+1px)] ${columns}`}>{children}</div>
+      <div className={`ruled-grid ${columns}`}>{children}</div>
     </div>
   );
 }

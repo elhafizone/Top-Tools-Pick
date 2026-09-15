@@ -3,8 +3,12 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { AffiliateCta } from "@/components/affiliate/AffiliateCta";
 import { Disclosure } from "@/components/affiliate/Disclosure";
-import { DecisionBadges } from "@/components/decision/DecisionBadges";
 import { ProductGrid } from "@/components/product/ProductGrid";
+import { ProductRow } from "@/components/product/ProductRow";
+import { SearchForm } from "@/components/search/SearchForm";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { ctaSubline } from "@/lib/affiliate/cta";
 import { breadcrumbJsonLd, buildMetadata, itemListJsonLd, jsonLd, siteUrl } from "@/lib/seo";
 import { getArticlesByTopic } from "@/lib/articles";
 import { getCategoryAwards, getProductsByCategory } from "@/lib/products";
@@ -15,109 +19,154 @@ export const dynamic = "force-dynamic";
 
 export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
   const { category: slug } = await params;
-  const category = await prisma.category.findFirst({ where: { slug, status: "PUBLISHED" }, select: { id: true, name: true, slug: true, description: true } });
+  const category = await prisma.category.findFirst({
+    where: { slug, status: "PUBLISHED" },
+    select: { id: true, name: true, slug: true, description: true },
+  });
   if (!category) notFound();
+
   const [products, awards, comparisons] = await Promise.all([
     getProductsByCategory(category.slug),
     getCategoryAwards(category.slug),
     getArticlesByTopic("comparisons", 3),
   ]);
+
   const awardItems = awards?.items ?? [];
-  const breadcrumbs = breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Categories", path: "/categories" }, { name: category.name, path: `/categories/${category.slug}` }]);
+  const freeOptions = products.filter((product) => product.hasFreePlan).length;
+  const trialOptions = products.filter((product) => product.hasFreeTrial).length;
+  const breadcrumbs = breadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Categories", path: "/categories" },
+    { name: category.name, path: `/categories/${category.slug}` },
+  ]);
 
-  return <article>
-    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumbs)} />
-    <section className="border-b border-[var(--line)] bg-white">
-      <div className="shell py-10 sm:py-16">
-        <nav aria-label="Breadcrumb" className="breadcrumb flex flex-wrap items-center gap-x-2 gap-y-1"><Link href="/" className="hover:text-[var(--ink)]">Home</Link><span aria-hidden="true">/</span><Link href="/categories" className="hover:text-[var(--ink)]">Categories</Link><span aria-hidden="true">/</span><span className="text-[var(--ink)]">{category.name}</span></nav>
-        <header className="mt-12 grid gap-8 lg:grid-cols-[1fr_18rem] lg:items-end">
-          <div><p className="eyebrow">Category guide</p><h1 className="section-heading mt-5 max-w-4xl">{category.name}</h1>{category.description && <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--muted)]">{category.description}</p>}</div>
-          <div className="border-l-2 border-[var(--accent)] pl-5"><strong className="block text-3xl tracking-[-0.05em]">{products.length}</strong><span className="metadata mt-1 block">published {products.length === 1 ? "tool" : "tools"} in this category</span></div>
-        </header>
-      </div>
-    </section>
-    {/* Award slots lead the page: they answer "which one for me?" before the grid
-        answers "what exists?". Curated only, so the block hides when nothing is set. */}
-    {awardItems.length > 0 && awards && (
-      <section className="shell py-16 sm:py-24">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={jsonLd(itemListJsonLd(`Best ${categoryToolsLabel(category.name)}`, awardItems.map((item) => ({ name: item.product.name, path: `/tools/${item.product.slug}` }))))}
-        />
-        <div className="flex flex-wrap items-end justify-between gap-4 border-b border-[var(--line)] pb-5">
-          <div>
-            <p className="eyebrow">Our picks</p>
-            <h2 className="mt-4 text-3xl font-bold tracking-[-0.05em]">Best {categoryToolsLabel(category.name)}</h2>
-          </div>
-          <Link href={`/best/${awards.slug}`} className="editorial-link text-sm font-semibold">See the full ranking ↗</Link>
-        </div>
-        <ul className="mt-8 divide-y divide-[var(--line)] border-b border-[var(--line)]">
-          {awardItems.map((item) => (
-            <li key={item.id} className="grid gap-6 py-8 lg:grid-cols-[minmax(0,1fr)_15rem] lg:items-start lg:gap-12">
-              <div className="min-w-0">
-                <span className="tag border-[var(--accent)] font-bold text-[var(--accent-deep)]">{item.award}</span>
-                <h3 className="mt-4 text-2xl font-bold tracking-[-0.04em]">
-                  <Link href={`/tools/${item.product.slug}`} className="hover:text-[var(--accent-deep)]">{item.product.name}</Link>
-                </h3>
-                {item.rationale && <p className="mt-3 max-w-2xl leading-7 text-[var(--muted)]">{item.rationale}</p>}
-                <DecisionBadges hasFreePlan={item.product.hasFreePlan} hasFreeTrial={item.product.hasFreeTrial} pricingModel={item.product.pricingModel} className="mt-4" />
+  return (
+    <article>
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumbs)} />
+
+      {/* Category introduction: what this is, how big the field is, and the two ways
+          into it - read our picks, or search within the category. */}
+      <section className="band">
+        <div className="shell py-8 sm:py-12">
+          <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Categories", href: "/categories" }, { name: category.name }]} />
+
+          <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-end lg:gap-16">
+            <div className="min-w-0">
+              <p className="eyebrow">Buying guide</p>
+              <h1 className="section-heading mt-3 max-w-3xl">Best {categoryToolsLabel(category.name)}</h1>
+              {category.description && <p className="lede mt-5 max-w-2xl">{category.description}</p>}
+              <div className="mt-7 flex flex-wrap gap-3">
+                {awardItems.length > 0 && <a href="#our-picks" className="button-primary">See our picks</a>}
+                {products.length >= 2 && (
+                  <Link href={`/compare?category=${encodeURIComponent(category.slug)}`} className="button-secondary">
+                    Compare {category.name}
+                  </Link>
+                )}
               </div>
-              <div className="flex flex-col gap-3 lg:pt-1">
-                <AffiliateCta product={item.product} placement="category-award" className="w-full text-center" />
-                <Link href={`/tools/${item.product.slug}`} className="button-secondary w-full text-center">Read review</Link>
-              </div>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-6"><Disclosure /></div>
-      </section>
-    )}
-
-    {/* No "how to choose" block: Category has no field for it, and reusing
-        description would print the same sentence twice on one page. Add a dedicated
-        column before reintroducing this section. */}
-
-    <section className="shell py-16 sm:py-24">
-      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-[var(--line)] pb-5">
-        <div>
-          <p className="eyebrow">Everything in this category</p>
-          <h2 className="mt-4 text-3xl font-bold tracking-[-0.05em]">All {categoryToolsLabel(category.name)}</h2>
-        </div>
-        <Link href={`/compare?category=${encodeURIComponent(category.slug)}`} className="editorial-link text-sm font-semibold">Compare them ↗</Link>
-      </div>
-      <ProductGrid
-        products={products}
-        className="mt-8"
-        emptyTitle="No published tools here yet."
-        emptyBody="This category is published, but its shortlist is still being edited."
-        emptyHref="/categories"
-        emptyLinkLabel="Explore other categories"
-      />
-    </section>
-
-    {comparisons.length > 0 && (
-      <section className="border-t border-[var(--line)]">
-        <div className="shell py-16 sm:py-24">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="eyebrow">Head to head</p>
-              <h2 className="mt-4 text-3xl font-bold tracking-[-0.05em]">Written comparisons</h2>
             </div>
-            <Link href="/comparisons" className="editorial-link text-sm font-semibold">All comparisons ↗</Link>
+
+            <dl className="grid grid-cols-3 gap-4 border-t border-[var(--line)] pt-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+              <Stat value={products.length} label={products.length === 1 ? "tool reviewed" : "tools reviewed"} />
+              <Stat value={freeOptions} label="with a free plan" />
+              <Stat value={trialOptions} label="with a free trial" />
+            </dl>
           </div>
-          <ul className="mt-8 divide-y divide-[var(--line)] border-y border-[var(--line)]">
+        </div>
+      </section>
+
+      {/* Award slots lead the page: they answer "which one for me?" before the grid
+          answers "what exists?". Curated only, so the block hides when nothing is set. */}
+      {awardItems.length > 0 && awards && (
+        <section id="our-picks" className="shell scroll-mt-24 py-14 sm:py-20">
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={jsonLd(itemListJsonLd(`Best ${categoryToolsLabel(category.name)}`, awardItems.map((item) => ({ name: item.product.name, path: `/tools/${item.product.slug}` }))))}
+          />
+          <SectionHeader
+            eyebrow="Our picks"
+            title="Our top picks"
+            intro="Each slot is assigned by an editor, with the reasoning written next to it. Nobody can buy a position."
+            href={`/best/${awards.slug}`}
+            linkLabel="See the full ranking"
+          />
+
+          <div className="mt-6 rule-list border-b border-[var(--line)]">
+            {awardItems.map((item, index) => (
+              <ProductRow
+                key={item.id}
+                product={item.product}
+                rank={index + 1}
+                award={item.award}
+                reason={item.rationale ? { label: "Why it wins this slot:", text: item.rationale } : null}
+                entryPriceLabel={ctaSubline(item.product.pricingPlans)}
+                action={<AffiliateCta product={item.product} placement="category-award" className="w-full" />}
+              />
+            ))}
+          </div>
+
+          <div className="mt-6"><Disclosure /></div>
+        </section>
+      )}
+
+      {/* The full field, as a browsable grid rather than a second ranking. */}
+      <section className="band-sunken">
+        <div className="shell py-14 sm:py-20">
+          <div className="flex flex-col gap-6 border-b border-[var(--line)] pb-6 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
+            <div className="min-w-0">
+              <p className="eyebrow">Everything in this category</p>
+              <h2 className="section-heading mt-3">All {categoryToolsLabel(category.name)}</h2>
+            </div>
+            <div className="w-full lg:max-w-sm">
+              {/* The same directory search, pre-scoped to this category. */}
+              <SearchForm
+                id="category-search"
+                label={`Search within ${category.name}`}
+                placeholder={`Search ${category.name}`}
+                scope={{ category: category.slug }}
+              />
+            </div>
+          </div>
+
+          <ProductGrid
+            products={products}
+            className="mt-8"
+            emptyTitle="No published tools here yet."
+            emptyBody="This category is published, but its shortlist is still being edited."
+            emptyHref="/categories"
+            emptyLinkLabel="Explore other categories"
+          />
+        </div>
+      </section>
+
+      {comparisons.length > 0 && (
+        <section className="shell py-14 sm:py-20">
+          <SectionHeader eyebrow="Head to head" title="Written comparisons" href="/comparisons" linkLabel="All comparisons" />
+          <ul className="mt-6 rule-list border-b border-[var(--line)]">
             {comparisons.map((article) => (
-              <li key={article.id} className="py-5">
-                <Link href={`/articles/${article.slug}`} className="group block">
-                  <span className="text-lg font-bold tracking-[-0.03em] group-hover:text-[var(--accent-deep)]">{article.title}</span>
+              <li key={article.id}>
+                <Link href={`/articles/${article.slug}`} className="group block py-5">
+                  <span className="text-lg font-bold tracking-[-0.02em] group-hover:text-[var(--accent-deep)]">{article.title}</span>
+                  {article.excerpt && <span className="mt-1 block max-w-2xl text-sm leading-6 text-[var(--muted)]">{article.excerpt}</span>}
                 </Link>
               </li>
             ))}
           </ul>
-        </div>
-      </section>
-    )}
-  </article>;
+        </section>
+      )}
+    </article>
+  );
+}
+
+function Stat({ value, label }: { value: number; label: string }) {
+  return (
+    <div>
+      <dt className="sr-only">{label}</dt>
+      <dd>
+        <strong className="block text-2xl font-bold tracking-[-0.03em] text-[var(--ink)]">{value}</strong>
+        <span className="mt-1 block text-[0.68rem] uppercase leading-4 tracking-[0.1em] text-[var(--muted)]" aria-hidden="true">{label}</span>
+      </dd>
+    </div>
+  );
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {

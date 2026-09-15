@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Disclosure } from "@/components/affiliate/Disclosure";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { buildMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -19,17 +20,13 @@ export const metadata = buildMetadata(
  */
 export default function MethodologyPage() {
   return (
-    <article className="shell py-20 sm:py-28">
-      <nav aria-label="Breadcrumb" className="breadcrumb flex flex-wrap items-center gap-x-2 gap-y-1">
-        <Link href="/" className="hover:text-[var(--ink)]">Home</Link>
-        <span aria-hidden="true">/</span>
-        <span className="text-[var(--ink)]">How we pick</span>
-      </nav>
+    <article className="shell py-12 sm:py-16">
+      <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "How we pick" }]} />
 
-      <header className="mt-10 max-w-3xl border-b border-[var(--line)] pb-12">
+      <header className="mt-10 max-w-3xl border-b border-[var(--line)] pb-10">
         <p className="eyebrow">Editorial policy</p>
-        <h1 className="section-heading mt-5">How we pick.</h1>
-        <p className="mt-6 text-lg leading-8 text-[var(--muted)]">
+        <h1 className="section-heading mt-3">How we pick.</h1>
+        <p className="lede mt-5">
           We exist to help you choose a tool, not to move you towards whichever one pays most.
           Here is exactly how that works.
         </p>
@@ -88,8 +85,8 @@ export default function MethodologyPage() {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="mt-12 first:mt-0">
-      <h2 className="text-2xl font-bold tracking-[-0.04em]">{title}</h2>
+    <section className="mt-10 first:mt-0">
+      <h2 className="sub-heading">{title}</h2>
       <p className="article-content mt-4">{children}</p>
     </section>
   );

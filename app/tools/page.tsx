@@ -1,13 +1,32 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ProductGrid } from "@/components/product/ProductGrid";
-import { getAudiences, getProducts, getPublishedCategories, getUseCases } from "@/lib/products";
+import { SearchForm } from "@/components/search/SearchForm";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { getAudiences, getProducts, getPublishedCategories, getUseCases, isSortOrder } from "@/lib/products";
 import { buildMetadata } from "@/lib/seo";
 import { PricingModel } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 
 const pricingModels = new Set(Object.values(PricingModel));
+
+const PRICING_OPTIONS = [
+  { value: "FREE", label: "Free" },
+  { value: "FREEMIUM", label: "Freemium" },
+  { value: "SUBSCRIPTION", label: "Subscription" },
+  { value: "ONE_TIME", label: "One-time" },
+  { value: "LIFETIME", label: "Lifetime" },
+  { value: "USAGE_BASED", label: "Usage-based" },
+  { value: "CUSTOM", label: "Custom" },
+];
+
+const SORT_OPTIONS = [
+  { value: "recommended", label: "Recommended" },
+  { value: "rating", label: "Highest rated" },
+  { value: "name", label: "A to Z" },
+  { value: "newest", label: "Recently added" },
+];
 
 type ToolsSearchParams = {
   q?: string;
@@ -17,6 +36,7 @@ type ToolsSearchParams = {
   freeTrial?: string;
   useCase?: string;
   audience?: string;
+  sort?: string;
 };
 
 /**
@@ -28,7 +48,7 @@ type ToolsSearchParams = {
  */
 export async function generateMetadata({ searchParams }: { searchParams: Promise<ToolsSearchParams> }): Promise<Metadata> {
   const params = await searchParams;
-  const isFiltered = Boolean(params.q || params.category || params.pricing || params.freePlan || params.freeTrial || params.useCase || params.audience);
+  const isFiltered = Boolean(params.q || params.category || params.pricing || params.freePlan || params.freeTrial || params.useCase || params.audience || params.sort);
   return buildMetadata(
     "Explore digital tools",
     "Search a curated directory of software, AI tools and digital products by what you need them to do.",
@@ -42,6 +62,7 @@ export default async function ToolsPage({ searchParams }: { searchParams: Promis
   const pricingModel = pricingModels.has(params.pricing as PricingModel) ? params.pricing as PricingModel : undefined;
   const freePlan = params.freePlan === "true" ? true : undefined;
   const freeTrial = params.freeTrial === "true" ? true : undefined;
+  const sort = isSortOrder(params.sort) ? params.sort : "recommended";
 
   const [products, categories, useCases, audiences] = await Promise.all([
     getProducts({
@@ -52,105 +73,193 @@ export default async function ToolsPage({ searchParams }: { searchParams: Promis
       freeTrial,
       useCase: params.useCase,
       audience: params.audience,
+      sort,
     }),
     getPublishedCategories(),
     getUseCases(),
     getAudiences(),
   ]);
 
-  const hasFilters = Boolean(params.q || params.category || pricingModel || freePlan || freeTrial || params.useCase || params.audience);
+  const activeCategory = categories.find((category) => category.slug === params.category);
+  const activeUseCase = useCases.find((item) => item.slug === params.useCase);
+  const activeAudience = audiences.find((item) => item.slug === params.audience);
 
-  return <section className="shell py-20 sm:py-28">
-    <header className="max-w-3xl">
-      <p className="eyebrow">Curated directory</p>
-      <h1 className="section-heading mt-5">Find the right tool for the work.</h1>
-      <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--muted)]">Start with what you need it to do. Search matches names, descriptions, use cases and audiences — not just tool names.</p>
-    </header>
+  /** The chips that let someone unpick one decision without losing the rest. */
+  const applied: Array<{ label: string; removeHref: string }> = [];
+  const withoutKey = (key: keyof ToolsSearchParams) => {
+    const next = new URLSearchParams();
+    for (const [name, value] of Object.entries(params)) {
+      if (name !== key && value) next.set(name, String(value));
+    }
+    const query = next.toString();
+    return query ? `/tools?${query}` : "/tools";
+  };
+  if (params.q?.trim()) applied.push({ label: `“${params.q.trim()}”`, removeHref: withoutKey("q") });
+  if (activeCategory) applied.push({ label: activeCategory.name, removeHref: withoutKey("category") });
+  if (pricingModel) applied.push({ label: PRICING_OPTIONS.find((option) => option.value === pricingModel)?.label ?? pricingModel, removeHref: withoutKey("pricing") });
+  if (activeUseCase) applied.push({ label: activeUseCase.name, removeHref: withoutKey("useCase") });
+  if (activeAudience) applied.push({ label: activeAudience.name, removeHref: withoutKey("audience") });
+  if (freePlan) applied.push({ label: "Has a free plan", removeHref: withoutKey("freePlan") });
+  if (freeTrial) applied.push({ label: "Has a free trial", removeHref: withoutKey("freeTrial") });
 
-    {/* A finished panel, not an open band: border-y with no horizontal padding left the
-        controls flush against the white edge, which read as a cut-off background. */}
-    <form action="/tools" className="surface mt-12 p-5 sm:mt-16 sm:p-7">
-      <div className="grid gap-4 lg:grid-cols-[minmax(14rem,1.4fr)_1fr_1fr_auto] lg:items-end">
-        <label className="block text-sm font-semibold">
-          Search
-          <input name="q" defaultValue={params.q} placeholder="e.g. invoicing, project management" aria-label="Search tools by name, description or use case" className="mt-2 block min-h-12 w-full border border-[var(--line)] bg-[var(--background)] px-4 text-sm outline-none placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[#2180f8]/15" />
-        </label>
-        <label className="block text-sm font-semibold">
-          Category
-          <select name="category" defaultValue={params.category ?? ""} className="mt-2 block min-h-12 w-full border border-[var(--line)] bg-[var(--background)] px-3 text-sm outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[#2180f8]/15">
-            <option value="">All categories</option>
-            {categories.map((category) => <option key={category.slug} value={category.slug}>{category.name}</option>)}
-          </select>
-        </label>
-        <label className="block text-sm font-semibold">
-          Pricing
-          <select name="pricing" defaultValue={params.pricing ?? ""} className="mt-2 block min-h-12 w-full border border-[var(--line)] bg-[var(--background)] px-3 text-sm outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[#2180f8]/15">
-            <option value="">All pricing</option>
-            <option value="FREE">Free</option><option value="FREEMIUM">Freemium</option><option value="SUBSCRIPTION">Subscription</option>
-            <option value="ONE_TIME">One-time</option><option value="LIFETIME">Lifetime</option><option value="USAGE_BASED">Usage-based</option><option value="CUSTOM">Custom</option>
-          </select>
-        </label>
-        <button className="button-primary min-h-12 w-full lg:w-auto">Apply filters <span aria-hidden="true">↗</span></button>
+  const hasFilters = applied.length > 0;
+
+  return (
+    <div>
+      {/* Search leads the page: this is the route most people take into the site. */}
+      <section className="band">
+        <div className="shell py-10 sm:py-14">
+          <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Tools" }]} />
+          <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-end lg:gap-16">
+            <div className="min-w-0">
+              <p className="eyebrow">Curated directory</p>
+              <h1 className="section-heading mt-3 max-w-3xl">Find the right tool for the work.</h1>
+              <SearchForm
+                id="directory-search"
+                label="Search tools by name, description or use case"
+                placeholder="e.g. invoicing, project management, SEO"
+                defaultValue={params.q}
+                size="lg"
+                submitLabel="Search"
+                className="mt-7 max-w-2xl"
+              />
+              <p className="mt-3 text-sm text-[var(--muted)]">
+                Search matches names, descriptions, use cases and audiences &mdash; not just tool names.
+              </p>
+            </div>
+            <p className="lede lg:pb-2">
+              {products.length === 0
+                ? "Nothing matches yet."
+                : <><strong className="font-semibold text-[var(--ink)]">{products.length}</strong> published {products.length === 1 ? "tool" : "tools"} {hasFilters ? "match your filters" : "in the directory"}.</>}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div className="shell grid gap-10 py-12 sm:py-16 lg:grid-cols-[17rem_minmax(0,1fr)] lg:gap-14">
+        {/* Filters. A plain GET form, so everything works without JavaScript and every
+            filtered view is a shareable URL. */}
+        <form action="/tools" className="h-fit lg:sticky lg:top-24">
+          {/* The current query survives a filter change without being retyped. */}
+          {params.q && <input type="hidden" name="q" value={params.q} />}
+
+          <div className="flex items-center justify-between gap-3 border-b border-[var(--line)] pb-3">
+            <h2 className="text-sm font-bold uppercase tracking-[0.1em] text-[var(--ink)]">Refine</h2>
+            {hasFilters && <Link href={params.q ? `/tools?q=${encodeURIComponent(params.q)}` : "/tools"} className="text-xs font-semibold text-[var(--accent-deep)]">Clear all</Link>}
+          </div>
+
+          <div className="mt-5 flex flex-col gap-5">
+            <div>
+              <label htmlFor="filter-category" className="field-label">Category</label>
+              <select id="filter-category" name="category" defaultValue={params.category ?? ""} className="field">
+                <option value="">All categories</option>
+                {categories.map((category) => <option key={category.slug} value={category.slug}>{category.name}</option>)}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="filter-pricing" className="field-label">Pricing</label>
+              <select id="filter-pricing" name="pricing" defaultValue={params.pricing ?? ""} className="field">
+                <option value="">Any pricing</option>
+                {PRICING_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="filter-use-case" className="field-label">Use case</label>
+              <select id="filter-use-case" name="useCase" defaultValue={params.useCase ?? ""} className="field">
+                <option value="">Any use case</option>
+                {useCases.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="filter-audience" className="field-label">Audience</label>
+              <select id="filter-audience" name="audience" defaultValue={params.audience ?? ""} className="field">
+                <option value="">Any audience</option>
+                {audiences.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}
+              </select>
+            </div>
+
+            <fieldset className="border-0 p-0">
+              <legend className="field-label">Cost to start</legend>
+              <div className="flex flex-col gap-2.5 text-sm text-[var(--ink-body)]">
+                <label className="inline-flex items-center gap-2.5">
+                  <input type="checkbox" name="freePlan" value="true" defaultChecked={freePlan} className="h-4 w-4 accent-[var(--accent)]" /> Has a free plan
+                </label>
+                <label className="inline-flex items-center gap-2.5">
+                  <input type="checkbox" name="freeTrial" value="true" defaultChecked={freeTrial} className="h-4 w-4 accent-[var(--accent)]" /> Has a free trial
+                </label>
+              </div>
+            </fieldset>
+
+            <div>
+              <label htmlFor="filter-sort" className="field-label">Sort by</label>
+              <select id="filter-sort" name="sort" defaultValue={sort} className="field">
+                {SORT_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              </select>
+            </div>
+
+            <button className="button-primary w-full">Apply</button>
+          </div>
+        </form>
+
+        <div className="min-w-0">
+          {applied.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2 pb-6">
+              <span className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--muted)]">Filtering by</span>
+              {applied.map((chip) => (
+                <Link
+                  key={chip.label}
+                  href={chip.removeHref}
+                  className="badge badge-accent hover:border-[var(--accent)]"
+                  aria-label={`Remove filter ${chip.label}`}
+                >
+                  {chip.label} <span aria-hidden="true">&times;</span>
+                </Link>
+              ))}
+            </div>
+          )}
+
+          <ProductGrid
+            products={products}
+            emptyTitle="Nothing fits those filters yet."
+            emptyBody={params.q ? "Try a broader term, or clear the filters to browse the full directory." : "Clear one or more filters to see more of the curated directory."}
+            emptyLinkLabel="Clear filters"
+          />
+
+          {/* Need-first entry points into the taxonomy landings. */}
+          {(useCases.length > 0 || audiences.length > 0) && (
+            <div className="mt-16 border-t border-[var(--line)] pt-10">
+              <p className="eyebrow">Browse by need</p>
+              {useCases.length > 0 && (
+                <>
+                  <h2 className="mt-3 text-lg font-bold tracking-[-0.02em]">By use case</h2>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {useCases.map((item) => (
+                      <Link key={item.slug} href={`/tools/use-case/${item.slug}`} className="badge hover:border-[var(--accent)] hover:text-[var(--accent-deep)]">
+                        {item.name} <span className="text-[var(--muted-soft)]">{item._count.products}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              )}
+              {audiences.length > 0 && (
+                <>
+                  <h2 className="mt-8 text-lg font-bold tracking-[-0.02em]">By audience</h2>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {audiences.map((item) => (
+                      <Link key={item.slug} href={`/tools/audience/${item.slug}`} className="badge hover:border-[var(--accent)] hover:text-[var(--accent-deep)]">
+                        {item.name} <span className="text-[var(--muted-soft)]">{item._count.products}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        <label className="block text-sm font-semibold">
-          Use case
-          <select name="useCase" defaultValue={params.useCase ?? ""} className="mt-2 block min-h-12 w-full border border-[var(--line)] bg-[var(--background)] px-3 text-sm outline-none focus:border-[var(--accent)]">
-            <option value="">Any use case</option>
-            {useCases.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}
-          </select>
-        </label>
-        <label className="block text-sm font-semibold">
-          Audience
-          <select name="audience" defaultValue={params.audience ?? ""} className="mt-2 block min-h-12 w-full border border-[var(--line)] bg-[var(--background)] px-3 text-sm outline-none focus:border-[var(--accent)]">
-            <option value="">Any audience</option>
-            {audiences.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}
-          </select>
-        </label>
-      </div>
-
-      <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-[var(--muted)]">
-        <label className="inline-flex items-center gap-2"><input type="checkbox" name="freePlan" value="true" defaultChecked={freePlan} className="h-4 w-4 accent-[#2180f8]" /> Has a free plan</label>
-        <label className="inline-flex items-center gap-2"><input type="checkbox" name="freeTrial" value="true" defaultChecked={freeTrial} className="h-4 w-4 accent-[#2180f8]" /> Has a free trial</label>
-        {hasFilters && <Link href="/tools" className="editorial-link font-semibold text-[var(--ink)]">Clear all filters</Link>}
-      </div>
-    </form>
-
-    <div className="mt-8 flex flex-wrap items-baseline justify-between gap-3 border-b border-[var(--line)] pb-4">
-      <p className="text-sm font-semibold text-[var(--ink)]"><span className="text-[var(--accent-deep)]">{products.length}</span> {products.length === 1 ? "tool" : "tools"} found</p>
-      {hasFilters && <p className="text-sm text-[var(--muted)]">Showing matches for your current filters</p>}
     </div>
-
-    <ProductGrid
-      products={products}
-      className="mt-8"
-      emptyTitle="Nothing fits those filters yet."
-      emptyBody={params.q ? "Try a broader term, or clear the filters to browse the full directory." : "Clear one or more filters to see more of the curated directory."}
-      emptyLinkLabel="Clear filters"
-    />
-
-    {/* Need-first entry points into the taxonomy landings. */}
-    {(useCases.length > 0 || audiences.length > 0) && (
-      <div className="mt-20 border-t border-[var(--line)] pt-10">
-        <p className="eyebrow">Browse by need</p>
-        {useCases.length > 0 && <>
-          <h2 className="mt-4 text-xl font-bold tracking-[-0.03em]">By use case</h2>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {useCases.map((item) => (
-              <Link key={item.slug} href={`/tools/use-case/${item.slug}`} className="tag hover:border-[var(--accent)] hover:text-[var(--accent-deep)]">{item.name} <span className="text-[var(--muted)]">{item._count.products}</span></Link>
-            ))}
-          </div>
-        </>}
-        {audiences.length > 0 && <>
-          <h2 className="mt-8 text-xl font-bold tracking-[-0.03em]">By audience</h2>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {audiences.map((item) => (
-              <Link key={item.slug} href={`/tools/audience/${item.slug}`} className="tag hover:border-[var(--accent)] hover:text-[var(--accent-deep)]">{item.name} <span className="text-[var(--muted)]">{item._count.products}</span></Link>
-            ))}
-          </div>
-        </>}
-      </div>
-    )}
-  </section>;
+  );
 }
