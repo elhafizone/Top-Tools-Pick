@@ -361,7 +361,7 @@ function LeadProduct({ product }: { product: FeaturedProduct }) {
 
 function SupportingProduct({ product }: { product: FeaturedProduct }) {
   return (
-    <article className="group flex items-start gap-4 py-5 first:pt-0 last:pb-0">
+    <article className="group flex items-start gap-4 py-5">
       <ProductLogo name={product.name} logoUrl={product.logoUrl} size="md" />
       <div className="min-w-0 flex-1">
         <p className="truncate text-xs font-semibold uppercase tracking-[0.1em] text-[var(--muted)]">{product.category.name}</p>
