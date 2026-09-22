@@ -474,7 +474,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: storedTitle ? { absolute: storedTitle } : title,
     description,
     alternates: { canonical },
-    openGraph: { title, description, url: canonical, siteName: "TopToolsPick", type: "website" },
-    twitter: { card: "summary_large_image", title, description },
+    openGraph: {
+      title, description, url: canonical, siteName: "TopToolsPick", type: "website",
+      images: [{ url: new URL("/ttp-logo.webp", siteUrl).toString(), width: 800, height: 600, alt: title }],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [new URL("/ttp-logo.webp", siteUrl).toString()] },
   };
 }

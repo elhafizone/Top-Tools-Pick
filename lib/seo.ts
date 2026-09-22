@@ -23,8 +23,11 @@ export function buildMetadata(title: string, description: string, path = "/", op
     alternates: { canonical },
     // openGraph.title is not templated by Next, so it carries siteName separately
     // rather than repeating the suffix inside the title string.
-    openGraph: { title, description, url: canonical, siteName, type: "website" },
-    twitter: { card: "summary_large_image", title, description },
+    openGraph: {
+      title, description, url: canonical, siteName, type: "website",
+      images: [{ url: new URL("/ttp-logo.webp", siteUrl).toString(), width: 800, height: 600, alt: siteName }],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [new URL("/ttp-logo.webp", siteUrl).toString()] },
     ...(options.robots ? { robots: options.robots } : {}),
   };
 }
