@@ -1,75 +1,76 @@
-import type { MetadataRoute } from "next";
-import { prisma } from "@/lib/db/prisma";
-import { getAudiences, getPlatforms, getUseCases } from "@/lib/products";
-import { siteUrl } from "@/lib/seo";
+import { MetadataRoute } from "next";
+import { prisma } from "@/lib/prisma";
 
-export const dynamic = "force-dynamic";
-
-/** Indexable surfaces that exist regardless of content. Kept in one place so the
- *  no-database fallback can never drift out of sync with the real branch again. */
-const staticEntries = (): MetadataRoute.Sitemap => [
-  { url: siteUrl, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
-  { url: `${siteUrl}/tools`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
-  { url: `${siteUrl}/categories`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
-  { url: `${siteUrl}/best`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
-  { url: `${siteUrl}/comparisons`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
-  { url: `${siteUrl}/compare`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
-  { url: `${siteUrl}/articles`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
-  { url: `${siteUrl}/stories`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
-  { url: `${siteUrl}/methodology`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.4 },
-  { url: `${siteUrl}/about`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.4 },
-  { url: `${siteUrl}/contact`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
-  { url: `${siteUrl}/affiliate-disclosure`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
-  { url: `${siteUrl}/privacy`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.2 },
-  { url: `${siteUrl}/terms`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.2 },
-];
-
-/** A dedicated alternatives page is only indexable once it has this many curated rows. */
-const INDEXABLE_ALTERNATIVES = 3;
-/** Facet landings below this many products are noindex, so they stay out of the sitemap too. */
-const INDEXABLE_FACET = 3;
+const BASE = "https://toptoolspick.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  if (!process.env.DATABASE_URL) return staticEntries();
+  const now = new Date();
 
-  const [products, categories, stories, editorialLists, articles, alternativeCounts, useCases, audiences, platforms] = await Promise.all([
-    prisma.product.findMany({ where: { status: "PUBLISHED" }, select: { slug: true, updatedAt: true } }),
-    prisma.category.findMany({ where: { status: "PUBLISHED" }, select: { slug: true, updatedAt: true } }),
-    prisma.story.findMany({ where: { status: "PUBLISHED" }, select: { slug: true, updatedAt: true } }),
-    prisma.editorialList.findMany({ where: { status: "PUBLISHED" }, select: { slug: true, updatedAt: true } }),
-    prisma.article.findMany({ where: { status: "PUBLISHED" }, select: { slug: true, updatedAt: true } }),
-    // Only list alternatives pages the metadata will actually allow to be indexed.
-    prisma.productAlternative.groupBy({
-      by: ["productId"],
-      where: { alternative: { status: "PUBLISHED", category: { status: "PUBLISHED" } } },
-      _count: { alternativeId: true },
-    }),
-    getUseCases(),
-    getAudiences(),
-    getPlatforms(),
+  // Static pages
+  const statics: MetadataRoute.Sitemap = [
+    { url: BASE, lastModified: now, changeFrequency: "daily", priority: 1 },
+    { url: `${BASE}/tools`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
+    { url: `${BASE}/categories`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/best`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/compare`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${BASE}/articles`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${BASE}/methodology`, lastModified: now, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${BASE}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${BASE}/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.3 },
+    { url: `${BASE}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${BASE}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${BASE}/affiliate-disclosure`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
+  ];
+
+  // Product pages
+  const products = await prisma.product.findMany({
+    where: { status: "published" },
+    select: { slug: true, updatedAt: true },
+  });
+
+  const productUrls: MetadataRoute.Sitemap = products.flatMap((p) => [
+    { url: `${BASE}/tools/${p.slug}`, lastModified: p.updatedAt, changeFrequency: "weekly" as const, priority: 0.85 },
+    { url: `${BASE}/tools/${p.slug}/alternatives`, lastModified: p.updatedAt, changeFrequency: "monthly" as const, priority: 0.5 },
   ]);
 
-  const indexableAlternativeIds = new Set(
-    alternativeCounts.filter((row) => row._count.alternativeId >= INDEXABLE_ALTERNATIVES).map((row) => row.productId),
-  );
-  const productSlugsById = new Map(
-    (await prisma.product.findMany({
-      where: { id: { in: [...indexableAlternativeIds] }, status: "PUBLISHED" },
-      select: { id: true, slug: true, updatedAt: true },
-    })).map((row) => [row.id, row]),
-  );
+  // Category pages
+  const categories = await prisma.category.findMany({
+    where: { status: "published" },
+    select: { slug: true, updatedAt: true },
+  });
 
-  return [
-    ...staticEntries(),
-    ...categories.map((category) => ({ url: `${siteUrl}/categories/${category.slug}`, lastModified: category.updatedAt, changeFrequency: "weekly" as const, priority: 0.6 })),
-    ...products.map((product) => ({ url: `${siteUrl}/tools/${product.slug}`, lastModified: product.updatedAt, changeFrequency: "monthly" as const, priority: 0.7 })),
-    ...[...productSlugsById.values()].map((product) => ({ url: `${siteUrl}/tools/${product.slug}/alternatives`, lastModified: product.updatedAt, changeFrequency: "monthly" as const, priority: 0.7 })),
-    ...stories.map((story) => ({ url: `${siteUrl}/stories/${story.slug}`, lastModified: story.updatedAt, changeFrequency: "monthly" as const, priority: 0.6 })),
-    ...editorialLists.map((list) => ({ url: `${siteUrl}/best/${list.slug}`, lastModified: list.updatedAt, changeFrequency: "monthly" as const, priority: 0.7 })),
-    ...articles.map((article) => ({ url: `${siteUrl}/articles/${article.slug}`, lastModified: article.updatedAt, changeFrequency: "monthly" as const, priority: 0.6 })),
-    // Facet landings, listed only where the page is actually indexable.
-    ...useCases.filter((row) => row._count.products >= INDEXABLE_FACET).map((row) => ({ url: `${siteUrl}/tools/use-case/${row.slug}`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.6 })),
-    ...audiences.filter((row) => row._count.products >= INDEXABLE_FACET).map((row) => ({ url: `${siteUrl}/tools/audience/${row.slug}`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.6 })),
-    ...platforms.filter((row) => row._count.products >= INDEXABLE_FACET).map((row) => ({ url: `${siteUrl}/tools/platform/${row.slug}`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.5 })),
-  ];
+  const categoryUrls: MetadataRoute.Sitemap = categories.map((c) => ({
+    url: `${BASE}/categories/${c.slug}`,
+    lastModified: c.updatedAt,
+    changeFrequency: "weekly",
+    priority: 0.75,
+  }));
+
+  // Editorial list pages (buying guides)
+  const lists = await prisma.editorialList.findMany({
+    where: { status: "published" },
+    select: { slug: true, updatedAt: true },
+  });
+
+  const listUrls: MetadataRoute.Sitemap = lists.map((l) => ({
+    url: `${BASE}/best/${l.slug}`,
+    lastModified: l.updatedAt,
+    changeFrequency: "weekly",
+    priority: 0.75,
+  }));
+
+  // Article pages
+  const articles = await prisma.article.findMany({
+    where: { status: "published" },
+    select: { slug: true, updatedAt: true },
+  });
+
+  const articleUrls: MetadataRoute.Sitemap = articles.map((a) => ({
+    url: `${BASE}/articles/${a.slug}`,
+    lastModified: a.updatedAt,
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [...statics, ...productUrls, ...categoryUrls, ...listUrls, ...articleUrls];
 }
