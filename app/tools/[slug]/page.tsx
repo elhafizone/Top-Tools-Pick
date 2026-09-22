@@ -96,7 +96,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                     </Link>
                     {product.verified && <span className="badge badge-accent">Verified listing</span>}
                   </div>
-                  <h1 className="section-heading mt-3 break-words">{product.name}</h1>
+                  <h1 className="section-heading mt-3 break-words">{product.name} Review</h1>
                 </div>
               </div>
 
