@@ -5,7 +5,22 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: ["/", "/tools", "/categories", "/articles", "/comparisons", "/compare", "/best", "/stories"],
+      allow: [
+        "/",
+        "/tools",
+        "/categories",
+        "/articles",
+        "/comparisons",
+        "/compare",
+        "/best",
+        "/stories",
+        "/methodology",
+        "/about",
+        "/contact",
+        "/privacy",
+        "/terms",
+        "/affiliate-disclosure",
+      ],
       // /go is the outbound redirect hop - never a destination, and never indexable.
       disallow: ["/admin", "/api/", "/go"],
     },

@@ -17,6 +17,11 @@ const staticEntries = (): MetadataRoute.Sitemap => [
   { url: `${siteUrl}/articles`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
   { url: `${siteUrl}/stories`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
   { url: `${siteUrl}/methodology`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.4 },
+  { url: `${siteUrl}/about`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.4 },
+  { url: `${siteUrl}/contact`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
+  { url: `${siteUrl}/affiliate-disclosure`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
+  { url: `${siteUrl}/privacy`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.2 },
+  { url: `${siteUrl}/terms`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.2 },
 ];
 
 /** A dedicated alternatives page is only indexable once it has this many curated rows. */
