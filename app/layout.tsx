@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Source_Serif_4 } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -32,6 +33,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${editorialSerif.variable} h-full antialiased`}>
+      <head>
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-4VVJW59JC3" strategy="afterInteractive" />
+        <Script id="gtag-init" strategy="afterInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-4VVJW59JC3');
+        `}</Script>
+      </head>
       <body suppressHydrationWarning className="flex min-h-full flex-col bg-[var(--background)] text-[var(--foreground)]">
         <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(organizationJsonLd())} />
         <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(websiteJsonLd())} />
