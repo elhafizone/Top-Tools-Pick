@@ -1,70 +1,201 @@
 @import "tailwindcss";
 
-/* ---------------------------------------------------------------------------
-   Design tokens
-   ---------------------------------------------------------------------------
-   Four families only: near-black, white, brand blue, neutral greys. Nothing else
-   is allowed into the palette - a buying-decision site earns trust by looking
-   restrained, and every extra hue is one more thing that reads as promotional.
-   The "yes / no" vocabulary in comparison tables is blue and grey for the same
-   reason, not the usual green/red traffic lights.
---------------------------------------------------------------------------- */
+/* ==========================================================================
+   TopToolsPick — design tokens v1.0  ·  Direction: "Full Stop"
+   ========================================================================== */
 :root {
-  /* Neutrals */
-  --ink: #0b0d12;
-  --ink-body: #2b3340;
-  --foreground: #14171c;
-  --muted: #59626f;
-  --muted-soft: #666e7c;
-  --line: #e3e7ec;
-  --line-strong: #ccd3dc;
-  --surface: #ffffff;
-  --surface-sunken: #f4f6f9;
-  --background: #f6f7f9;
+  /* ---------- Brand / interactive -------------------------------------- */
+  --ttp-accent:        #1a66d6; /* 5.36:1 on surface (was #2180f8 = 3.81:1, failed AA) */
+  --ttp-cta:           #1a5fcb; /* primary button. White label 5.93:1 */
+  --ttp-accent-deep:   #144aa6; /* hover / pressed. 8.20:1 on surface */
+  --ttp-accent-soft:   #edf3fd; /* tinted surface for low-emphasis callouts */
+  --ttp-accent-line:   #bfd3f5; /* tinted border, prose link underline */
+  --ttp-accent-on-ink: #5b95f2; /* accent on dark surfaces. 6.50:1 on ink */
 
-  /* Brand */
-  --accent: #2180f8;
-  /* Filled surfaces that carry white text. #2180f8 behind white is 3.81:1 and fails AA;
-     this is the same blue one step deeper, at 4.63:1. */
-  --accent-cta: #1d72e0;
-  --accent-deep: #1259c3;
-  --accent-soft: #eaf3ff;
-  --accent-line: #b7d5ff;
+  /* ---------- Editorial special ---------------------------------------- */
+  --ttp-pick:          #12294f; /* "Editorial Pick" plate — navy. White text 14.43:1 */
+  --ttp-pick-ink:      #ffffff;
+  --ttp-pick-mark:     #8db4f5; /* square inside pick plate. 6.86:1 on --ttp-pick */
+  --ttp-pick-soft:     #e9eef6; /* row tint behind a picked item */
+  --ttp-pick-line:     #c3cfe2;
+  --ttp-sponsored:      #f7f2e8;
+  --ttp-sponsored-line: #e5d9c3;
+  --ttp-sponsored-ink:  #6a5226; /* 6.61:1 on --ttp-sponsored */
 
-  /* Inverted surfaces (dark editorial bands) */
-  --ink-line: #2b313c;
-  --ink-muted: #a7aebc;
-  --ink-accent: #7eb8ff;
+  /* ---------- Semantic -------------------------------------------------- */
+  --ttp-success:      #17784a; /* 5.49:1 */
+  --ttp-success-soft: #e8f3ec;
+  --ttp-warning:      #8f5509; /* 6.05:1 */
+  --ttp-warning-soft: #fbf1df;
+  --ttp-error:        #c42b2b; /* 5.63:1 */
+  --ttp-error-soft:   #fbecec;
+  --ttp-info:         #3a5576; /* 7.66:1 */
+  --ttp-info-soft:    #edf1f6;
 
-  /* Layout */
-  --content-width: 82rem;
-  --reading-width: 44rem;
-  --focus-ring: #2180f8;
-  --ruled-gutter: 1.5rem;
-  --radius-control: 0.5rem;
-  --radius-surface: 0.75rem;
-  --shadow-sm: 0 1px 2px rgb(11 13 18 / 4%);
-  --shadow-md: 0 10px 28px -12px rgb(11 13 18 / 14%);
+  /* ---------- Neutrals (cool, hue ≈258) ---------------------------------- */
+  --ttp-neutral-50:  #f6f7f9;
+  --ttp-neutral-100: #eef1f4;
+  --ttp-neutral-200: #e3e7ec;
+  --ttp-neutral-300: #ccd3dc;
+  --ttp-neutral-400: #a5aebb; /* disabled text & icons only */
+  --ttp-neutral-500: #7d8796; /* 3.63:1 — input borders, marks */
+  --ttp-neutral-600: #59626f; /* 6.17:1 — muted text */
+  --ttp-neutral-700: #3d4654; /* 9.53:1 — secondary headings */
+  --ttp-neutral-800: #2b3340; /* 12.73:1 — body prose */
+  --ttp-neutral-900: #0b0d12; /* 19.43:1 — headings, ink */
+
+  /* ---------- Text roles ------------------------------------------------- */
+  --ttp-ink:          var(--ttp-neutral-900);
+  --ttp-ink-body:     var(--ttp-neutral-800);
+  --ttp-muted:        var(--ttp-neutral-600);
+  --ttp-ink-disabled: var(--ttp-neutral-400);
+  --ttp-placeholder:  var(--ttp-neutral-600);
+
+  /* ---------- Surfaces & borders ---------------------------------------- */
+  --ttp-bg:             #f6f7f9;
+  --ttp-surface:        #ffffff;
+  --ttp-surface-sunken: #f4f6f9;
+  --ttp-border:         #e3e7ec;
+  --ttp-border-strong:  #ccd3dc;
+  --ttp-border-input:   #7d8796; /* WCAG fix: was #ccd3dc = 1.51:1, now 3.63:1 */
+
+  /* ---------- Inverse (footer, dark bands) -------------------------------- */
+  --ttp-inverse-bg:    #0b0d12;
+  --ttp-inverse-ink:   #ffffff;
+  --ttp-inverse-body:  #c9cfd8;
+  --ttp-inverse-muted: #8a94a3;
+  --ttp-inverse-line:  #262c36;
+
+  /* ---------- Comparison marks ------------------------------------------- */
+  --ttp-mark-yes:     var(--ttp-accent);
+  --ttp-mark-partial: var(--ttp-neutral-500);
+  --ttp-mark-no:      var(--ttp-neutral-500);
+  --ttp-meter-empty:  var(--ttp-neutral-200);
+
+  /* ---------- Typography ------------------------------------------------- */
+  --ttp-font-sans:  var(--ttp-font-sans-loaded, 'Schibsted Grotesk'), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ttp-font-serif: var(--ttp-font-serif-loaded, 'Newsreader'), ui-serif, Georgia, 'Times New Roman', serif;
+  --ttp-font-mono:  ui-monospace, 'SFMono-Regular', 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --ttp-numeric:    tabular-nums lining-nums;
+
+  /* Fluid type scale */
+  --ttp-display-xl-size: clamp(2.5rem, 6.25vw, 4rem);
+  --ttp-display-lg-size: clamp(2.125rem, 0.6667rem + 3.6458vw, 3rem);
+  --ttp-display-md-size: clamp(1.75rem, 0.9167rem + 2.0833vw, 2.25rem);
+  --ttp-heading-lg-size: clamp(1.375rem, 0.75rem + 1.5625vw, 1.75rem);
+  --ttp-heading-md-size: clamp(1.1875rem, 0.875rem + 0.7813vw, 1.375rem);
+  --ttp-heading-sm-size: clamp(1.0625rem, 0.9583rem + 0.2604vw, 1.125rem);
+  --ttp-body-lg-size: clamp(1.125rem, 1.0208rem + 0.2604vw, 1.1875rem);
+  --ttp-body-md-size: 1rem;
+  --ttp-body-sm-size: 0.875rem;
+  --ttp-measure: 68ch;
+
+  /* ---------- Spacing (4px base) ----------------------------------------- */
+  --ttp-space-1: 4px;  --ttp-space-2: 8px;   --ttp-space-3: 12px;  --ttp-space-4: 16px;
+  --ttp-space-5: 20px; --ttp-space-6: 24px;  --ttp-space-8: 32px;  --ttp-space-10: 40px;
+  --ttp-space-12: 48px; --ttp-space-16: 64px; --ttp-space-20: 80px; --ttp-space-24: 96px;
+
+  /* ---------- Layout ------------------------------------------------------ */
+  --ttp-container: 1200px;
+  --ttp-gutter: clamp(20px, 3vw, 24px);
+  --ttp-header-h: 56px;
+  --ttp-utility-h: 32px;
+  --ttp-target-min: 44px;
+
+  /* ---------- Radii — crisp, not rounded ---------------------------------- */
+  --ttp-radius-xs: 2px;
+  --ttp-radius-sm: 4px;
+  --ttp-radius-md: 6px;
+  --ttp-radius-tile-48: 8px;
+  --ttp-radius-tile-64: 10px;
+  --ttp-radius-tile-96: 14px;
+
+  /* ---------- Elevation ---------------------------------------------------- */
+  --ttp-shadow-1: 0 1px 2px rgba(11, 13, 18, 0.05);
+  --ttp-shadow-2: 0 3px 8px rgba(11, 13, 18, 0.07), 0 1px 2px rgba(11, 13, 18, 0.05);
+  --ttp-shadow-pop: 0 12px 32px rgba(11, 13, 18, 0.12), 0 2px 6px rgba(11, 13, 18, 0.06);
+  --ttp-shadow-sticky: 0 1px 0 var(--ttp-border), 0 6px 12px -6px rgba(11, 13, 18, 0.08);
+  --ttp-focus-ring: 0 0 0 2px var(--ttp-surface), 0 0 0 4px var(--ttp-accent);
+
+  /* ---------- Motion ------------------------------------------------------ */
+  --ttp-duration-fast: 150ms;
+  --ttp-duration-base: 200ms;
+  --ttp-duration-slow: 250ms;
+  --ttp-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* ---------- Z-index ----------------------------------------------------- */
+  --ttp-z-sticky: 10; --ttp-z-dropdown: 30; --ttp-z-header: 40; --ttp-z-overlay: 50;
+
+  /* ==========================================================================
+     Backward-compat aliases — existing components keep working unchanged.
+     Gradually migrate callers to --ttp-* names over time.
+     ========================================================================== */
+  --ink:              var(--ttp-ink);
+  --ink-body:         var(--ttp-ink-body);
+  --foreground:       var(--ttp-ink);
+  --muted:            var(--ttp-muted);
+  --muted-soft:       var(--ttp-neutral-500);
+  --line:             var(--ttp-border);
+  --line-strong:      var(--ttp-border-strong);
+  --surface:          var(--ttp-surface);
+  --surface-sunken:   var(--ttp-surface-sunken);
+  --background:       var(--ttp-bg);
+  --accent:           var(--ttp-accent);
+  --accent-cta:       var(--ttp-cta);
+  --accent-deep:      var(--ttp-accent-deep);
+  --accent-soft:      var(--ttp-accent-soft);
+  --accent-line:      var(--ttp-accent-line);
+  --ink-line:         var(--ttp-inverse-line);
+  --ink-muted:        var(--ttp-inverse-muted);
+  --ink-accent:       var(--ttp-accent-on-ink);
+  --focus-ring:       var(--ttp-accent);
+  --radius-control:   var(--ttp-radius-sm);
+  --radius-surface:   var(--ttp-radius-md);
+  --shadow-sm:        var(--ttp-shadow-1);
+  --shadow-md:        var(--ttp-shadow-2);
+  --content-width:    var(--ttp-container);
+  --ruled-gutter:     var(--ttp-gutter);
+  --reading-width:    var(--ttp-measure);
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --ttp-header-h: 72px;
+    --ttp-utility-h: 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ttp-duration-fast: 0ms;
+    --ttp-duration-base: 0ms;
+    --ttp-duration-slow: 0ms;
+  }
+}
+
+@keyframes ttp-shimmer {
+  from { background-position: 150% 0; }
+  to   { background-position: -50% 0; }
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-serif: var(--font-editorial-serif);
+  --color-background: var(--ttp-bg);
+  --color-foreground: var(--ttp-ink);
+  --font-sans: var(--ttp-font-sans);
+  --font-serif: var(--ttp-font-serif);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  background: var(--ttp-bg);
+  color: var(--ttp-ink);
+  font-family: var(--ttp-font-sans);
   letter-spacing: -0.006em;
   overflow-x: hidden;
 }
 
 ::selection {
-  background: #d3e7ff;
-  color: var(--ink);
+  background: var(--ttp-accent-soft);
+  color: var(--ttp-ink);
 }
 
 a,
@@ -72,7 +203,10 @@ button,
 input,
 select,
 textarea {
-  transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+  transition: color var(--ttp-duration-base) var(--ttp-ease-out),
+              background-color var(--ttp-duration-base) var(--ttp-ease-out),
+              border-color var(--ttp-duration-base) var(--ttp-ease-out),
+              box-shadow var(--ttp-duration-base) var(--ttp-ease-out);
 }
 
 button,
@@ -91,49 +225,43 @@ select:focus-visible,
 textarea:focus-visible,
 summary:focus-visible,
 [tabindex]:focus-visible {
-  outline: 3px solid var(--focus-ring);
+  outline: 3px solid var(--ttp-accent);
   outline-offset: 2px;
-  border-radius: 2px;
+  border-radius: var(--ttp-radius-xs);
 }
 
 /* ---------------------------------------------------------------------------
    Layout primitives
 --------------------------------------------------------------------------- */
 .shell {
-  width: min(100% - 3rem, var(--content-width));
+  width: min(100% - 3rem, var(--ttp-container));
   margin-inline: auto;
 }
 
-/* A measured column for long-form editorial. Sits inside .shell. */
 .reading-column {
-  max-width: var(--reading-width);
+  max-width: var(--ttp-measure);
 }
 
-/* Alternating bands separate sections without wrapping everything in cards. */
 .band {
-  background: var(--surface);
-  border-block: 1px solid var(--line);
+  background: var(--ttp-surface);
+  border-block: 1px solid var(--ttp-border);
 }
 
 .band-sunken {
-  background: var(--surface-sunken);
-  border-block: 1px solid var(--line);
+  background: var(--ttp-surface-sunken);
+  border-block: 1px solid var(--ttp-border);
 }
 
 .band-ink {
-  background: var(--ink);
+  background: var(--ttp-inverse-bg);
   color: #ffffff;
 }
 
 /* ---------------------------------------------------------------------------
    Typography
-   ---------------------------------------------------------------------------
-   Headlines are sans and tightly set, but no longer compressed to the point of
-   reading as fashion editorial. Long-form body copy is serif, which is what
-   makes a review feel like a publication rather than a directory entry.
 --------------------------------------------------------------------------- */
 .eyebrow {
-  color: var(--accent-deep);
+  color: var(--ttp-accent-deep);
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -142,7 +270,7 @@ summary:focus-visible,
 }
 
 .eyebrow-muted {
-  color: var(--muted);
+  color: var(--ttp-muted);
 }
 
 .display-heading {
@@ -169,7 +297,7 @@ summary:focus-visible,
 }
 
 .lede {
-  color: var(--muted);
+  color: var(--ttp-muted);
   font-size: 1.0625rem;
   line-height: 1.7;
 }
@@ -182,35 +310,34 @@ summary:focus-visible,
 }
 
 .metadata {
-  color: var(--muted);
+  color: var(--ttp-muted);
   font-size: 0.75rem;
   line-height: 1.5;
 }
 
 .breadcrumb {
-  color: var(--muted);
+  color: var(--ttp-muted);
   font-size: 0.8125rem;
 }
 
 .breadcrumb a:hover {
-  color: var(--ink);
+  color: var(--ttp-ink);
 }
 
 .editorial-link {
   text-decoration: underline;
-  text-decoration-color: var(--accent);
+  text-decoration-color: var(--ttp-accent);
   text-decoration-thickness: 2px;
   text-underline-offset: 5px;
 }
 
 .editorial-link:hover {
-  color: var(--accent-deep);
+  color: var(--ttp-accent-deep);
 }
 
-/* Long-form prose: reviews, verdicts, guides, policy pages. */
 .article-content {
-  color: var(--ink-body);
-  font-family: var(--font-editorial-serif), Georgia, "Times New Roman", serif;
+  color: var(--ttp-ink-body);
+  font-family: var(--ttp-font-serif);
   font-size: 1.125rem;
   line-height: 1.78;
   letter-spacing: 0;
@@ -221,7 +348,7 @@ summary:focus-visible,
 }
 
 .article-content strong {
-  color: var(--ink);
+  color: var(--ttp-ink);
   font-weight: 600;
 }
 
@@ -231,11 +358,10 @@ summary:focus-visible,
   }
 }
 
-/* A single highlighted passage - the verdict, a recommendation, a caveat. */
 .pull-quote {
-  border-left: 3px solid var(--accent);
-  color: var(--ink);
-  font-family: var(--font-editorial-serif), Georgia, serif;
+  border-left: 3px solid var(--ttp-accent);
+  color: var(--ttp-ink);
+  font-family: var(--ttp-font-serif);
   font-size: 1.25rem;
   line-height: 1.6;
   padding-left: 1.5rem;
@@ -245,45 +371,40 @@ summary:focus-visible,
    Surfaces
 --------------------------------------------------------------------------- */
 .panel {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-surface);
+  background: var(--ttp-surface);
+  border: 1px solid var(--ttp-border);
+  border-radius: var(--ttp-radius-md);
 }
 
 .panel-raised {
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--ttp-shadow-1);
 }
 
 .panel-hover {
-  transition: border-color 160ms ease, box-shadow 160ms ease;
+  transition: border-color var(--ttp-duration-base) var(--ttp-ease-out),
+              box-shadow var(--ttp-duration-base) var(--ttp-ease-out);
 }
 
 .panel-hover:hover {
-  border-color: var(--accent-line);
-  box-shadow: var(--shadow-md);
+  border-color: var(--ttp-accent-line);
+  box-shadow: var(--ttp-shadow-2);
 }
 
-/* One cell of a RuledGrid: the left border and gutter of the first column are
-   clipped by the wrapper, so every column ends up evenly inset.
-   The gutter and the wrapper's negative margin must stay equal - if the cell's
-   horizontal padding is smaller than the shift, the first column's text is clipped
-   too. Both read the same token so they cannot drift apart. */
+/* Ruled grid: cells draw their own borders; the grid clips the leftmost one. */
 .ruled-cell {
-  border-bottom: 1px solid var(--line);
-  border-left: 1px solid var(--line);
-  padding: 1.75rem var(--ruled-gutter);
+  border-bottom: 1px solid var(--ttp-border);
+  border-left: 1px solid var(--ttp-border);
+  padding: 1.75rem var(--ttp-gutter);
 }
 
 .ruled-grid {
   display: grid;
-  margin-left: calc(-1 * (var(--ruled-gutter) + 1px));
-  width: calc(100% + var(--ruled-gutter) + 1px);
+  margin-left: calc(-1 * (var(--ttp-gutter) + 1px));
+  width: calc(100% + var(--ttp-gutter) + 1px);
 }
 
-/* A hairline-separated list - the default way to present a set of products.
-   Rows, not cards: easier to scan and compare down a column. */
 .rule-list > * + * {
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--ttp-border);
 }
 
 /* ---------------------------------------------------------------------------
@@ -291,9 +412,9 @@ summary:focus-visible,
 --------------------------------------------------------------------------- */
 .logo-tile {
   align-items: center;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 0.625rem;
+  background: var(--ttp-surface);
+  border: 1px solid var(--ttp-border);
+  border-radius: var(--ttp-radius-tile-48);
   display: flex;
   flex-shrink: 0;
   justify-content: center;
@@ -308,9 +429,9 @@ summary:focus-visible,
 }
 
 .logo-tile-fallback {
-  background: var(--accent-soft);
-  border-color: var(--accent-line);
-  color: var(--accent-deep);
+  background: var(--ttp-accent-soft);
+  border-color: var(--ttp-accent-line);
+  color: var(--ttp-accent-deep);
   font-weight: 800;
   letter-spacing: -0.03em;
 }
@@ -320,9 +441,9 @@ summary:focus-visible,
 --------------------------------------------------------------------------- */
 .badge {
   align-items: center;
-  border: 1px solid var(--line);
+  border: 1px solid var(--ttp-border);
   border-radius: 999px;
-  color: var(--muted);
+  color: var(--ttp-muted);
   display: inline-flex;
   font-size: 0.75rem;
   font-weight: 600;
@@ -333,22 +454,21 @@ summary:focus-visible,
 }
 
 .badge-accent {
-  background: var(--accent-soft);
-  border-color: var(--accent-line);
-  color: var(--accent-deep);
+  background: var(--ttp-accent-soft);
+  border-color: var(--ttp-accent-line);
+  color: var(--ttp-accent-deep);
 }
 
-/* The strongest label on a page: "Best overall", "Our pick". Use once. */
 .badge-solid {
-  background: var(--accent-cta);
-  border-color: var(--accent-cta);
+  background: var(--ttp-cta);
+  border-color: var(--ttp-cta);
   color: #ffffff;
   font-weight: 700;
 }
 
 .badge-ink {
-  border-color: var(--ink-line);
-  color: var(--ink-muted);
+  border-color: var(--ttp-inverse-line);
+  color: var(--ttp-inverse-muted);
 }
 
 /* ---------------------------------------------------------------------------
@@ -358,7 +478,7 @@ summary:focus-visible,
 .button-secondary,
 .button-ghost {
   align-items: center;
-  border-radius: var(--radius-control);
+  border-radius: var(--ttp-radius-sm);
   display: inline-flex;
   font-size: 0.875rem;
   font-weight: 650;
@@ -370,36 +490,36 @@ summary:focus-visible,
 }
 
 .button-primary {
-  background: var(--accent-cta);
-  border: 1px solid var(--accent-cta);
+  background: var(--ttp-cta);
+  border: 1px solid var(--ttp-cta);
   color: #ffffff;
 }
 
 .button-primary:hover {
-  background: var(--accent-deep);
-  border-color: var(--accent-deep);
+  background: var(--ttp-accent-deep);
+  border-color: var(--ttp-accent-deep);
 }
 
 .button-secondary {
-  background: var(--surface);
-  border: 1px solid var(--line-strong);
-  color: var(--ink);
+  background: var(--ttp-surface);
+  border: 1px solid var(--ttp-border-strong);
+  color: var(--ttp-ink);
 }
 
 .button-secondary:hover {
-  border-color: var(--accent);
-  color: var(--accent-deep);
+  border-color: var(--ttp-accent);
+  color: var(--ttp-accent-deep);
 }
 
 .button-ghost {
   background: transparent;
   border: 1px solid transparent;
-  color: var(--ink);
+  color: var(--ttp-ink);
 }
 
 .button-ghost:hover {
-  background: var(--accent-soft);
-  color: var(--accent-deep);
+  background: var(--ttp-accent-soft);
+  color: var(--ttp-accent-deep);
 }
 
 .button-lg {
@@ -408,12 +528,12 @@ summary:focus-visible,
   padding-inline: 1.5rem;
 }
 
-/* Form fields. One look for search, filters and selects everywhere. */
+/* Form fields. --ttp-border-input is the WCAG-compliant border (3.63:1). */
 .field {
-  background: var(--surface);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-control);
-  color: var(--ink);
+  background: var(--ttp-surface);
+  border: 1px solid var(--ttp-border-input);
+  border-radius: var(--ttp-radius-sm);
+  color: var(--ttp-ink);
   font-size: 0.9375rem;
   min-height: 2.875rem;
   padding: 0.5rem 0.875rem;
@@ -421,12 +541,12 @@ summary:focus-visible,
 }
 
 .field::placeholder {
-  color: var(--muted-soft);
+  color: var(--ttp-placeholder);
 }
 
 .field:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgb(33 128 248 / 14%);
+  border-color: var(--ttp-accent);
+  box-shadow: 0 0 0 3px rgb(26 102 214 / 14%);
   outline: none;
 }
 
@@ -442,8 +562,6 @@ summary:focus-visible,
   padding-block: 0.35rem;
 }
 
-/* Room for the leading search glyph. Declared after the size modifiers so it wins
-   over their shorthand padding rather than being silently overridden. */
 .field-icon {
   padding-left: 2.6rem;
 }
@@ -457,7 +575,7 @@ summary:focus-visible,
 }
 
 .field-label {
-  color: var(--ink);
+  color: var(--ttp-ink);
   display: block;
   font-size: 0.8125rem;
   font-weight: 650;
@@ -467,8 +585,8 @@ summary:focus-visible,
 select.field {
   appearance: none;
   background-image:
-    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
-    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+    linear-gradient(45deg, transparent 50%, var(--ttp-muted) 50%),
+    linear-gradient(135deg, var(--ttp-muted) 50%, transparent 50%);
   background-position: calc(100% - 1.05rem) 55%, calc(100% - 0.75rem) 55%;
   background-repeat: no-repeat;
   background-size: 0.3rem 0.3rem, 0.3rem 0.3rem;
@@ -477,9 +595,6 @@ select.field {
 
 /* ---------------------------------------------------------------------------
    Comparison tables
-   ---------------------------------------------------------------------------
-   The attribute column stays pinned while the product columns scroll, so a row
-   never loses its label on a narrow screen.
 --------------------------------------------------------------------------- */
 .table-scroll {
   -webkit-overflow-scrolling: touch;
@@ -487,8 +602,6 @@ select.field {
   overscroll-behavior-x: contain;
 }
 
-/* A horizontal scroller without the scrollbar furniture - used where the overflow
-   is incidental (a row of section links) rather than the point (a wide table). */
 .scroll-x-quiet {
   overflow-x: auto;
   scrollbar-width: none;
@@ -511,13 +624,13 @@ select.field {
 }
 
 .data-table thead th {
-  border-bottom: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--ttp-border-strong);
   padding: 1.25rem 1.25rem 1.1rem;
 }
 
 .data-table tbody th {
-  border-bottom: 1px solid var(--line);
-  color: var(--muted);
+  border-bottom: 1px solid var(--ttp-border);
+  color: var(--ttp-muted);
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -526,17 +639,16 @@ select.field {
 }
 
 .data-table tbody td {
-  border-bottom: 1px solid var(--line);
-  border-left: 1px solid var(--line);
-  color: var(--ink-body);
+  border-bottom: 1px solid var(--ttp-border);
+  border-left: 1px solid var(--ttp-border);
+  color: var(--ttp-ink-body);
   font-size: 0.875rem;
   line-height: 1.6;
   padding: 1rem 1.25rem;
 }
 
-/* Pin the label column. Needs an opaque background or scrolled cells show through. */
 .data-table .col-sticky {
-  background: var(--background);
+  background: var(--ttp-bg);
   left: 0;
   position: sticky;
   z-index: 2;
@@ -547,12 +659,12 @@ select.field {
 }
 
 .yes-mark {
-  color: var(--accent-deep);
+  color: var(--ttp-accent-deep);
   font-weight: 700;
 }
 
 .no-mark {
-  color: var(--muted-soft);
+  color: var(--ttp-neutral-500);
 }
 
 /* ---------------------------------------------------------------------------
@@ -560,18 +672,18 @@ select.field {
 --------------------------------------------------------------------------- */
 .site-header {
   backdrop-filter: blur(10px);
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
-  border-color: var(--line);
+  background: color-mix(in srgb, var(--ttp-surface) 92%, transparent);
+  border-color: var(--ttp-border);
 }
 
 .site-nav-link {
-  color: var(--muted);
+  color: var(--ttp-muted);
   font-weight: 550;
   position: relative;
 }
 
 .site-nav-link::after {
-  background: var(--accent);
+  background: var(--ttp-accent);
   bottom: -0.55rem;
   content: "";
   height: 2px;
@@ -580,12 +692,13 @@ select.field {
   position: absolute;
   right: 0;
   transform: scaleX(0.4);
-  transition: opacity 160ms ease, transform 160ms ease;
+  transition: opacity var(--ttp-duration-fast) var(--ttp-ease-out),
+              transform var(--ttp-duration-fast) var(--ttp-ease-out);
 }
 
 .site-nav-link:hover,
 .site-nav-link:focus-visible {
-  color: var(--ink);
+  color: var(--ttp-ink);
 }
 
 .site-nav-link:hover::after,
@@ -596,15 +709,15 @@ select.field {
 }
 
 .site-nav-link[aria-current="page"] {
-  color: var(--ink);
+  color: var(--ttp-ink);
 }
 
 .site-footer {
-  border-color: var(--ink-line);
+  border-color: var(--ttp-inverse-line);
 }
 
 .site-footer a {
-  color: #c8cedb;
+  color: var(--ttp-inverse-body);
 }
 
 .site-footer a:hover,
@@ -614,21 +727,18 @@ select.field {
 
 /* ---------------------------------------------------------------------------
    Restrained atmosphere
-   ---------------------------------------------------------------------------
-   One soft wash behind the hero and nothing else. No glass, no glow, no floating
-   shapes: the page should look like a publication, not a product launch.
 --------------------------------------------------------------------------- */
 .hero-wash {
   background:
-    radial-gradient(90rem 40rem at 85% -15%, rgb(33 128 248 / 7%), transparent 60%),
-    var(--surface);
+    radial-gradient(90rem 40rem at 85% -15%, rgb(26 102 214 / 6%), transparent 60%),
+    var(--ttp-surface);
 }
 
 /* ---------------------------------------------------------------------------
    Motion
 --------------------------------------------------------------------------- */
 .hover-shift {
-  transition: transform 160ms ease;
+  transition: transform var(--ttp-duration-base) var(--ttp-ease-out);
 }
 
 .group:hover .hover-shift {
@@ -651,13 +761,12 @@ select.field {
 --------------------------------------------------------------------------- */
 @media (max-width: 640px) {
   .shell {
-    width: min(100% - 2rem, var(--content-width));
+    width: min(100% - 2rem, var(--ttp-container));
   }
 
   :root {
-    /* Narrower gutter on small screens. The grid reads the same token, so the
-       cell padding and the wrapper offset stay in step. */
-    --ruled-gutter: 1.25rem;
+    --ttp-gutter: 20px;
+    --ruled-gutter: 20px;
   }
 
   .ruled-cell {

@@ -29,7 +29,7 @@ export function Footer() {
       <div className="shell grid gap-12 py-14 sm:py-16 md:grid-cols-[1.6fr_1fr_1fr_1fr]">
         <div>
           <Image
-            src="/ttp-footer-logo.webp"
+            src="/ttp-footer-logo.svg"
             alt="Top Tools Pick"
             width={360}
             height={72}

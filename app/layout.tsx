@@ -1,19 +1,24 @@
 import type { Metadata } from "next";
-import { Geist, Source_Serif_4 } from "next/font/google";
+import { Schibsted_Grotesk, Newsreader } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { jsonLd, organizationJsonLd, siteName, siteUrl, websiteJsonLd } from "@/lib/seo";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"], display: "swap" });
+const sans = Schibsted_Grotesk({
+  variable: "--ttp-font-sans-loaded",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
 
-/**
- * The editorial half of the type system. Long-form copy - reviews, verdicts, guides -
- * is set in this serif so a tool page reads like a published review rather than a
- * database record. Interface type stays sans. Latin subset only, self-hosted by
- * next/font, so the cost is one extra font file and no layout shift.
- */
-const editorialSerif = Source_Serif_4({ variable: "--font-editorial-serif", subsets: ["latin"], display: "swap" });
+const serif = Newsreader({
+  variable: "--ttp-font-serif-loaded",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
 
 const DEFAULT_TITLE = "TopToolsPick — Choose the right tool before you pay";
 const DEFAULT_DESCRIPTION = "Independent research for the moment before you buy: ranked shortlists, honest comparisons and real alternatives across software, AI tools and digital services.";
@@ -31,7 +36,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${editorialSerif.variable} h-full antialiased`}>
+    <html lang="en" className={`${sans.variable} ${serif.variable} h-full antialiased`}>
       <head>
         {/* Google Analytics — plain tags so the script appears in the initial HTML */}
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
