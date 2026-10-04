@@ -36,6 +36,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const bestForPoints = toBullets(product.bestFor);
   const notForPoints = toBullets(product.notFor);
   const featurePoints = toBullets(product.keyFeatures);
+  const integrationPoints = toBullets(product.integrations);
   const prosPoints = toBullets(product.pros);
   const consPoints = toBullets(product.cons);
   const comparisonArticles = product.articleLinks.filter((link) => link.article.topic === "comparisons");
@@ -50,6 +51,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     { id: "overview", label: "Overview", show: true },
     { id: "fit", label: "Who it's for", show: bestForPoints.length > 0 || notForPoints.length > 0 },
     { id: "features", label: "Features", show: featurePoints.length > 0 },
+    { id: "integrations", label: "Integrations", show: integrationPoints.length > 0 },
     { id: "pricing", label: "Pricing", show: product.pricingPlans.length > 0 },
     { id: "pros-cons", label: "Pros & cons", show: prosPoints.length > 0 || consPoints.length > 0 },
     { id: "alternatives", label: "Alternatives", show: alternatives.length > 0 },
@@ -211,6 +213,23 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                   </li>
                 ))}
               </ul>
+            </section>
+          )}
+
+          {integrationPoints.length > 0 && (
+            <section aria-labelledby="integrations" className="mt-14 scroll-mt-32">
+              <p className="eyebrow">Works with</p>
+              <h2 id="integrations" className="section-heading mt-3">
+                Integrations
+                <span className="ml-3 align-middle text-base font-normal text-[var(--muted)]">
+                  {integrationPoints.length}
+                </span>
+              </h2>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {integrationPoints.map((name) => (
+                  <span key={name} className="badge">{name}</span>
+                ))}
+              </div>
             </section>
           )}
 

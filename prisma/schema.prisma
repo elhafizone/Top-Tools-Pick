@@ -47,6 +47,7 @@ model Product {
   // element on a review page. Free text, same convention as pros/cons.
   notFor            String?
   keyFeatures       String?
+  integrations      String?
   verdict           String?
   // updatedAt is a poor freshness signal: fixing a typo bumps it. This is set by hand
   // when an editor actually re-checks the product.
