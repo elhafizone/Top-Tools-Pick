@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AffiliateCta } from "@/components/affiliate/AffiliateCta";
-import { Disclosure } from "@/components/affiliate/Disclosure";
 import { DecisionBadges } from "@/components/decision/DecisionBadges";
 import { AlternativesSection } from "@/components/product/AlternativesSection";
 import { ProductCard } from "@/components/product/ProductCard";
@@ -34,7 +33,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const ctaUrl = getBestAffiliateLink(product);
   const websiteHost = safeHostname(product.websiteUrl);
   const entryPrice = ctaSubline(product.pricingPlans);
-  const programDisclosure = product.affiliatePrograms.find((program) => program.disclosure)?.disclosure ?? null;
   const bestForPoints = toBullets(product.bestFor);
   const notForPoints = toBullets(product.notFor);
   const featurePoints = toBullets(product.keyFeatures);
@@ -178,7 +176,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         </nav>
       )}
 
-      <div className="shell grid gap-12 py-12 sm:py-16 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-16">
+      <div className="shell py-12 sm:py-16">
         <div className="min-w-0">
           <section aria-labelledby="overview" className="scroll-mt-32">
             <p className="eyebrow">The editorial note</p>
@@ -370,18 +368,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
 
-        <aside className="h-fit lg:sticky lg:top-32">
-          <div className="border-t-2 border-[var(--ink)] pt-5">
-            <p className="eyebrow">Trust &amp; transparency</p>
-            <p className="mt-4 text-sm leading-6 text-[var(--muted)]">
-              We may earn a commission when you visit a merchant through a labelled affiliate link.
-              This does not change your price, and it never changes a ranking.
-            </p>
-            {programDisclosure && <p className="mt-4 text-sm leading-6 text-[var(--muted)]">{programDisclosure}</p>}
-            <div className="mt-5"><Disclosure /></div>
-            <Link href="/methodology" className="editorial-link mt-5 inline-block text-sm font-semibold text-[var(--ink)]">How we pick</Link>
-          </div>
-        </aside>
       </div>
 
       {related.length > 0 && (
