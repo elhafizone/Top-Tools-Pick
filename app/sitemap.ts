@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db/prisma";
 
 const BASE = "https://toptoolspick.com";
 
@@ -24,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Product pages
   const products = await prisma.product.findMany({
-    where: { status: "published" },
+    where: { status: "PUBLISHED" },
     select: { slug: true, updatedAt: true },
   });
 
@@ -35,7 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Category pages
   const categories = await prisma.category.findMany({
-    where: { status: "published" },
+    where: { status: "PUBLISHED" },
     select: { slug: true, updatedAt: true },
   });
 
@@ -48,7 +48,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Editorial list pages (buying guides)
   const lists = await prisma.editorialList.findMany({
-    where: { status: "published" },
+    where: { status: "PUBLISHED" },
     select: { slug: true, updatedAt: true },
   });
 
@@ -61,7 +61,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Article pages
   const articles = await prisma.article.findMany({
-    where: { status: "published" },
+    where: { status: "PUBLISHED" },
     select: { slug: true, updatedAt: true },
   });
 
