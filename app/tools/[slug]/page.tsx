@@ -410,20 +410,26 @@ function PointList({ title, points, tone }: { title: string; points: string[]; t
   return (
     <div className={`panel h-full p-5 sm:p-6 ${tone === "positive" ? "border-[var(--accent-line)] bg-[var(--accent-soft)]" : ""}`}>
       <h3 className="text-sm font-bold uppercase tracking-[0.1em] text-[var(--ink)]">{title}</h3>
-      {points.length === 1
-        ? <p className="mt-3 leading-7 text-[var(--ink-body)]">{points[0]}</p>
-        : (
-          <ul className="mt-3 flex flex-col gap-2.5">
-            {points.map((point) => (
-              <li key={point} className="flex gap-3 leading-6 text-[var(--ink-body)]">
-                <span aria-hidden="true" className={tone === "positive" ? "font-bold text-[var(--accent-deep)]" : "text-[var(--muted-soft)]"}>
-                  {tone === "positive" ? "✓" : "–"}
-                </span>
-                {point}
-              </li>
-            ))}
-          </ul>
-        )}
+      <ul className="mt-4 flex flex-col gap-3">
+        {points.map((point) => (
+          <li key={point} className="flex gap-3 text-sm leading-6 text-[var(--ink-body)]">
+            <span aria-hidden="true" className={`mt-0.5 shrink-0 ${tone === "positive" ? "text-[var(--accent-deep)]" : "text-[var(--muted-soft)]"}`}>
+              {tone === "positive" ? (
+                <svg width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true">
+                  <circle cx="8.5" cy="8.5" r="8.5" fill="currentColor" fillOpacity="0.15"/>
+                  <path d="M5.5 8.5l2 2.25 4-4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              ) : (
+                <svg width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true">
+                  <circle cx="8.5" cy="8.5" r="8.5" fill="currentColor" fillOpacity="0.12"/>
+                  <path d="M5.5 8.5h6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+                </svg>
+              )}
+            </span>
+            {point}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
