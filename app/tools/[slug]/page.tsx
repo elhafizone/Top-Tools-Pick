@@ -206,12 +206,25 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <section aria-labelledby="features" className="mt-14 scroll-mt-32">
               <p className="eyebrow">What you get</p>
               <h2 id="features" className="section-heading mt-3">Key features</h2>
-              <ul className="mt-6 grid gap-x-8 gap-y-3 sm:grid-cols-2">
-                {featurePoints.map((point) => (
-                  <li key={point} className="flex gap-3 text-sm leading-6 text-[var(--ink-body)]">
-                    <span aria-hidden="true" className="mt-1 font-bold text-[var(--accent-deep)]">&#10003;</span>{point}
-                  </li>
-                ))}
+              <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+                {featurePoints.map((point) => {
+                  const [title, ...rest] = point.split(": ");
+                  const body = rest.length ? rest.join(": ") : null;
+                  return (
+                    <li key={point} className="flex gap-3 rounded-xl border border-[var(--line)] bg-[var(--surface)] p-4">
+                      <span aria-hidden="true" className="mt-0.5 shrink-0 text-[var(--accent-deep)]">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                          <rect width="18" height="18" rx="4" fill="currentColor" fillOpacity="0.13"/>
+                          <path d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-sm font-semibold leading-5 text-[var(--ink)]">{title}</span>
+                        {body && <span className="mt-0.5 block text-sm leading-6 text-[var(--muted)]">{body}</span>}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
             </section>
           )}
