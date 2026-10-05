@@ -96,7 +96,7 @@
   --ttp-space-12: 48px; --ttp-space-16: 64px; --ttp-space-20: 80px; --ttp-space-24: 96px;
 
   /* ---------- Layout ------------------------------------------------------ */
-  --ttp-container: 1200px;
+  --ttp-container: 1360px;
   --ttp-gutter: clamp(20px, 3vw, 24px);
   --ttp-header-h: 56px;
   --ttp-utility-h: 32px;
