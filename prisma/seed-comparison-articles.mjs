@@ -100,10 +100,10 @@ If you are just starting out, try both free trials before committing. Switching 
   },
   {
     slug: 'slack-vs-microsoft-teams',
-    title: 'Slack vs Microsoft Teams: Which Team Chat App Wins in 2025?',
+    title: 'Slack vs Microsoft Teams: Which Team Chat App Wins in 2026?',
     excerpt: 'Slack invented the modern team chat category. Microsoft Teams came later and now has more daily users. Which one should your team actually use?',
     topic: 'comparisons',
-    seoTitle: 'Slack vs Microsoft Teams (2025): Features, Pricing, and the Real Difference',
+    seoTitle: 'Slack vs Microsoft Teams (2026): Features, Pricing, and the Real Difference',
     seoDescription: 'Slack vs Microsoft Teams: an honest comparison of features, pricing, integrations, and which one works better for different team types.',
     content: `Slack and Microsoft Teams are the two dominant team communication tools. Choosing between them mostly comes down to one question: what software does your team already use?
 
