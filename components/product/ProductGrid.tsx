@@ -1,6 +1,11 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import type { Product, Category } from "@prisma/client";
 import { ProductCard } from "@/components/product/ProductCard";
+
+const INITIAL_COUNT = 12;
 
 type Props = {
   products: Array<Product & { category: Category }>;
@@ -20,6 +25,8 @@ export function ProductGrid({
   emptyLinkLabel = "Browse all tools",
   className,
 }: Props) {
+  const [visible, setVisible] = useState(INITIAL_COUNT);
+
   if (products.length === 0) {
     return (
       <div className={`rounded-[var(--radius-surface)] border border-dashed border-[var(--line-strong)] bg-[var(--surface)] px-6 py-12 sm:px-10 ${className ?? ""}`}>
@@ -31,9 +38,25 @@ export function ProductGrid({
     );
   }
 
+  const shown = products.slice(0, visible);
+  const remaining = products.length - visible;
+
   return (
-    <div className={`grid gap-4 sm:grid-cols-2 xl:grid-cols-3 ${className ?? ""}`}>
-      {products.map((product) => <ProductCard key={product.id} product={product} />)}
+    <div className={className}>
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {shown.map((product) => <ProductCard key={product.id} product={product} />)}
+      </div>
+
+      {remaining > 0 && (
+        <div className="mt-8 flex justify-center">
+          <button
+            onClick={() => setVisible((v) => v + INITIAL_COUNT)}
+            className="button-secondary"
+          >
+            Load more <span className="ml-1 text-[var(--muted)]">({remaining} remaining)</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

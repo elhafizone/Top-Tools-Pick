@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ProductGrid } from "@/components/product/ProductGrid";
-import { SearchForm } from "@/components/search/SearchForm";
+import { SearchAutocomplete } from "@/components/search/SearchAutocomplete";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { getAudiences, getProducts, getPublishedCategories, getUseCases, isSortOrder } from "@/lib/products";
 import { buildMetadata } from "@/lib/seo";
@@ -114,7 +114,7 @@ export default async function ToolsPage({ searchParams }: { searchParams: Promis
             <div className="min-w-0">
               <p className="eyebrow">Curated directory</p>
               <h1 className="section-heading mt-3 max-w-3xl">Find the right tool for the work.</h1>
-              <SearchForm
+              <SearchAutocomplete
                 id="directory-search"
                 label="Search tools by name, description or use case"
                 placeholder="e.g. invoicing, project management, SEO"
