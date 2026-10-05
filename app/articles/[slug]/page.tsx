@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { marked } from "marked";
 import { AffiliateCta } from "@/components/affiliate/AffiliateCta";
 import { Disclosure } from "@/components/affiliate/Disclosure";
 import { ProductRow } from "@/components/product/ProductRow";
@@ -35,7 +36,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const isComparison = article.topic === "comparisons";
   const sectionName = isComparison ? "Comparisons" : "Guides & news";
   const sectionPath = isComparison ? "/comparisons" : "/articles";
-  const paragraphs = article.content.split(/\r?\n\r?\n/).filter(Boolean);
+  const htmlContent = marked(article.content, { gfm: true, breaks: false }) as string;
 
   const breadcrumbs = breadcrumbJsonLd([
     { name: "Home", path: "/" },
@@ -87,15 +88,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       )}
 
       <div className="shell mx-auto max-w-5xl py-12 sm:py-16">
-        <div className="article-content reading-column mx-auto">
-          {paragraphs.map((paragraph, index) => <p key={`${article.id}-${index}`}>{paragraph}</p>)}
-        </div>
+        {/* eslint-disable-next-line react/no-danger */}
+        <div className="article-content reading-column mx-auto" dangerouslySetInnerHTML={{ __html: htmlContent }} />
         {article.source && (
           <p className="reading-column mx-auto mt-10 border-t border-[var(--line)] pt-5 text-sm text-[var(--muted)]">Source: {article.source}</p>
         )}
 
-        {/* Article bodies are plain text, so this rail is the only route from editorial
-            content into the commercial pages. It is also where the affiliate CTA belongs. */}
+        {/* The product rail is the primary route from editorial content into commercial pages. */}
         {article.productLinks.length > 0 && (
           <section aria-labelledby="tools-mentioned" className="mt-14">
             <p className="eyebrow">{isComparison ? "Tools compared" : "Tools mentioned"}</p>
