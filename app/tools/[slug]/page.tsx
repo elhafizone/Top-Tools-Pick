@@ -11,7 +11,7 @@ import { Rating, ScoreMeter } from "@/components/ui/Rating";
 import { ctaSubline } from "@/lib/affiliate/cta";
 import { getBestAffiliateLink, safeHostname } from "@/lib/affiliate/links";
 import { getAlternatives } from "@/lib/alternatives";
-import { getProductBySlug, getRelatedProducts } from "@/lib/products";
+import { getAllProductNameSlugs, getProductBySlug, getRelatedProducts } from "@/lib/products";
 import { toBullets } from "@/lib/text";
 import { breadcrumbJsonLd, jsonLd, productMetadata, siteUrl, softwareApplicationJsonLd } from "@/lib/seo";
 
@@ -25,9 +25,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  const [related, alternatives] = await Promise.all([
+  const [related, alternatives, productNameSlugs] = await Promise.all([
     getRelatedProducts(product.id),
     getAlternatives(product.id),
+    getAllProductNameSlugs(),
   ]);
 
   const ctaUrl = getBestAffiliateLink(product);
@@ -96,7 +97,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                     </Link>
                     {product.verified && <span className="badge badge-accent">Verified listing</span>}
                   </div>
-                  <h1 className="section-heading mt-3 break-words">{product.name} Review</h1>
+                  <h1 className="section-heading mt-3 break-words">{product.name}</h1>
                 </div>
               </div>
 
@@ -239,9 +240,14 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 </span>
               </h2>
               <div className="mt-6 flex flex-wrap gap-2">
-                {integrationPoints.map((name) => (
-                  <span key={name} className="badge">{name}</span>
-                ))}
+                {integrationPoints.map((name) => {
+                  const slug = productNameSlugs.get(name.toLowerCase());
+                  return slug ? (
+                    <Link key={name} href={`/tools/${slug}`} className="badge hover:border-[var(--accent)] hover:text-[var(--accent-deep)]">{name}</Link>
+                  ) : (
+                    <span key={name} className="badge">{name}</span>
+                  );
+                })}
               </div>
             </section>
           )}

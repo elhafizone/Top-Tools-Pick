@@ -286,6 +286,15 @@ export async function getPublishedEditorialLists() {
   });
 }
 
+/** Lightweight name→slug lookup used by the integrations section to link known tools. */
+export async function getAllProductNameSlugs() {
+  const rows = await prisma.product.findMany({
+    where: { status: "PUBLISHED" },
+    select: { name: true, slug: true },
+  });
+  return new Map(rows.map((r) => [r.name.toLowerCase(), r.slug]));
+}
+
 export const MIN_COMPARE = 2;
 export const MAX_COMPARE = 4;
 
