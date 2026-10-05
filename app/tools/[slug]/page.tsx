@@ -243,7 +243,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 {integrationPoints.map((name) => {
                   const slug = productNameSlugs.get(name.toLowerCase());
                   return slug ? (
-                    <Link key={name} href={`/tools/${slug}`} className="badge hover:border-[var(--accent)] hover:text-[var(--accent-deep)]">{name}</Link>
+                    <Link key={name} href={`/tools/${slug}`} className="badge transition-colors duration-150 hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent-deep)]">{name}</Link>
                   ) : (
                     <span key={name} className="badge">{name}</span>
                   );
