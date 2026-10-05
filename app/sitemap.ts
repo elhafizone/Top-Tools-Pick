@@ -6,13 +6,13 @@ const BASE = "https://toptoolspick.com";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
-  // Static pages
+  // Static pages — /compare is excluded: it carries noindex (user-driven builder, not a
+  // content destination) so including it wastes crawl budget without indexing benefit.
   const statics: MetadataRoute.Sitemap = [
     { url: BASE, lastModified: now, changeFrequency: "daily", priority: 1 },
     { url: `${BASE}/tools`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE}/categories`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE}/best`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${BASE}/compare`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${BASE}/articles`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${BASE}/methodology`, lastModified: now, changeFrequency: "monthly", priority: 0.4 },
     { url: `${BASE}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.4 },
@@ -22,16 +22,33 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/affiliate-disclosure`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
   ];
 
-  // Product pages
+  // Product pages — alternatives are only included when the product has enough curated
+  // entries to be indexable (mirrors the INDEXABLE_ALTERNATIVES threshold on the page).
+  const MIN_ALTERNATIVES = 3;
   const products = await prisma.product.findMany({
     where: { status: "PUBLISHED" },
-    select: { slug: true, updatedAt: true },
+    select: {
+      slug: true,
+      updatedAt: true,
+      _count: {
+        select: {
+          alternatives: {
+            where: { alternative: { status: "PUBLISHED", category: { status: "PUBLISHED" } } },
+          },
+        },
+      },
+    },
   });
 
-  const productUrls: MetadataRoute.Sitemap = products.flatMap((p) => [
-    { url: `${BASE}/tools/${p.slug}`, lastModified: p.updatedAt, changeFrequency: "weekly" as const, priority: 0.85 },
-    { url: `${BASE}/tools/${p.slug}/alternatives`, lastModified: p.updatedAt, changeFrequency: "monthly" as const, priority: 0.5 },
-  ]);
+  const productUrls: MetadataRoute.Sitemap = products.flatMap((p) => {
+    const rows: MetadataRoute.Sitemap = [
+      { url: `${BASE}/tools/${p.slug}`, lastModified: p.updatedAt, changeFrequency: "weekly", priority: 0.85 },
+    ];
+    if (p._count.alternatives >= MIN_ALTERNATIVES) {
+      rows.push({ url: `${BASE}/tools/${p.slug}/alternatives`, lastModified: p.updatedAt, changeFrequency: "monthly", priority: 0.5 });
+    }
+    return rows;
+  });
 
   // Category pages
   const categories = await prisma.category.findMany({
