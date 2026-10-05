@@ -481,7 +481,7 @@ summary:focus-visible,
   border-radius: var(--ttp-radius-sm);
   display: inline-flex;
   font-size: 0.875rem;
-  font-weight: 650;
+  font-weight: 600;
   gap: 0.4rem;
   justify-content: center;
   min-height: 2.75rem;
@@ -578,7 +578,7 @@ summary:focus-visible,
   color: var(--ttp-ink);
   display: block;
   font-size: 0.8125rem;
-  font-weight: 650;
+  font-weight: 600;
   margin-bottom: 0.4rem;
 }
 
@@ -672,13 +672,13 @@ select.field {
 --------------------------------------------------------------------------- */
 .site-header {
   backdrop-filter: blur(10px);
-  background: color-mix(in srgb, var(--ttp-surface) 92%, transparent);
+  background: rgba(255, 255, 255, 0.92);
   border-color: var(--ttp-border);
 }
 
 .site-nav-link {
   color: var(--ttp-muted);
-  font-weight: 550;
+  font-weight: 500;
   position: relative;
 }
 
