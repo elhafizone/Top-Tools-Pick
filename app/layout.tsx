@@ -40,7 +40,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <head>
         {/* Impact.com site verification */}
         {/* @ts-expect-error — Impact requires non-standard `value` attribute */}
-        <meta name="impact-site-verification" value="cb647c35-284a-4bd3-bc85-e3075ea28786" />
+        <meta name="impact-site-verification" value="38879e62-27ff-4c11-94a8-c85dbc5fd583" />
         {/* Google Analytics — plain tags so the script appears in the initial HTML */}
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VVJW59JC3" />
