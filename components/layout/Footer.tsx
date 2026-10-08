@@ -38,9 +38,6 @@ export function Footer() {
           <p className="mt-5 max-w-sm text-sm leading-7 text-[var(--ink-muted)]">
             Independent research for the moment before you pay. Honest shortlists, real alternatives, no noise.
           </p>
-          <p className="mt-5 max-w-sm text-xs leading-6 text-[#7e8696]">
-            Some outbound links are affiliate links. They are labelled, they never change a ranking, and they never change your price.
-          </p>
         </div>
 
         <FooterColumn title="Decide" links={DECIDE} />

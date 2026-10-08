@@ -48,6 +48,32 @@ export async function getFeaturedProducts() {
   });
 }
 
+export async function getNewlyAddedProducts(take = 6) {
+  return prisma.product.findMany({
+    where: { status: "PUBLISHED" },
+    select: {
+      id: true, name: true, slug: true, shortDescription: true, logoUrl: true,
+      rating: true, editorialScore: true, hasFreePlan: true, pricingModel: true,
+      category: { select: { name: true, slug: true } },
+    },
+    orderBy: { createdAt: "desc" },
+    take,
+  });
+}
+
+export async function getTopFreeProducts(take = 6) {
+  return prisma.product.findMany({
+    where: { status: "PUBLISHED", hasFreePlan: true },
+    select: {
+      id: true, name: true, slug: true, shortDescription: true, logoUrl: true,
+      rating: true, editorialScore: true, hasFreePlan: true, pricingModel: true,
+      category: { select: { name: true, slug: true } },
+    },
+    orderBy: [{ editorialScore: "desc" }, { rating: "desc" }],
+    take,
+  });
+}
+
 /**
  * Sort orders offered on the directory.
  *

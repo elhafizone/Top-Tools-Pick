@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { RuledGrid } from "@/components/layout/RuledGrid";
-import { SearchForm } from "@/components/search/SearchForm";
+import { SearchAutocomplete } from "@/components/search/SearchAutocomplete";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { prisma } from "@/lib/db/prisma";
 import { buildMetadata } from "@/lib/seo";
@@ -31,7 +31,7 @@ export default async function CategoriesPage() {
                 Each category is a decision, not a folder: a focused set of published tools you can rank, compare and choose between.
               </p>
             </div>
-            <SearchForm
+            <SearchAutocomplete
               id="categories-search"
               label="Search tools"
               placeholder="Or search by what you need"

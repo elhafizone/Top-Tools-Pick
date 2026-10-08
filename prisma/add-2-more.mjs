@@ -1,0 +1,8 @@
+import { PrismaClient } from "@prisma/client";
+const p = new PrismaClient();
+const cats = await p.category.findMany({ select: { id: true, slug: true } });
+const m = Object.fromEntries(cats.map(c => [c.slug, c.id]));
+await p.product.create({ data: { name:"Figma FigJam", slug:"figma-figjam", shortDescription:"Online whiteboard by Figma.", description:"FigJam is Figma's online whiteboard for brainstorming, diagramming and team workshops, deeply integrated with Figma design files.", websiteUrl:"https://www.figma.com/figjam", categoryId:m["remote-work"], pricingModel:"FREEMIUM", rating:4.6, editorialScore:90, featured:false, hasFreePlan:true, bestFor:"Design teams who want a whiteboard that stays inside their Figma workflow.", pros:"Seamlessly linked to Figma files; great for design sprints.", cons:"Less powerful than Miro for non-design workshops.", status:"PUBLISHED" }});
+await p.product.create({ data: { name:"Webex", slug:"webex", shortDescription:"Enterprise video conferencing by Cisco.", description:"Cisco Webex is an enterprise-grade video meetings and messaging platform with AI-powered features and industry-leading security.", websiteUrl:"https://www.webex.com", categoryId:m["remote-work"], pricingModel:"FREEMIUM", rating:4.1, editorialScore:78, featured:false, hasFreePlan:true, bestFor:"Enterprises with Cisco infrastructure who need secure, compliant video conferencing.", pros:"Strong security and compliance certifications; good for large organisations.", cons:"Interface trails Zoom and Teams in usability for everyday meetings.", status:"PUBLISHED" }});
+console.log("Added 2 tools!");
+await p.$disconnect();

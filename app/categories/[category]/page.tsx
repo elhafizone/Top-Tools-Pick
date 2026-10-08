@@ -5,7 +5,7 @@ import { AffiliateCta } from "@/components/affiliate/AffiliateCta";
 import { Disclosure } from "@/components/affiliate/Disclosure";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { ProductRow } from "@/components/product/ProductRow";
-import { SearchForm } from "@/components/search/SearchForm";
+import { SearchAutocomplete } from "@/components/search/SearchAutocomplete";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ctaSubline } from "@/lib/affiliate/cta";
@@ -118,7 +118,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
             </div>
             <div className="w-full lg:max-w-sm">
               {/* The same directory search, pre-scoped to this category. */}
-              <SearchForm
+              <SearchAutocomplete
                 id="category-search"
                 label={`Search within ${category.name}`}
                 placeholder={`Search ${category.name}`}

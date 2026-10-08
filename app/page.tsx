@@ -1,15 +1,15 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { AffiliateCta } from "@/components/affiliate/AffiliateCta";
 import { Disclosure } from "@/components/affiliate/Disclosure";
 import { DecisionBadges } from "@/components/decision/DecisionBadges";
 import { RuledGrid } from "@/components/layout/RuledGrid";
 import { ProductLogo } from "@/components/product/ProductLogo";
-import { SearchForm } from "@/components/search/SearchForm";
-import { Rating, ScoreMeter } from "@/components/ui/Rating";
+import { SearchAutocomplete } from "@/components/search/SearchAutocomplete";
+import { Rating } from "@/components/ui/Rating";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ctaSubline } from "@/lib/affiliate/cta";
 import { getPublishedArticles } from "@/lib/articles";
-import { MAX_COMPARE, MIN_COMPARE, getComparableCategories, getFeaturedProducts, getPopulatedCategories, getPublishedEditorialLists } from "@/lib/products";
+import { MAX_COMPARE, MIN_COMPARE, getComparableCategories, getFeaturedProducts, getNewlyAddedProducts, getTopFreeProducts, getPopulatedCategories, getPublishedEditorialLists } from "@/lib/products";
 import { prisma } from "@/lib/db/prisma";
 import { buildMetadata } from "@/lib/seo";
 import { truncate } from "@/lib/text";
@@ -27,7 +27,7 @@ export const metadata = buildMetadata(
 type FeaturedProduct = Awaited<ReturnType<typeof getFeaturedProducts>>[number];
 
 export default async function Home() {
-  const [products, categories, comparableCategories, editorialLists, articles, stories, totalTools] = await Promise.all([
+  const [products, categories, comparableCategories, editorialLists, articles, stories, totalTools, newlyAdded, topFree] = await Promise.all([
     getFeaturedProducts(),
     getPopulatedCategories(),
     getComparableCategories(),
@@ -35,10 +35,12 @@ export default async function Home() {
     getPublishedArticles(1),
     prisma.story.findMany({ where: { status: "PUBLISHED" }, orderBy: { publishedAt: "desc" }, take: 3 }),
     prisma.product.count({ where: { status: "PUBLISHED" } }),
+    getNewlyAddedProducts(6),
+    getTopFreeProducts(6),
   ]);
 
   const leadProduct = products[0];
-  const supportingProducts = products.slice(1, 4);
+  const supportingProducts = products.slice(1);
   const leadArticle = articles.articles[0];
   const supportingArticles = articles.articles.slice(1, 3);
   const shortlists = editorialLists.slice(0, 3);
@@ -58,7 +60,7 @@ export default async function Home() {
               what it costs, and what to use instead.
             </p>
 
-            <SearchForm
+            <SearchAutocomplete
               id="hero-search"
               label="What do you need a tool for?"
               placeholder="e.g. project management, invoicing, SEO"
@@ -107,22 +109,20 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 2 - Recommended tools. The people furthest along the decision want a name. */}
-      {leadProduct && (
+      {/* 2 - Editor's picks: 6-card grid, one per featured tool. */}
+      {products.length > 0 && (
         <section className="shell py-16 sm:py-20">
           <SectionHeader
             eyebrow="Editor's picks"
             title="Tools we keep recommending."
+            intro="Independently evaluated and ranked by editorial score. Updated every month."
             href="/tools"
-            linkLabel="Browse all tools"
+            linkLabel="Browse all 200 tools"
           />
-          <div className="mt-8 grid gap-6 lg:grid-cols-[1.05fr_.95fr] lg:gap-10">
-            <LeadProduct product={leadProduct} />
-            {supportingProducts.length > 0 && (
-              <div className="rule-list border-y border-[var(--line)]">
-                {supportingProducts.map((product) => <SupportingProduct key={product.id} product={product} />)}
-              </div>
-            )}
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {[leadProduct, ...supportingProducts].map((product) => (
+              <PickCard key={product.id} product={product} />
+            ))}
           </div>
         </section>
       )}
@@ -151,6 +151,24 @@ export default async function Home() {
           ) : <EmptySection message="Categories are being prepared." href="/tools" />}
         </div>
       </section>
+
+      {/* 3b - Free tools. High-intent visitors who can't pay yet. */}
+      {topFree.length > 0 && (
+        <section className="shell py-16 sm:py-20">
+          <SectionHeader
+            eyebrow="Free to start"
+            title="No credit card needed."
+            intro="These tools have a genuinely useful free plan — not just a trial."
+            href="/tools"
+            linkLabel="All free tools"
+          />
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {topFree.map((product) => (
+              <SimpleToolCard key={product.id} product={product} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* 4 - Buying guides. The ranked shortlist is the strongest editorial format here. */}
       {shortlists.length > 0 && (
@@ -258,7 +276,27 @@ export default async function Home() {
         </section>
       )}
 
-      {/* 7 - Closing discovery prompt, back to the same search. */}
+      {/* 7 - Newly added tools. */}
+      {newlyAdded.length > 0 && (
+        <section className="band">
+          <div className="shell py-16 sm:py-20">
+            <SectionHeader
+              eyebrow="Just added"
+              title="Fresh to the library."
+              intro="Tools we recently reviewed and published."
+              href="/tools"
+              linkLabel="Browse the full library"
+            />
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {newlyAdded.map((product) => (
+                <SimpleToolCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 8 - Closing discovery prompt, back to the same search. */}
       <section className="band-sunken">
         <div className="shell flex flex-col gap-7 py-14 sm:py-16 lg:flex-row lg:items-center lg:justify-between lg:gap-14">
           <div className="max-w-xl">
@@ -266,7 +304,7 @@ export default async function Home() {
             <h2 className="section-heading mt-3">Start with the job, not the tool.</h2>
             <div className="mt-5 max-w-md"><Disclosure /></div>
           </div>
-          <SearchForm
+          <SearchAutocomplete
             id="closing-search"
             label="What do you need a tool for?"
             placeholder="What do you need a tool for?"
@@ -308,76 +346,76 @@ function Assurance({ children }: { children: React.ReactNode }) {
   );
 }
 
-/**
- * The lead pick, presented as a product rather than a card: identity, the numbers
- * people compare, and what it is actually for.
- */
-function LeadProduct({ product }: { product: FeaturedProduct }) {
+function PickCard({ product }: { product: FeaturedProduct }) {
   return (
-    <article className="panel panel-raised flex flex-col p-6 sm:p-8">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <span className="badge badge-solid">Featured tool</span>
-        <Link href={`/categories/${product.category.slug}`} className="badge hover:border-[var(--accent)] hover:text-[var(--accent-deep)]">
-          {product.category.name}
-        </Link>
-      </div>
-
-      <div className="mt-6 flex items-start gap-4 sm:gap-5">
-        <ProductLogo name={product.name} logoUrl={product.logoUrl} size="xl" />
-        <div className="min-w-0">
-          <h3 className="text-2xl font-bold tracking-[-0.03em] sm:text-3xl">
-            <Link href={`/tools/${product.slug}`} className="hover:text-[var(--accent-deep)]">{product.name}</Link>
-          </h3>
-          <Rating value={Number(product.rating)} className="mt-2" />
-          <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{truncate(product.shortDescription, 150)}</p>
+    <article className="panel panel-raised group flex flex-col gap-4 p-5 sm:p-6">
+      {/* Header row: logo + name + score badge */}
+      <div className="flex items-start gap-3">
+        <ProductLogo name={product.name} logoUrl={product.logoUrl} size="md" />
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="truncate text-base font-bold tracking-[-0.02em]">
+              <Link href={`/tools/${product.slug}`} className="group-hover:text-[var(--accent-deep)]">{product.name}</Link>
+            </h3>
+            <span
+              className="shrink-0 rounded-full bg-[var(--accent)] px-2 py-0.5 text-xs font-bold text-white"
+              aria-label={`Score ${product.editorialScore}`}
+            >
+              {product.editorialScore}
+            </span>
+          </div>
+          <Link href={`/categories/${product.category.slug}`} className="mt-0.5 block text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted)] hover:text-[var(--accent-deep)]">
+            {product.category.name}
+          </Link>
         </div>
       </div>
 
-      {product.bestFor && (
-        <p className="mt-5 leading-7 text-[var(--ink-body)]">
-          <span className="font-semibold text-[var(--ink)]">Best for:</span> {truncate(product.bestFor, 160)}
-        </p>
-      )}
+      {/* Description */}
+      <p className="flex-1 text-sm leading-6 text-[var(--muted)]">{truncate(product.shortDescription, 100)}</p>
 
-      <div className="flex-1" />
-
-      <DecisionBadges
-        hasFreePlan={product.hasFreePlan}
-        hasFreeTrial={product.hasFreeTrial}
-        pricingModel={product.pricingModel}
-        entryPriceLabel={ctaSubline(product.pricingPlans)}
-        className="mt-6"
-      />
-
-      <ScoreMeter score={product.editorialScore} className="mt-6" />
-
-      <div className="mt-6 grid gap-2.5 sm:grid-cols-2">
-        <AffiliateCta product={product} placement="home-featured" className="w-full" />
-        <Link href={`/tools/${product.slug}`} className="button-secondary w-full">Read the review</Link>
+      {/* Footer: rating + pricing badges */}
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <Rating value={Number(product.rating)} showValue={false} />
+        <DecisionBadges
+          hasFreePlan={product.hasFreePlan}
+          hasFreeTrial={product.hasFreeTrial}
+          pricingModel={product.pricingModel}
+          entryPriceLabel={ctaSubline(product.pricingPlans)}
+        />
       </div>
+
+      <Link href={`/tools/${product.slug}`} className="button-secondary w-full text-center text-sm">
+        Read the review →
+      </Link>
     </article>
   );
 }
 
-function SupportingProduct({ product }: { product: FeaturedProduct }) {
+type SimpleProduct = {
+  id: string; name: string; slug: string; shortDescription: string; logoUrl: string | null;
+  rating: unknown; editorialScore: number; hasFreePlan: boolean; pricingModel: string;
+  category: { name: string; slug: string };
+};
+
+function SimpleToolCard({ product }: { product: SimpleProduct }) {
   return (
-    <article className="group flex items-start gap-4 py-5">
-      <ProductLogo name={product.name} logoUrl={product.logoUrl} size="md" />
+    <Link
+      href={`/tools/${product.slug}`}
+      className="panel group flex items-center gap-3 p-4 hover:border-[var(--accent)]"
+    >
+      <ProductLogo name={product.name} logoUrl={product.logoUrl} size="sm" />
       <div className="min-w-0 flex-1">
-        <p className="truncate text-xs font-semibold uppercase tracking-[0.1em] text-[var(--muted)]">{product.category.name}</p>
-        <h3 className="mt-1.5 text-lg font-bold tracking-[-0.02em]">
-          <Link href={`/tools/${product.slug}`} className="group-hover:text-[var(--accent-deep)]">{product.name}</Link>
-        </h3>
-        <p className="mt-1 line-clamp-2 text-sm leading-6 text-[var(--muted)]">{product.shortDescription}</p>
-        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
-          <Rating value={Number(product.rating)} showValue={false} />
-          <DecisionBadges hasFreePlan={product.hasFreePlan} hasFreeTrial={product.hasFreeTrial} pricingModel={product.pricingModel} />
-        </div>
+        <p className="truncate font-semibold tracking-[-0.01em] group-hover:text-[var(--accent-deep)]">{product.name}</p>
+        <p className="mt-0.5 truncate text-xs text-[var(--muted)]">{product.category.name}</p>
+        <p className="mt-1 line-clamp-1 text-xs leading-5 text-[var(--muted)]">{product.shortDescription}</p>
       </div>
-      <span className="shrink-0 pt-1 text-sm font-semibold text-[var(--muted)]" aria-label={`Editorial score ${product.editorialScore} out of 100`}>
+      <span
+        className="shrink-0 rounded-full bg-[var(--accent)] px-2 py-0.5 text-xs font-bold text-white"
+        aria-label={`Score ${product.editorialScore}`}
+      >
         {product.editorialScore}
       </span>
-    </article>
+    </Link>
   );
 }
 

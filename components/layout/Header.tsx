@@ -1,10 +1,10 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 import { Logo } from "@/components/brand/Logo";
-import { SearchForm } from "@/components/search/SearchForm";
+import { SearchAutocomplete } from "@/components/search/SearchAutocomplete";
 
 /**
  * Five destinations, ordered by decision intent: pick a tool, narrow by need, read a
@@ -74,7 +74,7 @@ export function Header() {
 
         <div className="ml-auto flex items-center gap-3">
           <div className="hidden w-44 lg:block xl:w-56">
-            <SearchForm id="header-search" label="Search tools" placeholder="Search tools" size="sm" />
+            <SearchAutocomplete id="header-search" label="Search tools" placeholder="Search tools" size="sm" />
           </div>
           <Link href="/compare" className="hidden shrink-0 text-sm font-semibold text-[var(--accent-deep)] hover:text-[var(--ink)] lg:inline-flex">
             Compare tools
@@ -95,7 +95,7 @@ export function Header() {
               className="panel absolute right-0 top-full mt-2 flex w-[min(19rem,calc(100vw-2rem))] flex-col gap-1 p-3 text-sm font-semibold shadow-[var(--shadow-md)]"
             >
               <div className="pb-2">
-                <SearchForm id="mobile-search" label="Search tools" placeholder="What do you need a tool for?" />
+                <SearchAutocomplete id="mobile-search" label="Search tools" placeholder="What do you need a tool for?" />
               </div>
               {/* onClick as well as the route effect: tapping the link for the page you
                   are already on does not change the pathname, so the effect never fires. */}

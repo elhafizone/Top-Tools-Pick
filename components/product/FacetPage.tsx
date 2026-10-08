@@ -1,7 +1,7 @@
 import type { Product, Category } from "@prisma/client";
 import { Disclosure } from "@/components/affiliate/Disclosure";
 import { ProductGrid } from "@/components/product/ProductGrid";
-import { SearchForm } from "@/components/search/SearchForm";
+import { SearchAutocomplete } from "@/components/search/SearchAutocomplete";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { jsonLd, breadcrumbJsonLd, itemListJsonLd } from "@/lib/seo";
 
@@ -53,7 +53,7 @@ export function FacetPage({ kicker, heading, intro, basePath, facetName, facetSl
                 <span className="text-2xl font-bold tracking-[-0.03em]">{products.length}</span>{" "}
                 {products.length === 1 ? "tool" : "tools"} listed
               </p>
-              <SearchForm
+              <SearchAutocomplete
                 id="facet-search"
                 label="Search tools"
                 placeholder="Search all tools"
