@@ -1,3 +1,5 @@
+import { LogoImage } from "./LogoImage";
+
 const SIZES = {
   sm: { box: "h-10 w-10", text: "text-sm" },
   md: { box: "h-12 w-12", text: "text-base" },
@@ -24,8 +26,7 @@ type Props = {
  *
  * Logos live on arbitrary vendor CDNs, so this uses a plain `img` - the same decision
  * the article images already make - instead of adding every vendor host to the image
- * config. `onError` is unavailable in a server component, so a broken URL falls back to
- * the tile background showing through rather than a broken-image glyph.
+ * config. A broken URL falls back to the initial tile via the client `LogoImage`.
  */
 export function ProductLogo({ name, logoUrl, size = "md", className = "" }: Props) {
   const styles = SIZES[size];
@@ -43,8 +44,11 @@ export function ProductLogo({ name, logoUrl, size = "md", className = "" }: Prop
 
   return (
     <span className={`logo-tile ${styles.box} ${className}`}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={logoUrl} alt={`${name} logo`} loading="lazy" decoding="async" />
+      <LogoImage
+        src={logoUrl}
+        name={name}
+        fallbackClassName={`logo-tile-fallback flex h-full w-full items-center justify-center border-0 ${styles.text}`}
+      />
     </span>
   );
 }
