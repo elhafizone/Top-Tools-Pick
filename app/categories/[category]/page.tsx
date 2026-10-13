@@ -175,9 +175,13 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
   if (!category) return buildMetadata("Category not found", "The requested category could not be found.", `/categories/${slug}`);
   // A stored seoTitle is used verbatim: some already end in "| TopToolsPick" and the
   // root layout's title template would otherwise repeat the suffix.
+  const year = new Date().getFullYear();
   const storedTitle = category.seoTitle?.trim();
-  const title = storedTitle ?? categoryToolsLabel(category.name);
-  const description = category.seoDescription ?? category.description ?? `Explore ${category.name} tools on TopToolsPick.`;
+  const title = storedTitle ?? `Best ${categoryToolsLabel(category.name)} ${year} — Expert Reviews & Rankings`;
+  const description =
+    category.seoDescription ??
+    category.description ??
+    `Compare the best ${category.name.toLowerCase()} tools. Independent expert reviews, pricing breakdowns, feature comparisons and ranked shortlists — updated ${year}.`;
   const metadata = buildMetadata(title, description, `/categories/${slug}`, { absolute: Boolean(storedTitle) });
   return { ...metadata, openGraph: { title, description, url: new URL(`/categories/${slug}`, siteUrl).toString(), siteName: "TopToolsPick", type: "website" } };
 }

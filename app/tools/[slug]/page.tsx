@@ -494,11 +494,25 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) return productMetadata("Tool not found", "The requested tool could not be found.", slug);
+
+  const year = new Date().getFullYear();
   // seoTitle / seoDescription / canonicalUrl are editor-controlled overrides.
   // A stored seoTitle is used verbatim; only the generated fallback gets templated.
   const storedTitle = product.seoTitle?.trim();
-  const title = storedTitle ?? `${product.name} review`;
-  const description = product.seoDescription ?? product.shortDescription;
+  const title = storedTitle ?? `${product.name} Review ${year} — Pricing, Features & Alternatives`;
+
+  // Build a richer default description that includes pricing signal and use-case.
+  const defaultDescription = (() => {
+    const base = product.shortDescription;
+    const pricingHint = product.hasFreePlan
+      ? "Free plan available."
+      : product.hasFreeTrial
+      ? "Free trial available."
+      : "";
+    return [base, pricingHint].filter(Boolean).join(" ");
+  })();
+  const description = product.seoDescription ?? defaultDescription;
+
   const canonical = product.canonicalUrl ?? new URL(`/tools/${slug}`, siteUrl).toString();
   return {
     title: storedTitle ? { absolute: storedTitle } : title,

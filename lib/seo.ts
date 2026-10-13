@@ -32,8 +32,12 @@ export function buildMetadata(title: string, description: string, path = "/", op
   };
 }
 
-export const productMetadata = (name: string, description: string, slug: string) => buildMetadata(`${name} review`, description, `/tools/${slug}`);
-export const categoryMetadata = (name: string, description: string, slug: string) => buildMetadata(categoryToolsLabel(name), description, `/categories/${slug}`);
+const YEAR = new Date().getFullYear();
+
+export const productMetadata = (name: string, description: string, slug: string) =>
+  buildMetadata(`${name} Review ${YEAR} — Pricing, Features & Alternatives`, description, `/tools/${slug}`);
+export const categoryMetadata = (name: string, description: string, slug: string) =>
+  buildMetadata(categoryToolsLabel(name), description, `/categories/${slug}`);
 export const storyMetadata = (title: string, description: string, slug: string) => buildMetadata(title, description, `/stories/${slug}`);
 export const editorialListMetadata = (title: string, description: string, slug: string) => buildMetadata(title, description, `/best/${slug}`);
 

@@ -35,9 +35,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!facet) return { title: "Not found" };
 
   const products = await getProductsByPlatform(slug);
+  const year = new Date().getFullYear();
   return buildMetadata(
-    `Best tools on ${facet.name}`,
-    `Published tools with a ${facet.name} client or interface, ranked by editorial score.`,
+    `Best ${facet.name} Tools in ${year} — Ranked & Reviewed`,
+    `${products.length} top tools available on ${facet.name} in ${year}. Compare pricing, free plans and features — all independently reviewed and ranked by editorial score.`,
     `/tools/platform/${slug}`,
     products.length >= MIN_INDEXABLE ? {} : { robots: { index: false, follow: true } },
   );

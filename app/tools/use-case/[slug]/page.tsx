@@ -35,9 +35,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!facet) return { title: "Not found" };
 
   const products = await getProductsByUseCase(slug);
+  const year = new Date().getFullYear();
   return buildMetadata(
-    `Best tools for ${facet.name}`,
-    `Every published tool we list for ${facet.name}, ranked by editorial score.`,
+    `Best Tools for ${facet.name} in ${year} — Ranked & Reviewed`,
+    `The ${products.length} best tools for ${facet.name} in ${year}. Independent expert reviews, pricing, free plans and feature comparisons — all ranked by editorial score.`,
     `/tools/use-case/${slug}`,
     products.length >= MIN_INDEXABLE ? {} : { robots: { index: false, follow: true } },
   );
