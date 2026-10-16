@@ -100,19 +100,17 @@ type OfferSource = { priceAmount: unknown; currency: string | null };
  * SoftwareApplication markup for a tool page.
  *
  * `offers` is emitted only when a plan carries both a numeric price and a currency -
- * a price label like "Free trial available" is not an offer. `aggregateRating` keeps
- * the existing guard: editorial ratings without published reviews are not marked up.
+ * a price label like "Free trial available" is not an offer. No `aggregateRating`:
+ * the only rating source is the site's own editorial score, which Google does not
+ * treat as an independent user rating (self-serving review markup).
  */
 export function softwareApplicationJsonLd(product: {
   name: string;
   shortDescription: string;
   websiteUrl: string;
-  rating: unknown;
   category: { name: string };
-  reviews: unknown[];
   pricingPlans: OfferSource[];
 }) {
-  const rating = Number(product.rating);
   const offers = product.pricingPlans
     .filter((plan) => plan.priceAmount !== null && plan.priceAmount !== undefined && plan.currency)
     .map((plan) => ({
@@ -129,15 +127,5 @@ export function softwareApplicationJsonLd(product: {
     url: product.websiteUrl,
     applicationCategory: product.category.name,
     ...(offers.length ? { offers } : {}),
-    ...(rating > 0 && product.reviews.length > 0
-      ? {
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: rating,
-            bestRating: 5,
-            ratingCount: product.reviews.length,
-          },
-        }
-      : {}),
   };
 }
