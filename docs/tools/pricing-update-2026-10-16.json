@@ -1,0 +1,53 @@
+{
+  "checkedAt": "2026-10-16",
+  "products": [
+    {
+      "slug": "intercom",
+      "source": "https://www.intercom.com/pricing",
+      "flags": { "hasFreeTrial": true },
+      "keepPlans": [],
+      "plans": [
+        { "name": "Essential", "priceLabel": "$19 / seat / month", "priceAmount": 19, "currency": "USD", "billingPeriod": "annually", "description": "Messenger live chat, shared inbox and ticketing, pre-built reports, public help center, basic automation. Fin AI Agent is $0.99 per outcome." },
+        { "name": "Advanced", "priceLabel": "$85 / seat / month", "priceAmount": 85, "currency": "USD", "billingPeriod": "annually", "description": "Everything in Essential plus workflow automation builder, multiple team inboxes, round robin assignment, private and multilingual help center, and 20 free Lite seats." },
+        { "name": "Expert", "priceLabel": "$132 / seat / month", "priceAmount": 132, "currency": "USD", "billingPeriod": "annually", "description": "Everything in Advanced plus SSO and identity management, HIPAA support, SLAs, multibrand Messenger and help center, and 50 free Lite seats." },
+        { "name": "Fin AI Agent (add-on)", "priceLabel": "$0.99 per outcome", "priceAmount": null, "currency": null, "billingPeriod": null, "description": "Charged once per resolved conversation at most; no charge if Fin cannot answer or the customer asks for a human. Works on all plans or on top of an existing helpdesk via sales." }
+      ]
+    },
+    {
+      "slug": "zendesk",
+      "source": "https://www.zendesk.com/pricing/",
+      "flags": {},
+      "keepPlans": [],
+      "plans": [
+        { "name": "Support Team", "priceLabel": "$19 / agent / month", "priceAmount": 19, "currency": "USD", "billingPeriod": "annually", "description": "Email and ticketing, ticket routing, prebuilt analytics dashboards, pre-written responses, customer context, automations and triggers." },
+        { "name": "Suite Team", "priceLabel": "$55 / agent / month", "priceAmount": 55, "currency": "USD", "billingPeriod": "annually", "description": "Support Team features plus AI agents, AI knowledge base, AI action builder, omnichannel routing, messaging and live chat, and telephony." },
+        { "name": "Suite Professional", "priceLabel": "$115 / agent / month", "priceAmount": 115, "currency": "USD", "billingPeriod": "annually", "description": "Suite Team features plus AI admin copilot, AI app builder, AI writing tools, AI quick reports, skills-based routing and an IVR phone tree." },
+        { "name": "Suite Enterprise + Copilot", "priceLabel": "Contact sales", "priceAmount": null, "currency": null, "billingPeriod": null, "description": "Suite Professional features plus intelligent triage, auto assist, generative AI for voice, approval workflows, a sandbox environment and custom agent roles." }
+      ]
+    },
+    {
+      "slug": "github-copilot",
+      "source": "https://github.com/features/copilot/plans",
+      "flags": { "hasFreePlan": true },
+      "keepPlans": ["Business", "Enterprise"],
+      "plans": [
+        { "name": "Free", "priceLabel": "$0", "priceAmount": 0, "currency": "USD", "billingPeriod": null, "description": "Limited chat and agent usage; CLI and agent mode supported." },
+        { "name": "Pro", "priceLabel": "$10 / month", "priceAmount": 10, "currency": "USD", "billingPeriod": "monthly", "description": "$10 base credits plus a $5 flex allotment each month; adds pull request reviews, assigning work to Copilot and the cloud agent." },
+        { "name": "Pro+", "priceLabel": "$39 / month", "priceAmount": 39, "currency": "USD", "billingPeriod": "monthly", "description": "$39 base credits plus a $31 flex allotment each month." },
+        { "name": "Max", "priceLabel": "$100 / month", "priceAmount": 100, "currency": "USD", "billingPeriod": "monthly", "description": "$100 base credits plus a $100 flex allotment each month." }
+      ]
+    },
+    {
+      "slug": "plausible-analytics",
+      "source": "https://plausible.io/",
+      "flags": { "hasFreeTrial": true },
+      "keepPlans": [],
+      "plans": [
+        { "name": "Starter", "priceLabel": "From $9 / month", "priceAmount": 9, "currency": "USD", "billingPeriod": null, "description": "At up to 10k monthly pageviews; price rises with traffic. One site, 3 years of data retention, email/Slack reports, Google Analytics import, goals and custom events." },
+        { "name": "Growth", "priceLabel": "From $14 / month", "priceAmount": 14, "currency": "USD", "billingPeriod": null, "description": "At up to 10k monthly pageviews. Everything in Starter plus up to 3 sites, up to 3 team members, team management, shared links and embedded dashboards." },
+        { "name": "Business", "priceLabel": "From $19 / month", "priceAmount": 19, "currency": "USD", "billingPeriod": null, "description": "At up to 10k monthly pageviews. Everything in Growth plus up to 10 sites and team members, 5 years of retention, Stats API, funnels and ecommerce revenue attribution." },
+        { "name": "Enterprise", "priceLabel": "Contact us", "priceAmount": null, "currency": null, "billingPeriod": null, "description": "10+ sites and team members, SSO, managed proxy, scheduled raw event exports and priority support." }
+      ]
+    }
+  ]
+}
