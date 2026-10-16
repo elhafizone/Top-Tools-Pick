@@ -1,0 +1,13 @@
+{
+  "name": "", "slug": "", "category": "", "websiteUrl": "",
+  "shortDescription": "", "description": "",
+  "bestFor": "", "notFor": "",
+  "pros": [], "cons": [], "keyFeatures": [], "integrations": [],
+  "pricingModel": "FREEMIUM", "hasFreePlan": false, "hasFreeTrial": false,
+  "pricingPlans": [{ "name": "", "priceLabel": "", "priceAmount": null, "currency": null, "billingPeriod": null, "description": "" }],
+  "verdict": "", "seoTitle": "", "seoDescription": "",
+  "useCases": [], "audiences": [], "platforms": [],
+  "alternatives": [{ "slug": "", "reason": "" }],
+  "logoFile": "", "lastReviewedAt": null,
+  "sources": [{ "url": "", "checkedAt": "YYYY-MM-DD", "note": "official pricing page" }]
+}

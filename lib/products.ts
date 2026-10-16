@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { prisma } from "@/lib/db/prisma";
 import type { PricingModel, Prisma } from "@prisma/client";
 
@@ -180,9 +181,14 @@ export async function getFacet(kind: "use-case" | "audience" | "platform", slug:
   return prisma.platform.findUnique({ where: { slug }, select: { name: true, slug: true } });
 }
 
-export async function getProductBySlug(slug: string) {
+/**
+ * Wrapped in React `cache` so generateMetadata and the page share one query per request.
+ * Prisma calls are not deduplicated by Next, so without this the heavy include ran twice
+ * for every tool-page view. Per-request only: no staleness across requests.
+ */
+export const getProductBySlug = cache(async (slug: string) => {
   return prisma.product.findFirst({ where: { slug, status: "PUBLISHED", category: { status: "PUBLISHED" } }, include: productContext });
-}
+});
 
 export async function getProductsByCategory(slug: string) {
   return prisma.product.findMany({
@@ -316,6 +322,20 @@ export async function getPublishedEditorialLists() {
 export async function getAllProductNameSlugs() {
   const rows = await prisma.product.findMany({
     where: { status: "PUBLISHED" },
+    select: { name: true, slug: true },
+  });
+  return new Map(rows.map((r) => [r.name.toLowerCase(), r.slug]));
+}
+
+/**
+ * Resolves only the given names to slugs (case-insensitive), so a tool page does not
+ * load the whole catalogue just to link a handful of integration chips.
+ */
+export async function getProductSlugsByNames(names: string[]) {
+  const unique = [...new Set(names.map((n) => n.trim()).filter(Boolean))];
+  if (unique.length === 0) return new Map<string, string>();
+  const rows = await prisma.product.findMany({
+    where: { status: "PUBLISHED", OR: unique.map((name) => ({ name: { equals: name, mode: "insensitive" as const } })) },
     select: { name: true, slug: true },
   });
   return new Map(rows.map((r) => [r.name.toLowerCase(), r.slug]));

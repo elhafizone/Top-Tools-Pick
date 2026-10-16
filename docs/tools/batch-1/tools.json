@@ -1,0 +1,177 @@
+[
+  {
+    "name": "Claude Code",
+    "slug": "claude-code",
+    "category": "development-coding",
+    "websiteUrl": "https://claude.com/product/claude-code",
+    "shortDescription": "Anthropic's agentic coding tool that reads your codebase, edits files and runs commands from the terminal, IDE, desktop app or browser.",
+    "description": "Claude Code is an agentic coding tool from Anthropic. According to its documentation, it reads your codebase, edits files, runs commands and integrates with your development tools, and it is available in the terminal, in IDE extensions, in a desktop app and in the browser.\n\nIt is built to work across multiple files rather than complete single lines. You describe a feature, a bug or an automation task, and it works through the project to carry it out. Installation is a single command on macOS, Linux and Windows, and VS Code and JetBrains integrations are offered. Most surfaces need a Claude subscription or an Anthropic Console account, and the terminal CLI, VS Code and JetBrains also support third-party providers.\n\nOn Anthropic's pricing page, Claude Code is included in the paid individual plans (Pro and Max) and is not included in the Free plan. Team plans list Claude Code on their premium seat, and Enterprise is priced as a per-seat fee plus usage at API rates. Each plan has usage limits, so heavy daily use is the main reason people move up from Pro to Max.\n\nThe main trade-off is that it is a subscription or metered product tied to Anthropic's models, and it expects you to be comfortable reviewing code changes it makes in your repository.",
+    "bestFor": "Developers who want an AI agent that works across a whole codebase from the terminal or IDE, and are comfortable reviewing the changes it makes",
+    "notFor": "People who want a free tool (Claude Code is not in the Free plan) or who only need inline autocomplete rather than an agent",
+    "pros": [
+      "Works across multiple files and can run commands, not just suggest snippets",
+      "Available in the terminal, VS Code, JetBrains, a desktop app and the browser",
+      "Included in the Pro and Max subscriptions rather than billed separately",
+      "Terminal CLI, VS Code and JetBrains also support third-party providers",
+      "Installs with a single command on macOS, Linux and Windows"
+    ],
+    "cons": [
+      "Not included in the Free plan",
+      "Usage limits apply on every plan, so heavy use can hit limits on Pro",
+      "Most surfaces require a Claude subscription or an Anthropic Console account",
+      "It edits your repository and runs commands, so its changes need careful review"
+    ],
+    "keyFeatures": [
+      "Codebase understanding: reads your project and works across multiple files",
+      "Edits files and runs commands from your terminal",
+      "Terminal CLI: full-featured command-line interface",
+      "IDE extensions: VS Code and JetBrains integrations",
+      "Desktop app and web: use it outside the terminal",
+      "Third-party provider support: terminal CLI, VS Code and JetBrains"
+    ],
+    "integrations": ["VS Code", "JetBrains IDEs", "Slack", "GitHub Enterprise Server"],
+    "pricingModel": "SUBSCRIPTION",
+    "hasFreePlan": false,
+    "hasFreeTrial": false,
+    "pricingPlans": [
+      { "name": "Pro", "priceLabel": "$17/month billed annually ($200 up front), or $20 monthly", "priceAmount": 20, "currency": "USD", "billingPeriod": "monthly", "description": "Includes Claude Code, more usage than Free, and Claude in Chrome and Microsoft 365." },
+      { "name": "Max", "priceLabel": "From $100/month", "priceAmount": 100, "currency": "USD", "billingPeriod": "monthly", "description": "Everything in Pro with a choice of 5x or 20x more usage, higher output limits and priority access at high traffic times." },
+      { "name": "Team (standard seat)", "priceLabel": "$20/seat/month billed annually, or $25 monthly", "priceAmount": 25, "currency": "USD", "billingPeriod": "monthly", "description": "For teams of 2 to 150: all Claude features with more usage than Pro." },
+      { "name": "Team (premium seat)", "priceLabel": "$100/seat/month billed annually, or $125 monthly", "priceAmount": 125, "currency": "USD", "billingPeriod": "monthly", "description": "5x more usage than standard seats; lists Claude Code and Claude Cowork." },
+      { "name": "Enterprise", "priceLabel": "Seat price plus usage at API rates (US$20/seat/month billed annually, 20 seat minimum)", "priceAmount": null, "currency": null, "billingPeriod": null, "description": "Adds spend limits, role-based access, SCIM, audit logs and a compliance API." }
+    ],
+    "verdict": "Claude Code is a strong choice for developers who want an agent that works across a whole repository rather than an autocomplete tool. It is not free and usage limits apply, so try it on Pro and move up only if you hit the limits. Skip it if you want inline suggestions only or cannot review the changes it makes.",
+    "seoTitle": "Claude Code Review: Plans, Pricing and Who It Suits",
+    "seoDescription": "Claude Code reviewed: what the agentic coding tool does, which Claude plans include it, how usage limits work, and who should use it.",
+    "useCases": ["web-development"],
+    "audiences": ["developers", "startups"],
+    "platforms": ["macos", "linux", "windows", "web"],
+    "alternatives": [
+      { "slug": "cursor", "reason": "An AI-first code editor if you prefer working inside an editor rather than an agent in the terminal." },
+      { "slug": "github-copilot", "reason": "Inline suggestions and chat inside your existing IDE and GitHub workflow." },
+      { "slug": "windsurf", "reason": "Another AI-native editor with agentic features." },
+      { "slug": "tabnine", "reason": "Code completion with private and on-premise deployment options for teams with strict data rules." }
+    ],
+    "logoFile": "public/tool-logos/claude-code.png",
+    "lastReviewedAt": "2026-10-16",
+    "sources": [
+      { "url": "https://claude.com/pricing", "checkedAt": "2026-10-16", "note": "official pricing page" },
+      { "url": "https://docs.claude.com/en/docs/claude-code/overview", "checkedAt": "2026-10-16", "note": "official docs overview" }
+    ]
+  },
+  {
+    "name": "DeepSeek",
+    "slug": "deepseek",
+    "category": "ai-tools",
+    "websiteUrl": "https://www.deepseek.com",
+    "shortDescription": "AI lab offering a chat app and a pay-as-you-go API with 1M-token context and OpenAI- and Anthropic-compatible endpoints.",
+    "description": "DeepSeek is an AI company whose models are available through a web chat, a mobile app and a developer API platform. Its homepage highlights the DeepSeek-V4.1-Flash release and offers deep thinking and search modes in the chat interface.\n\nFor developers, the API documentation lists two models: deepseek-flash (DeepSeek-V4.1-Flash) and deepseek-v4-pro. Both support a 1M-token context length, JSON output, tool calls, a Responses API and an Anthropic-format API, and thinking and non-thinking modes. Flash also supports vision, while Pro does not. The API is reachable in OpenAI format and in Anthropic format, which makes it easy to point existing clients and coding tools at it.\n\nPricing is usage-based and quoted per 1M tokens, with separate rates for cache hits, cache misses and output, and with lower off-peak rates that are half of the peak rates. Peak hours are 01:00 to 04:00 and 06:00 to 10:00 UTC, Monday to Friday, excluding Chinese public holidays. Search and Fetch are billed per 1,000 successful requests.\n\nThe documentation also warns that prices may vary and that DeepSeek reserves the right to adjust them. This page covers the API pricing published by DeepSeek; it does not state a price for the consumer chat app.",
+    "bestFor": "Developers who want a low-cost, usage-based API with a very long context window and OpenAI- or Anthropic-compatible endpoints",
+    "notFor": "Teams that need fixed monthly pricing, or that have data-residency or vendor-location requirements they have not checked against DeepSeek's terms",
+    "pros": [
+      "Low per-token API prices, with off-peak rates at half of peak rates",
+      "1M-token context length on both listed models",
+      "OpenAI-format and Anthropic-format API endpoints for easy integration",
+      "JSON output, tool calls and a Responses API on both models",
+      "Cache-hit pricing is far below cache-miss pricing"
+    ],
+    "cons": [
+      "Pricing is per token, so monthly cost is harder to predict than a flat plan",
+      "Peak and off-peak pricing depends on UTC time windows",
+      "The Pro model does not support vision",
+      "Prices can change; DeepSeek reserves the right to adjust them"
+    ],
+    "keyFeatures": [
+      "Two API models: deepseek-flash (V4.1-Flash) and deepseek-v4-pro",
+      "1M-token context: both models, with up to 384K maximum output",
+      "OpenAI- and Anthropic-format APIs: change the base URL to integrate",
+      "Thinking and non-thinking modes: switchable per request",
+      "Tool calls and JSON output: supported on both models",
+      "Search and Fetch APIs: billed per 1,000 successful requests"
+    ],
+    "integrations": ["Claude Code", "Codex", "OpenCode"],
+    "pricingModel": "USAGE_BASED",
+    "hasFreePlan": false,
+    "hasFreeTrial": false,
+    "pricingPlans": [
+      { "name": "deepseek-flash (API)", "priceLabel": "Input $0.15 / output $0.60 per 1M tokens off-peak; $0.30 / $1.20 at peak (cache miss)", "priceAmount": null, "currency": null, "billingPeriod": null, "description": "Cache-hit input is $0.003 off-peak and $0.006 at peak per 1M tokens. Supports vision." },
+      { "name": "deepseek-v4-pro (API)", "priceLabel": "Input $0.66 / output $1.98 per 1M tokens off-peak; $1.32 / $3.96 at peak (cache miss)", "priceAmount": null, "currency": null, "billingPeriod": null, "description": "Cache-hit input is $0.022 off-peak and $0.044 at peak per 1M tokens. No vision support." },
+      { "name": "Search and Fetch APIs", "priceLabel": "$0.75 per 1,000 successful requests", "priceAmount": null, "currency": null, "billingPeriod": null, "description": "Each API is billed per successful request, deducted from your topped-up or granted balance." }
+    ],
+    "verdict": "DeepSeek is worth a look if you build on LLM APIs and care about cost and context length, and its OpenAI- and Anthropic-compatible endpoints make trying it cheap. Check its terms against your data requirements first, and budget for per-token billing rather than a flat plan.",
+    "seoTitle": "DeepSeek Review: API Pricing, Models and Limits",
+    "seoDescription": "DeepSeek reviewed: its API models, per-token pricing with peak and off-peak rates, 1M-token context and who it suits best.",
+    "useCases": ["web-development", "research"],
+    "audiences": ["developers", "students"],
+    "platforms": ["web"],
+    "alternatives": [
+      { "slug": "chatgpt", "reason": "A consumer chat product with fixed subscription tiers instead of per-token billing." },
+      { "slug": "claude", "reason": "Anthropic's assistant, with subscription plans and an API." },
+      { "slug": "google-gemini", "reason": "Google's models, integrated with Google's products and cloud." },
+      { "slug": "mistral-ai", "reason": "A European provider of models and an API." }
+    ],
+    "logoFile": "public/tool-logos/deepseek.png",
+    "lastReviewedAt": "2026-10-16",
+    "sources": [
+      { "url": "https://api-docs.deepseek.com/quick_start/pricing", "checkedAt": "2026-10-16", "note": "official API pricing page" },
+      { "url": "https://www.deepseek.com/", "checkedAt": "2026-10-16", "note": "official homepage" }
+    ]
+  },
+  {
+    "name": "Microsoft OneDrive",
+    "slug": "microsoft-onedrive",
+    "category": "business-productivity",
+    "websiteUrl": "https://www.microsoft.com/en-us/microsoft-365/onedrive/online-cloud-storage",
+    "shortDescription": "Microsoft's cloud storage service for syncing, sharing and backing up files, sold inside Microsoft 365 subscriptions for individuals.",
+    "description": "OneDrive is Microsoft's cloud storage service. Its plans page describes secure storage and ransomware protection for files and photos, with sync across PC, Mac, iPhone, iPad and Android phones and tablets. For individuals it is sold through Microsoft 365 plans that bundle storage with the Office apps.\n\nOn the individual plans page, Microsoft 365 Basic includes 100 GB of cloud storage for one person. Microsoft 365 Personal includes 1 TB, Family includes 2 TB shared by up to six people, and Premium includes up to 6 TB (1 TB per person) for up to six people. Personal, Family and Premium also include the Word, Excel, PowerPoint, Outlook and OneNote desktop apps with Microsoft Copilot features, with usage levels that differ by plan.\n\nThe key OneDrive features Microsoft lists include Personal Vault, real-time collaboration, easy file sharing with password-protected or expiring links, ransomware detection and file restore, Windows backup, version history, camera roll backup, offline files and advanced sync between PC, Mac and the cloud. Storage can be expanded up to 10 TB on the higher plans.\n\nThe plans page also has a Business tab and links to enterprise plans, which this entry does not cover. Because the storage is sold inside Microsoft 365 plans, OneDrive is best judged as part of that bundle rather than as a standalone storage price.",
+    "bestFor": "People already using Windows or Microsoft 365 who want file sync and backup bundled with the Office apps",
+    "notFor": "People who want a standalone storage plan without paying for a Microsoft 365 bundle, or who need business-specific features that this entry does not cover",
+    "pros": [
+      "Bundled with the Microsoft 365 desktop apps on Personal, Family and Premium",
+      "Family plan shares 2 TB between up to six people",
+      "Ransomware detection and file restore, plus version history",
+      "Personal Vault and password-protected or expiring share links",
+      "Works on PC, Mac, iPhone, iPad and Android"
+    ],
+    "cons": [
+      "Individual storage is sold inside Microsoft 365 plans rather than as a simple storage-only plan on this page",
+      "The cheapest plan includes only 100 GB",
+      "AI features are for the subscription owner only on Family and Premium",
+      "Prices renew automatically unless canceled"
+    ],
+    "keyFeatures": [
+      "Cloud storage: 100 GB to 6 TB depending on the plan",
+      "Personal Vault: extra protection for sensitive files",
+      "Ransomware detection and files restore: recover earlier file versions",
+      "Windows backup and camera roll backup: automatic protection of files and photos",
+      "Easy file sharing: password-protected or expiring links",
+      "Offline files and advanced sync: between PC, Mac and the cloud"
+    ],
+    "integrations": ["Microsoft Word", "Microsoft Excel", "Microsoft PowerPoint", "Microsoft Outlook", "Microsoft OneNote", "Microsoft Teams"],
+    "pricingModel": "SUBSCRIPTION",
+    "hasFreePlan": false,
+    "hasFreeTrial": true,
+    "pricingPlans": [
+      { "name": "Microsoft 365 Basic", "priceLabel": "$19.99/year or $1.99/month", "priceAmount": 19.99, "currency": "USD", "billingPeriod": "yearly", "description": "100 GB of cloud storage for one person, plus 100 GB mailbox storage." },
+      { "name": "Microsoft 365 Personal", "priceLabel": "$99.99/year or $9.99/month", "priceAmount": 99.99, "currency": "USD", "billingPeriod": "yearly", "description": "1 TB of storage for one person, with Microsoft 365 desktop apps and Copilot features." },
+      { "name": "Microsoft 365 Family", "priceLabel": "$129.99/year or $12.99/month", "priceAmount": 129.99, "currency": "USD", "billingPeriod": "yearly", "description": "2 TB of shared storage for up to six people; AI features for the subscription owner only." },
+      { "name": "Microsoft 365 Premium", "priceLabel": "$199.99/year or $19.99/month", "priceAmount": 199.99, "currency": "USD", "billingPeriod": "yearly", "description": "Up to 6 TB (1 TB per person) for up to six people, with extensive Copilot usage and agents." }
+    ],
+    "verdict": "OneDrive is the natural choice if you already live in Windows and the Office apps and want storage and backup included in the same subscription. If you only want a simple storage plan or have business needs, compare it against dedicated storage services first.",
+    "seoTitle": "Microsoft OneDrive Review: Plans, Storage and Pricing",
+    "seoDescription": "Microsoft OneDrive reviewed: individual Microsoft 365 plans, how much storage each includes, key features and who it suits best.",
+    "useCases": ["team-collaboration"],
+    "audiences": ["small-businesses", "students", "freelancers"],
+    "platforms": ["web", "windows", "macos", "ios", "android"],
+    "alternatives": [
+      { "slug": "google-drive", "reason": "Google's cloud storage, tightly tied to Google Workspace instead of Microsoft 365." },
+      { "slug": "dropbox", "reason": "A storage-first service that works across ecosystems." }
+    ],
+    "logoFile": "pending",
+    "lastReviewedAt": "2026-10-16",
+    "sources": [
+      { "url": "https://www.microsoft.com/en-us/microsoft-365/onedrive/onedrive-plans-and-pricing", "checkedAt": "2026-10-16", "note": "official plans and pricing page (individuals tab)" },
+      { "url": "https://www.microsoft.com/en-us/microsoft-365/onedrive/online-cloud-storage", "checkedAt": "2026-10-16", "note": "official product page" }
+    ]
+  }
+]

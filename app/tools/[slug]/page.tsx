@@ -11,7 +11,7 @@ import { Rating, ScoreMeter } from "@/components/ui/Rating";
 import { ctaSubline } from "@/lib/affiliate/cta";
 import { getBestAffiliateLink, safeHostname } from "@/lib/affiliate/links";
 import { getAlternatives } from "@/lib/alternatives";
-import { getAllProductNameSlugs, getProductBySlug, getRelatedProducts } from "@/lib/products";
+import { getProductBySlug, getProductSlugsByNames, getRelatedProducts } from "@/lib/products";
 import { toBullets } from "@/lib/text";
 import { breadcrumbJsonLd, jsonLd, productMetadata, siteUrl, softwareApplicationJsonLd } from "@/lib/seo";
 
@@ -25,10 +25,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
+  const integrationPoints = toBullets(product.integrations);
   const [related, alternatives, productNameSlugs] = await Promise.all([
     getRelatedProducts(product.id),
     getAlternatives(product.id),
-    getAllProductNameSlugs(),
+    getProductSlugsByNames(integrationPoints),
   ]);
 
   const ctaUrl = getBestAffiliateLink(product);
@@ -37,7 +38,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const bestForPoints = toBullets(product.bestFor);
   const notForPoints = toBullets(product.notFor);
   const featurePoints = toBullets(product.keyFeatures);
-  const integrationPoints = toBullets(product.integrations);
   const prosPoints = toBullets(product.pros);
   const consPoints = toBullets(product.cons);
   const comparisonArticles = product.articleLinks.filter((link) => link.article.topic === "comparisons");

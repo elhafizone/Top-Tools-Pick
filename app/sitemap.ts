@@ -1,25 +1,39 @@
 import { MetadataRoute } from "next";
 import { prisma } from "@/lib/db/prisma";
 
+// Rendered per request: without this Next prerenders the sitemap at build time (the build
+// output showed `○ /sitemap.xml`), so tools added after a deploy never appeared in it.
+export const dynamic = "force-dynamic";
+
 const BASE = "https://toptoolspick.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date();
+  // Index pages are listed only when they have content to show (empty ones are thin).
+  const [comparisonCount, storyCount] = await Promise.all([
+    prisma.article.count({ where: { status: "PUBLISHED", topic: "comparisons" } }),
+    prisma.story.count({ where: { status: "PUBLISHED" } }),
+  ]);
 
   // Static pages — /compare is excluded: it carries noindex (user-driven builder, not a
   // content destination) so including it wastes crawl budget without indexing benefit.
   const statics: MetadataRoute.Sitemap = [
-    { url: BASE, lastModified: now, changeFrequency: "daily", priority: 1 },
-    { url: `${BASE}/tools`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
-    { url: `${BASE}/categories`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${BASE}/best`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${BASE}/articles`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
-    { url: `${BASE}/methodology`, lastModified: now, changeFrequency: "monthly", priority: 0.4 },
-    { url: `${BASE}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.4 },
-    { url: `${BASE}/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.3 },
-    { url: `${BASE}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
-    { url: `${BASE}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
-    { url: `${BASE}/affiliate-disclosure`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
+    { url: BASE, changeFrequency: "daily", priority: 1 },
+    { url: `${BASE}/tools`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${BASE}/categories`, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/best`, changeFrequency: "weekly", priority: 0.8 },
+    ...(comparisonCount > 0
+      ? [{ url: `${BASE}/comparisons`, changeFrequency: "weekly" as const, priority: 0.7 }]
+      : []),
+    ...(storyCount > 0
+      ? [{ url: `${BASE}/stories`, changeFrequency: "weekly" as const, priority: 0.6 }]
+      : []),
+    { url: `${BASE}/articles`, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${BASE}/methodology`, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${BASE}/about`, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${BASE}/contact`, changeFrequency: "monthly", priority: 0.3 },
+    { url: `${BASE}/privacy`, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${BASE}/terms`, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${BASE}/affiliate-disclosure`, changeFrequency: "yearly", priority: 0.2 },
   ];
 
   // Product pages — alternatives are only included when the product has enough curated
@@ -97,7 +111,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const storyUrls: MetadataRoute.Sitemap = stories.map((s) => ({
     url: `${BASE}/stories/${s.slug}`,
-    lastModified: s.publishedAt ?? now,
+    ...(s.publishedAt ? { lastModified: s.publishedAt } : {}),
     changeFrequency: "monthly",
     priority: 0.55,
   }));
@@ -120,15 +134,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const useCaseUrls: MetadataRoute.Sitemap = useCases
     .filter((u) => u._count.products >= MIN_FACET)
-    .map((u) => ({ url: `${BASE}/tools/use-case/${u.slug}`, lastModified: now, changeFrequency: "weekly", priority: 0.7 }));
+    .map((u) => ({ url: `${BASE}/tools/use-case/${u.slug}`, changeFrequency: "weekly", priority: 0.7 }));
 
   const audienceUrls: MetadataRoute.Sitemap = audiences
     .filter((a) => a._count.products >= MIN_FACET)
-    .map((a) => ({ url: `${BASE}/tools/audience/${a.slug}`, lastModified: now, changeFrequency: "weekly", priority: 0.65 }));
+    .map((a) => ({ url: `${BASE}/tools/audience/${a.slug}`, changeFrequency: "weekly", priority: 0.65 }));
 
   const platformUrls: MetadataRoute.Sitemap = platforms
     .filter((p) => p._count.products >= MIN_FACET)
-    .map((p) => ({ url: `${BASE}/tools/platform/${p.slug}`, lastModified: now, changeFrequency: "weekly", priority: 0.65 }));
+    .map((p) => ({ url: `${BASE}/tools/platform/${p.slug}`, changeFrequency: "weekly", priority: 0.65 }));
 
   return [...statics, ...productUrls, ...categoryUrls, ...listUrls, ...articleUrls, ...storyUrls, ...useCaseUrls, ...audienceUrls, ...platformUrls];
 }

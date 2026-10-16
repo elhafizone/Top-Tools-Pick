@@ -1,5 +1,6 @@
 import type { PricingModel } from "@prisma/client";
 import { ctaLabel } from "@/lib/affiliate/cta";
+import { TrackedOutboundLink } from "@/components/affiliate/TrackedOutboundLink";
 import { resolveOutboundLink } from "@/lib/affiliate/links";
 
 type CtaProduct = {
@@ -43,14 +44,16 @@ export function AffiliateCta({ product, placement, variant = "primary", classNam
 
   return (
     <>
-      <a
+      <TrackedOutboundLink
+        productSlug={product.slug}
+        placement={placement}
         href={href}
         target="_blank"
         rel="nofollow sponsored noopener noreferrer"
         className={`${variant === "primary" ? "button-primary" : "button-secondary"} ${className ?? ""}`}
       >
         {label} <span aria-hidden="true">↗</span>
-      </a>
+      </TrackedOutboundLink>
       {showCaption && (
         <p className="mt-3 text-xs leading-5 text-[var(--muted)]">
           Opens the {resolved.isAffiliate ? "partner" : "official"} website in a new tab.
