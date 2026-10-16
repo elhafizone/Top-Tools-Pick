@@ -25,9 +25,9 @@ export function buildMetadata(title: string, description: string, path = "/", op
     // rather than repeating the suffix inside the title string.
     openGraph: {
       title, description, url: canonical, siteName, type: "website",
-      images: [{ url: new URL("/ttp-logo.webp", siteUrl).toString(), width: 800, height: 600, alt: siteName }],
+      images: [{ url: new URL("/og-default.png", siteUrl).toString(), width: 1200, height: 630, alt: siteName }],
     },
-    twitter: { card: "summary_large_image", title, description, images: [new URL("/ttp-logo.webp", siteUrl).toString()] },
+    twitter: { card: "summary_large_image", title, description, images: [new URL("/og-default.png", siteUrl).toString()] },
     ...(options.robots ? { robots: options.robots } : {}),
   };
 }

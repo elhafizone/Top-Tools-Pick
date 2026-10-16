@@ -520,8 +520,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     alternates: { canonical },
     openGraph: {
       title, description, url: canonical, siteName: "TopToolsPick", type: "website",
-      images: [{ url: new URL("/ttp-logo.webp", siteUrl).toString(), width: 800, height: 600, alt: title }],
+      images: [{ url: new URL("/og-default.png", siteUrl).toString(), width: 1200, height: 630, alt: title }],
     },
-    twitter: { card: "summary_large_image", title, description, images: [new URL("/ttp-logo.webp", siteUrl).toString()] },
+    twitter: { card: "summary_large_image", title, description, images: [new URL("/og-default.png", siteUrl).toString()] },
   };
 }

@@ -1,0 +1,12 @@
+[
+ {"slug":"claude-code-pricing-which-plan-do-you-need","text":"Claude Code isn't in Claude's Free plan. Pro is $17/mo billed annually ($20 monthly); Max starts at $100/mo. Which plan do you actually need? Prices checked Oct 16, 2026."},
+ {"slug":"deepseek-api-pricing-explained","text":"DeepSeek API pricing, explained: Flash vs Pro, cache hit vs miss, and why off-peak calls cost half. Includes a worked example of what a job costs."},
+ {"slug":"supabase-pricing-free-plan-limits-and-what-pro-adds","text":"Supabase's free plan: 500 MB database, 50k monthly users, but projects pause after 1 week of inactivity. Pro starts at $25/mo. What changes when you upgrade:"},
+ {"slug":"github-copilot-plans-compared-free-pro-pro-plus-max","text":"GitHub Copilot now has four individual plans: Free, Pro $10, Pro+ $39, Max $100, built around monthly AI credits. What each one unlocks:"},
+ {"slug":"zendesk-pricing-explained-support-team-vs-suite","text":"Zendesk pricing (annual billing): Support Team $19, Suite Team $55, Suite Professional $115 per agent/month. What each tier adds and who needs which:"},
+ {"slug":"intercom-pricing-helpdesk-seats-and-fin-per-outcome","text":"Intercom bills per seat ($19 to $132/mo) plus $0.99 per outcome for its Fin AI agent. Here's how to estimate your real monthly bill:"},
+ {"slug":"notion-pricing-free-plus-business-which-plan","text":"Notion plans: Free, Plus $10, Business $20 per member/month, Enterprise custom. What actually changes at each step, and when to upgrade:"},
+ {"slug":"vercel-pricing-hobby-vs-pro","text":"Vercel Hobby is $0. Pro is $20/mo with $20 of included usage. What each plan includes and when upgrading makes sense:"},
+ {"slug":"plausible-analytics-pricing-and-ga4-alternative","text":"Plausible Analytics starts at $9/mo (up to 10k pageviews) with a 30-day free trial. Is it a real Google Analytics alternative? Plans compared:"},
+ {"slug":"claude-code-vs-github-copilot-which-should-you-pay-for","text":"Claude Code vs GitHub Copilot: Copilot has a free tier and $10 Pro; Claude Code starts at $17/mo billed annually. Which one should you pay for?"}
+]

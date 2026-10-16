@@ -1,0 +1,5 @@
+[
+ {"slug":"claude-code","text":"Claude Code: Anthropic's agentic coding tool. Reads your codebase, edits files and runs commands from the terminal, IDE, desktop app or browser. Included in Pro and Max, not in Free. Plans and our take:"},
+ {"slug":"deepseek","text":"DeepSeek: 1M-token context, OpenAI- and Anthropic-compatible API, usage-based pricing with cheaper off-peak rates. Models, pricing and who it suits:"},
+ {"slug":"plausible-analytics","text":"Plausible Analytics: privacy-focused, no cookie banner, plans from $9/mo with a 30-day free trial. What each plan includes and how it compares to Google Analytics:"}
+]
