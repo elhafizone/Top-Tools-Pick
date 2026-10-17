@@ -1,0 +1,362 @@
+[
+ {
+  "slug": "ahrefs-webmaster-tools",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "ahrefs"
+ },
+ {
+  "slug": "amplitude-analytics",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "amplitude"
+ },
+ {
+  "slug": "cal-com-scheduling",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "cal-com"
+ },
+ {
+  "slug": "canva-pro",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "canva"
+ },
+ {
+  "slug": "capacities",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "capacities-app"
+ },
+ {
+  "slug": "claude-ai",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "claude"
+ },
+ {
+  "slug": "cleanfeed",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "cleanfeed-audio"
+ },
+ {
+  "slug": "clickup-ai",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "clickup"
+ },
+ {
+  "slug": "cloudflare-waf",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "cloudflare"
+ },
+ {
+  "slug": "cloudflare-zero-trust",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "cloudflare"
+ },
+ {
+  "slug": "coda",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "coda-io"
+ },
+ {
+  "slug": "windsurf-editor",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "windsurf-ide"
+ },
+ {
+  "slug": "consensus",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "consensus-ai"
+ },
+ {
+  "slug": "coolify-platform",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "coolify"
+ },
+ {
+  "slug": "cursor",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "cursor-ai"
+ },
+ {
+  "slug": "cursor-editor",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "cursor-ai"
+ },
+ {
+  "slug": "elicit",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "elicit-ai"
+ },
+ {
+  "slug": "ghost",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "ghost-cms"
+ },
+ {
+  "slug": "google-analytics-4",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "google-analytics"
+ },
+ {
+  "slug": "hubspot-crm",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "hubspot"
+ },
+ {
+  "slug": "hubspot-sales-hub",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "hubspot"
+ },
+ {
+  "slug": "hubspot-marketing",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "hubspot"
+ },
+ {
+  "slug": "jasper",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "jasper-ai"
+ },
+ {
+  "slug": "kinsta-app-hosting",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "kinsta"
+ },
+ {
+  "slug": "klaviyo-sms",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "klaviyo"
+ },
+ {
+  "slug": "lark",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "lark-suite"
+ },
+ {
+  "slug": "linear-method",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "linear"
+ },
+ {
+  "slug": "loom-ai",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "loom"
+ },
+ {
+  "slug": "mercury-bank",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "mercury"
+ },
+ {
+  "slug": "neon-database",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "neon"
+ },
+ {
+  "slug": "notion-tasks",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "notion"
+ },
+ {
+  "slug": "obsidian-notes",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "obsidian"
+ },
+ {
+  "slug": "perplexity-ai",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "perplexity"
+ },
+ {
+  "slug": "perplexity-pages",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "perplexity"
+ },
+ {
+  "slug": "pika",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "pika-labs"
+ },
+ {
+  "slug": "poe",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "poe-ai"
+ },
+ {
+  "slug": "prisma-orm",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "prisma"
+ },
+ {
+  "slug": "railway-app",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "railway"
+ },
+ {
+  "slug": "recharge-payments",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "recharge"
+ },
+ {
+  "slug": "render-hosting",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "render"
+ },
+ {
+  "slug": "riverside-fm",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "riverside"
+ },
+ {
+  "slug": "runway",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "runway-ml"
+ },
+ {
+  "slug": "semrush-position-tracking",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "semrush"
+ },
+ {
+  "slug": "semrush-keyword-magic",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "semrush"
+ },
+ {
+  "slug": "squarespace-commerce",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "squarespace"
+ },
+ {
+  "slug": "stability-ai",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "stability-ai-api"
+ },
+ {
+  "slug": "stripe-billing",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "stripe"
+ },
+ {
+  "slug": "stripe-connect",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "stripe"
+ },
+ {
+  "slug": "stripe-atlas",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "stripe"
+ },
+ {
+  "slug": "stripe-treasury",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "stripe"
+ },
+ {
+  "slug": "suno",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "suno-ai"
+ },
+ {
+  "slug": "supabase-auth",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "supabase"
+ },
+ {
+  "slug": "supabase-vector",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "supabase"
+ },
+ {
+  "slug": "tome",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "tome-app"
+ },
+ {
+  "slug": "transistor",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "transistor-fm"
+ },
+ {
+  "slug": "wave-accounting",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "wave"
+ },
+ {
+  "slug": "webflow-hosting",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "webflow"
+ },
+ {
+  "slug": "webflow-cms",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "webflow"
+ },
+ {
+  "slug": "wiz-security",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "wiz"
+ },
+ {
+  "slug": "xata-database",
+  "status": "PUBLISHED",
+  "canonicalUrl": null,
+  "mergedInto": "xata"
+ }
+]
