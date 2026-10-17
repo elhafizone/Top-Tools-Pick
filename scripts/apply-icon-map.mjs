@@ -4,7 +4,7 @@
 import { PrismaClient } from "@prisma/client";
 import { readFileSync, writeFileSync } from "node:fs";
 const apply = process.argv.includes("--apply");
-const map = JSON.parse(readFileSync("docs/seo/icon-update-map.json", "utf8"));
+const map = JSON.parse(readFileSync(process.argv.find((a) => a.endsWith(".json")) ?? "docs/seo/icon-update-map.json", "utf8"));
 const prisma = new PrismaClient();
 const rows = await prisma.product.findMany({ where: { slug: { in: Object.keys(map) } }, select: { id: true, slug: true, logoUrl: true } });
 const missing = [];
