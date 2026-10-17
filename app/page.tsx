@@ -42,7 +42,11 @@ export default async function Home() {
   const leadProduct = products[0];
   const supportingProducts = products.slice(1);
   const leadArticle = articles.articles[0];
-  const supportingArticles = articles.articles.slice(1, 3);
+  // With stories the right column belongs to them and two guides sit under the lead.
+  // Without any, that column used to render empty, so it carries the next guides instead.
+  const hasStories = stories.length > 0;
+  const supportingArticles = hasStories ? articles.articles.slice(1, 3) : [];
+  const moreArticles = hasStories ? [] : articles.articles.slice(1, 5);
   const shortlists = editorialLists.slice(0, 3);
 
   return (
@@ -234,6 +238,13 @@ export default async function Home() {
             <div>
               {leadArticle ? (
                 <Link href={`/articles/${leadArticle.slug}`} className="group block border-b border-[var(--line)] pb-7">
+                  {leadArticle.featuredImage && (
+                    <div className="mb-6 aspect-[16/9] overflow-hidden rounded-[var(--radius-surface)] border border-[var(--line)] bg-[var(--surface-sunken)]">
+                      {/* CMS images may use arbitrary trusted media hosts. */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={leadArticle.featuredImage} alt={leadArticle.title} loading="lazy" className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]" />
+                    </div>
+                  )}
                   <span className="eyebrow">Featured guide</span>
                   <h3 className="mt-4 max-w-2xl text-2xl font-bold leading-tight tracking-[-0.03em] group-hover:text-[var(--accent-deep)] sm:text-3xl">
                     {leadArticle.title}
@@ -247,6 +258,12 @@ export default async function Home() {
                 <div className="grid gap-x-8 sm:grid-cols-2">
                   {supportingArticles.map((article) => (
                     <Link key={article.id} href={`/articles/${article.slug}`} className="group border-b border-[var(--line)] py-6">
+                      {article.featuredImage && (
+                        <div className="mb-4 aspect-[16/9] overflow-hidden rounded-[var(--radius-surface)] border border-[var(--line)] bg-[var(--surface-sunken)]">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={article.featuredImage} alt={article.title} loading="lazy" className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]" />
+                        </div>
+                      )}
                       <span className="eyebrow">Guide</span>
                       <h3 className="mt-3 text-lg font-bold leading-snug tracking-[-0.02em] group-hover:text-[var(--accent-deep)]">{article.title}</h3>
                       <EditorialMeta author={article.author} publishedAt={article.publishedAt} />
@@ -255,6 +272,28 @@ export default async function Home() {
                 </div>
               )}
             </div>
+
+            {moreArticles.length > 0 && (
+              <div className="border-t-2 border-[var(--ink)] pt-5">
+                <div className="flex items-center justify-between gap-4">
+                  <p className="eyebrow">More guides</p>
+                  <Link href="/articles" className="text-sm font-semibold text-[var(--accent-deep)]">All guides</Link>
+                </div>
+                <div className="mt-4 rule-list">
+                  {moreArticles.map((article) => (
+                    <Link key={article.id} href={`/articles/${article.slug}`} className="group flex gap-4 py-5">
+                      {article.featuredImage && (
+                        <div className="h-16 w-24 shrink-0 overflow-hidden rounded-[var(--radius-surface)] border border-[var(--line)] bg-[var(--surface-sunken)]">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={article.featuredImage} alt="" loading="lazy" className="h-full w-full object-cover" />
+                        </div>
+                      )}
+                      <h3 className="min-w-0 text-base font-bold leading-snug tracking-[-0.02em] group-hover:text-[var(--accent-deep)]">{article.title}</h3>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {stories.length > 0 && (
               <div className="border-t-2 border-[var(--ink)] pt-5">
