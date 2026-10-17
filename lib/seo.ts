@@ -4,6 +4,12 @@ import { categoryToolsLabel } from "@/lib/text";
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toptoolspick.com";
 export const siteName = "TopToolsPick";
 
+/** Official profiles. Used by the footer links and Organization `sameAs`. */
+export const socialLinks = {
+  x: "https://x.com/toptoolspick",
+  linkedin: "https://www.linkedin.com/company/toptoolspick",
+} as const;
+
 type BuildOptions = {
   /**
    * Use the title exactly as given, bypassing the root layout's "%s | TopToolsPick"
@@ -60,6 +66,7 @@ export function organizationJsonLd() {
     name: siteName,
     url: siteUrl,
     logo: new URL("/ttp-logo.webp", siteUrl).toString(),
+    sameAs: Object.values(socialLinks),
     description: "Independent research and ranked shortlists for people choosing software and digital tools.",
   };
 }
