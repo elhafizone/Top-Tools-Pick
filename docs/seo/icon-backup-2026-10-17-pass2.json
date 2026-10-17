@@ -1,0 +1,438 @@
+[
+ {
+  "slug": "udemy",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=udemy.com&sz=128"
+ },
+ {
+  "slug": "zoom",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=zoom.us&sz=128"
+ },
+ {
+  "slug": "mistral-ai",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=mistral.ai&sz=128"
+ },
+ {
+  "slug": "playwright",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=playwright.dev&sz=128"
+ },
+ {
+  "slug": "storybook",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=storybook.js.org&sz=128"
+ },
+ {
+  "slug": "penpot",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=penpot.app&sz=128"
+ },
+ {
+  "slug": "unsplash",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=unsplash.com&sz=128"
+ },
+ {
+  "slug": "namecheap",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=namecheap.com&sz=128"
+ },
+ {
+  "slug": "godaddy",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=godaddy.com&sz=128"
+ },
+ {
+  "slug": "rytr",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=rytr.me&sz=128"
+ },
+ {
+  "slug": "grammarly",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=grammarly.com&sz=128"
+ },
+ {
+  "slug": "ghost",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=ghost.org&sz=128"
+ },
+ {
+  "slug": "tldv",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=tldv.io&sz=128"
+ },
+ {
+  "slug": "poe",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=poe.com&sz=128"
+ },
+ {
+  "slug": "obsidian",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=obsidian.md&sz=128"
+ },
+ {
+  "slug": "shipbob",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=shipbob.com&sz=128"
+ },
+ {
+  "slug": "recharge",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=rechargepayments.com&sz=128"
+ },
+ {
+  "slug": "carta",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=carta.com&sz=128"
+ },
+ {
+  "slug": "snyk",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=snyk.io&sz=128"
+ },
+ {
+  "slug": "dashlane",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=dashlane.com&sz=128"
+ },
+ {
+  "slug": "khan-academy",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=khanacademy.org&sz=128"
+ },
+ {
+  "slug": "youtube",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=youtube.com&sz=128"
+ },
+ {
+  "slug": "n8n",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=n8n.io&sz=128"
+ },
+ {
+  "slug": "crowdstrike",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=crowdstrike.com&sz=128"
+ },
+ {
+  "slug": "sentinelone",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=sentinelone.com&sz=128"
+ },
+ {
+  "slug": "postscript",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=postscript.io&sz=128"
+ },
+ {
+  "slug": "google-search-console",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=search.google.com&sz=128"
+ },
+ {
+  "slug": "later",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=later.com&sz=128"
+ },
+ {
+  "slug": "beehiiv",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=beehiiv.com&sz=128"
+ },
+ {
+  "slug": "wordpress-com",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=wordpress.com&sz=128"
+ },
+ {
+  "slug": "gumroad",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=gumroad.com&sz=128"
+ },
+ {
+  "slug": "thinkific",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=thinkific.com&sz=128"
+ },
+ {
+  "slug": "davinci-resolve",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=blackmagicdesign.com&sz=128"
+ },
+ {
+  "slug": "final-cut-pro",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=apple.com&sz=128"
+ },
+ {
+  "slug": "buzzsprout",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=buzzsprout.com&sz=128"
+ },
+ {
+  "slug": "epidemic-sound",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=epidemicsound.com&sz=128"
+ },
+ {
+  "slug": "brex",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=brex.com&sz=128"
+ },
+ {
+  "slug": "protonmail",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=proton.me&sz=128"
+ },
+ {
+  "slug": "google-meet",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=meet.google.com&sz=128"
+ },
+ {
+  "slug": "lattice",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=lattice.com&sz=128"
+ },
+ {
+  "slug": "rive",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=rive.app&sz=128"
+ },
+ {
+  "slug": "mixpanel",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=mixpanel.com&sz=128"
+ },
+ {
+  "slug": "neon",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=neon.tech&sz=128"
+ },
+ {
+  "slug": "skillshare",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=skillshare.com&sz=128"
+ },
+ {
+  "slug": "duolingo",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=duolingo.com&sz=128"
+ },
+ {
+  "slug": "thrivecart",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=thrivecart.com&sz=128"
+ },
+ {
+  "slug": "podia",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=podia.com&sz=128"
+ },
+ {
+  "slug": "etsy",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=etsy.com&sz=128"
+ },
+ {
+  "slug": "switchboard",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=switchboard.app&sz=128"
+ },
+ {
+  "slug": "webex",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=webex.com&sz=128"
+ },
+ {
+  "slug": "airwallex",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=airwallex.com&sz=128"
+ },
+ {
+  "slug": "zoho-crm",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=zoho.com&sz=128"
+ },
+ {
+  "slug": "pulumi",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=pulumi.com&sz=128"
+ },
+ {
+  "slug": "bunny-net",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=bunny.net&sz=128"
+ },
+ {
+  "slug": "argocd",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=argoproj.github.io&sz=128"
+ },
+ {
+  "slug": "vectornator",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=vectornator.io&sz=128"
+ },
+ {
+  "slug": "wistia",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=wistia.com&sz=128"
+ },
+ {
+  "slug": "turso",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=turso.tech&sz=128"
+ },
+ {
+  "slug": "v0-vercel",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=v0.dev&sz=128"
+ },
+ {
+  "slug": "trpc",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=trpc.io&sz=128"
+ },
+ {
+  "slug": "zoho-projects",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=zoho.com&sz=128"
+ },
+ {
+  "slug": "workato",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=workato.com&sz=128"
+ },
+ {
+  "slug": "qualys",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=qualys.com&sz=128"
+ },
+ {
+  "slug": "edx",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=edx.org&sz=128"
+ },
+ {
+  "slug": "clerk-auth",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=clerk.com&sz=128"
+ },
+ {
+  "slug": "expressvpn",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=expressvpn.com&sz=128"
+ },
+ {
+  "slug": "cleanfeed",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=cleanfeed.net&sz=128"
+ },
+ {
+  "slug": "articulate-360",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=articulate.com&sz=128"
+ },
+ {
+  "slug": "exploding-topics",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=explodingtopics.com&sz=128"
+ },
+ {
+  "slug": "spyfu",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=spyfu.com&sz=128"
+ },
+ {
+  "slug": "weaviate",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=weaviate.io&sz=128"
+ },
+ {
+  "slug": "jotform",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=jotform.com&sz=128"
+ },
+ {
+  "slug": "wpforms",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=wpforms.com&sz=128"
+ },
+ {
+  "slug": "redash",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=redash.io&sz=128"
+ },
+ {
+  "slug": "budibase",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=budibase.com&sz=128"
+ },
+ {
+  "slug": "taxjar",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=taxjar.com&sz=128"
+ },
+ {
+  "slug": "nx",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=nx.dev&sz=128"
+ },
+ {
+  "slug": "cloudflare-pages",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=cloudflare.com&sz=128"
+ },
+ {
+  "slug": "hugging-face",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=huggingface.co&sz=128"
+ },
+ {
+  "slug": "lastpass",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=lastpass.com&sz=128"
+ },
+ {
+  "slug": "proton-mail",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=proton.me&sz=128"
+ },
+ {
+  "slug": "assemblyai",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=assemblyai.com&sz=128"
+ },
+ {
+  "slug": "meta-ads",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=meta.com&sz=128"
+ },
+ {
+  "slug": "slack-huddles",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=slack.com&sz=128"
+ },
+ {
+  "slug": "cloudflare-r2",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=cloudflare.com&sz=128"
+ },
+ {
+  "slug": "lemlist",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=lemlist.com&sz=128"
+ },
+ {
+  "slug": "trigger-dev",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=trigger.dev&sz=128"
+ },
+ {
+  "slug": "replicate",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=replicate.com&sz=128"
+ },
+ {
+  "slug": "cal-com",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=cal.com&sz=128"
+ },
+ {
+  "slug": "prestashop",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=prestashop.com&sz=128"
+ },
+ {
+  "slug": "lunacy",
+  "logoUrl": "https://logo.clearbit.com/icons8.com"
+ },
+ {
+  "slug": "datacamp",
+  "logoUrl": "https://logo.clearbit.com/datacamp.com"
+ },
+ {
+  "slug": "scrimba",
+  "logoUrl": "https://logo.clearbit.com/scrimba.com"
+ },
+ {
+  "slug": "vultr",
+  "logoUrl": "https://logo.clearbit.com/vultr.com"
+ },
+ {
+  "slug": "protonvpn",
+  "logoUrl": "https://logo.clearbit.com/protonvpn.com"
+ },
+ {
+  "slug": "revolut-business",
+  "logoUrl": "https://logo.clearbit.com/revolut.com"
+ },
+ {
+  "slug": "snappa",
+  "logoUrl": "https://logo.clearbit.com/snappa.com"
+ },
+ {
+  "slug": "betterstack",
+  "logoUrl": "https://logo.clearbit.com/betterstack.com"
+ },
+ {
+  "slug": "whimsical",
+  "logoUrl": "https://logo.clearbit.com/whimsical.com"
+ },
+ {
+  "slug": "twitch",
+  "logoUrl": "https://logo.clearbit.com/twitch.tv"
+ },
+ {
+  "slug": "rumble",
+  "logoUrl": "https://logo.clearbit.com/rumble.com"
+ },
+ {
+  "slug": "novu",
+  "logoUrl": "https://logo.clearbit.com/novu.co"
+ },
+ {
+  "slug": "loops-email",
+  "logoUrl": "https://logo.clearbit.com/loops.so"
+ },
+ {
+  "slug": "chatwoot",
+  "logoUrl": "https://logo.clearbit.com/chatwoot.com"
+ },
+ {
+  "slug": "glide-apps",
+  "logoUrl": "https://logo.clearbit.com/glideapps.com"
+ },
+ {
+  "slug": "posit-rstudio",
+  "logoUrl": "https://logo.clearbit.com/posit.co"
+ },
+ {
+  "slug": "payhip",
+  "logoUrl": "https://logo.clearbit.com/payhip.com"
+ },
+ {
+  "slug": "xendit",
+  "logoUrl": "https://logo.clearbit.com/xendit.co"
+ },
+ {
+  "slug": "razorpay",
+  "logoUrl": "https://logo.clearbit.com/razorpay.com"
+ }
+]

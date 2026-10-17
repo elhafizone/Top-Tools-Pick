@@ -17,7 +17,7 @@ missing.slice(0, 10).forEach((s) => console.log("  not reachable:", s));
 if (!apply) console.log("\nCHECK ONLY - nothing written.");
 else if (missing.length) console.log("\nRefusing to apply: some CDN files are not reachable yet.");
 else {
-  writeFileSync(`docs/seo/icon-backup-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(rows.map((r) => ({ slug: r.slug, logoUrl: r.logoUrl })), null, 1));
+  writeFileSync(`docs/seo/icon-backup-${new Date().toISOString().slice(0, 10)}-${Date.now()}.json`, JSON.stringify(rows.map((r) => ({ slug: r.slug, logoUrl: r.logoUrl })), null, 1));
   await prisma.$transaction(rows.map((r) => prisma.product.update({ where: { id: r.id }, data: { logoUrl: map[r.slug] } })), { timeout: 120000 });
   console.log(`updated ${rows.length} logos`);
 }
