@@ -1,0 +1,445 @@
+[
+ {
+  "site": "ahrefs.com",
+  "keep": "ahrefs",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "ahrefs-webmaster-tools"
+  ]
+ },
+ {
+  "site": "amplitude.com",
+  "keep": "amplitude",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "amplitude-analytics"
+  ]
+ },
+ {
+  "site": "cal.com",
+  "keep": "cal-com",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "cal-com-scheduling"
+  ]
+ },
+ {
+  "site": "canva.com",
+  "keep": "canva",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "canva-pro"
+  ]
+ },
+ {
+  "site": "capacities.io",
+  "keep": "capacities-app",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "capacities"
+  ]
+ },
+ {
+  "site": "claude.ai",
+  "keep": "claude",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "claude-ai"
+  ]
+ },
+ {
+  "site": "cleanfeed.net",
+  "keep": "cleanfeed-audio",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "cleanfeed"
+  ]
+ },
+ {
+  "site": "clickup.com",
+  "keep": "clickup",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "clickup-ai"
+  ]
+ },
+ {
+  "site": "cloudflare.com",
+  "keep": "cloudflare",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "cloudflare-waf",
+   "cloudflare-zero-trust"
+  ]
+ },
+ {
+  "site": "coda.io",
+  "keep": "coda-io",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "coda"
+  ]
+ },
+ {
+  "site": "codeium.com",
+  "keep": "windsurf-ide",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "windsurf-editor"
+  ]
+ },
+ {
+  "site": "consensus.app",
+  "keep": "consensus-ai",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "consensus"
+  ]
+ },
+ {
+  "site": "coolify.io",
+  "keep": "coolify",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "coolify-platform"
+  ]
+ },
+ {
+  "site": "cursor.sh",
+  "keep": "cursor-ai",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "cursor",
+   "cursor-editor"
+  ]
+ },
+ {
+  "site": "elicit.com",
+  "keep": "elicit-ai",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "elicit"
+  ]
+ },
+ {
+  "site": "figma.com",
+  "keep": "figma",
+  "also_keep_separate": [
+   "figma-figjam"
+  ],
+  "redirect_to_keep": []
+ },
+ {
+  "site": "ghost.org",
+  "keep": "ghost-cms",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "ghost"
+  ]
+ },
+ {
+  "site": "github.com",
+  "keep": "github",
+  "also_keep_separate": [
+   "github-copilot"
+  ],
+  "redirect_to_keep": []
+ },
+ {
+  "site": "analytics.google.com",
+  "keep": "google-analytics",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "google-analytics-4"
+  ]
+ },
+ {
+  "site": "hubspot.com",
+  "keep": "hubspot",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "hubspot-crm",
+   "hubspot-sales-hub",
+   "hubspot-marketing"
+  ]
+ },
+ {
+  "site": "jasper.ai",
+  "keep": "jasper-ai",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "jasper"
+  ]
+ },
+ {
+  "site": "kinsta.com",
+  "keep": "kinsta",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "kinsta-app-hosting"
+  ]
+ },
+ {
+  "site": "klaviyo.com",
+  "keep": "klaviyo",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "klaviyo-sms"
+  ]
+ },
+ {
+  "site": "larksuite.com",
+  "keep": "lark-suite",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "lark"
+  ]
+ },
+ {
+  "site": "linear.app",
+  "keep": "linear",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "linear-method"
+  ]
+ },
+ {
+  "site": "linkedin.com",
+  "keep": "linkedin",
+  "also_keep_separate": [
+   "linkedin-learning"
+  ],
+  "redirect_to_keep": []
+ },
+ {
+  "site": "loom.com",
+  "keep": "loom",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "loom-ai"
+  ]
+ },
+ {
+  "site": "mercury.com",
+  "keep": "mercury",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "mercury-bank"
+  ]
+ },
+ {
+  "site": "neon.tech",
+  "keep": "neon",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "neon-database"
+  ]
+ },
+ {
+  "site": "notion.so",
+  "keep": "notion",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "notion-tasks"
+  ]
+ },
+ {
+  "site": "obsidian.md",
+  "keep": "obsidian",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "obsidian-notes"
+  ]
+ },
+ {
+  "site": "perplexity.ai",
+  "keep": "perplexity",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "perplexity-ai",
+   "perplexity-pages"
+  ]
+ },
+ {
+  "site": "pika.art",
+  "keep": "pika-labs",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "pika"
+  ]
+ },
+ {
+  "site": "poe.com",
+  "keep": "poe-ai",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "poe"
+  ]
+ },
+ {
+  "site": "prisma.io",
+  "keep": "prisma",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "prisma-orm"
+  ]
+ },
+ {
+  "site": "railway.app",
+  "keep": "railway",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "railway-app"
+  ]
+ },
+ {
+  "site": "rechargepayments.com",
+  "keep": "recharge",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "recharge-payments"
+  ]
+ },
+ {
+  "site": "render.com",
+  "keep": "render",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "render-hosting"
+  ]
+ },
+ {
+  "site": "riverside.fm",
+  "keep": "riverside",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "riverside-fm"
+  ]
+ },
+ {
+  "site": "runwayml.com",
+  "keep": "runway-ml",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "runway"
+  ]
+ },
+ {
+  "site": "semrush.com",
+  "keep": "semrush",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "semrush-position-tracking",
+   "semrush-keyword-magic"
+  ]
+ },
+ {
+  "site": "slack.com",
+  "keep": "slack",
+  "also_keep_separate": [
+   "slack-huddles"
+  ],
+  "redirect_to_keep": []
+ },
+ {
+  "site": "squarespace.com",
+  "keep": "squarespace",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "squarespace-commerce"
+  ]
+ },
+ {
+  "site": "stability.ai",
+  "keep": "stability-ai-api",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "stability-ai"
+  ]
+ },
+ {
+  "site": "stripe.com",
+  "keep": "stripe",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "stripe-billing",
+   "stripe-connect",
+   "stripe-atlas",
+   "stripe-treasury"
+  ]
+ },
+ {
+  "site": "suno.com",
+  "keep": "suno-ai",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "suno"
+  ]
+ },
+ {
+  "site": "supabase.com",
+  "keep": "supabase",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "supabase-auth",
+   "supabase-vector"
+  ]
+ },
+ {
+  "site": "tandem.chat",
+  "keep": "tandem-app",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "tandem"
+  ]
+ },
+ {
+  "site": "tome.app",
+  "keep": "tome-app",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "tome"
+  ]
+ },
+ {
+  "site": "transistor.fm",
+  "keep": "transistor-fm",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "transistor"
+  ]
+ },
+ {
+  "site": "waveapps.com",
+  "keep": "wave",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "wave-accounting"
+  ]
+ },
+ {
+  "site": "webflow.com",
+  "keep": "webflow",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "webflow-hosting",
+   "webflow-cms"
+  ]
+ },
+ {
+  "site": "wiz.io",
+  "keep": "wiz",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "wiz-security"
+  ]
+ },
+ {
+  "site": "xata.io",
+  "keep": "xata",
+  "also_keep_separate": [],
+  "redirect_to_keep": [
+   "xata-database"
+  ]
+ }
+]

@@ -1,0 +1,867 @@
+[
+ {
+  "site": "ahrefs.com",
+  "members": [
+   {
+    "slug": "ahrefs",
+    "name": "Ahrefs",
+    "score": 82
+   },
+   {
+    "slug": "ahrefs-webmaster-tools",
+    "name": "Ahrefs Webmaster Tools",
+    "score": 17
+   }
+  ]
+ },
+ {
+  "site": "amplitude.com",
+  "members": [
+   {
+    "slug": "amplitude",
+    "name": "Amplitude",
+    "score": 75
+   },
+   {
+    "slug": "amplitude-analytics",
+    "name": "Amplitude",
+    "score": 33
+   }
+  ]
+ },
+ {
+  "site": "cal.com",
+  "members": [
+   {
+    "slug": "cal-com",
+    "name": "Cal.com",
+    "score": 33
+   },
+   {
+    "slug": "cal-com-scheduling",
+    "name": "Cal.com",
+    "score": 11
+   }
+  ]
+ },
+ {
+  "site": "canva.com",
+  "members": [
+   {
+    "slug": "canva",
+    "name": "Canva",
+    "score": 69
+   },
+   {
+    "slug": "canva-pro",
+    "name": "Canva Pro",
+    "score": 34
+   }
+  ]
+ },
+ {
+  "site": "capacities.io",
+  "members": [
+   {
+    "slug": "capacities-app",
+    "name": "Capacities",
+    "score": 26
+   },
+   {
+    "slug": "capacities",
+    "name": "Capacities",
+    "score": 10
+   }
+  ]
+ },
+ {
+  "site": "claude.ai",
+  "members": [
+   {
+    "slug": "claude",
+    "name": "Claude",
+    "score": 90
+   },
+   {
+    "slug": "claude-ai",
+    "name": "Claude AI",
+    "score": 13
+   }
+  ]
+ },
+ {
+  "site": "cleanfeed.net",
+  "members": [
+   {
+    "slug": "cleanfeed-audio",
+    "name": "Cleanfeed",
+    "score": 33
+   },
+   {
+    "slug": "cleanfeed",
+    "name": "Cleanfeed",
+    "score": 18
+   }
+  ]
+ },
+ {
+  "site": "clickup.com",
+  "members": [
+   {
+    "slug": "clickup",
+    "name": "ClickUp",
+    "score": 80
+   },
+   {
+    "slug": "clickup-ai",
+    "name": "ClickUp AI",
+    "score": 18
+   }
+  ]
+ },
+ {
+  "site": "cloudflare.com",
+  "members": [
+   {
+    "slug": "cloudflare",
+    "name": "Cloudflare",
+    "score": 68
+   },
+   {
+    "slug": "cloudflare-waf",
+    "name": "Cloudflare WAF",
+    "score": 41
+   },
+   {
+    "slug": "cloudflare-zero-trust",
+    "name": "Cloudflare Zero Trust",
+    "score": 19
+   }
+  ]
+ },
+ {
+  "site": "coda.io",
+  "members": [
+   {
+    "slug": "coda-io",
+    "name": "Coda",
+    "score": 41
+   },
+   {
+    "slug": "coda",
+    "name": "Coda",
+    "score": 27
+   }
+  ]
+ },
+ {
+  "site": "codeium.com",
+  "members": [
+   {
+    "slug": "windsurf-ide",
+    "name": "Windsurf",
+    "score": 25
+   },
+   {
+    "slug": "windsurf-editor",
+    "name": "Windsurf",
+    "score": 12
+   }
+  ]
+ },
+ {
+  "site": "consensus.app",
+  "members": [
+   {
+    "slug": "consensus-ai",
+    "name": "Consensus",
+    "score": 33
+   },
+   {
+    "slug": "consensus",
+    "name": "Consensus",
+    "score": 25
+   }
+  ]
+ },
+ {
+  "site": "coolify.io",
+  "members": [
+   {
+    "slug": "coolify",
+    "name": "Coolify",
+    "score": 27
+   },
+   {
+    "slug": "coolify-platform",
+    "name": "Coolify",
+    "score": 11
+   }
+  ]
+ },
+ {
+  "site": "cursor.sh",
+  "members": [
+   {
+    "slug": "cursor-ai",
+    "name": "Cursor",
+    "score": 33
+   },
+   {
+    "slug": "cursor",
+    "name": "Cursor",
+    "score": 31
+   },
+   {
+    "slug": "cursor-editor",
+    "name": "Cursor",
+    "score": 12
+   }
+  ]
+ },
+ {
+  "site": "elicit.com",
+  "members": [
+   {
+    "slug": "elicit-ai",
+    "name": "Elicit",
+    "score": 33
+   },
+   {
+    "slug": "elicit",
+    "name": "Elicit",
+    "score": 25
+   }
+  ]
+ },
+ {
+  "site": "figma.com",
+  "members": [
+   {
+    "slug": "figma",
+    "name": "Figma",
+    "score": 75
+   },
+   {
+    "slug": "figma-figjam",
+    "name": "Figma FigJam",
+    "score": 27
+   }
+  ]
+ },
+ {
+  "site": "ghost.org",
+  "members": [
+   {
+    "slug": "ghost-cms",
+    "name": "Ghost CMS",
+    "score": 41
+   },
+   {
+    "slug": "ghost",
+    "name": "Ghost",
+    "score": 12
+   }
+  ]
+ },
+ {
+  "site": "github.com",
+  "members": [
+   {
+    "slug": "github-copilot",
+    "name": "GitHub Copilot",
+    "score": 79
+   },
+   {
+    "slug": "github",
+    "name": "GitHub",
+    "score": 73
+   }
+  ]
+ },
+ {
+  "site": "analytics.google.com",
+  "members": [
+   {
+    "slug": "google-analytics",
+    "name": "Google Analytics",
+    "score": 72
+   },
+   {
+    "slug": "google-analytics-4",
+    "name": "Google Analytics 4",
+    "score": 19
+   }
+  ]
+ },
+ {
+  "site": "hubspot.com",
+  "members": [
+   {
+    "slug": "hubspot",
+    "name": "HubSpot",
+    "score": 85
+   },
+   {
+    "slug": "hubspot-crm",
+    "name": "HubSpot CRM",
+    "score": 42
+   },
+   {
+    "slug": "hubspot-sales-hub",
+    "name": "Hubspot Sales Hub",
+    "score": 41
+   },
+   {
+    "slug": "hubspot-marketing",
+    "name": "HubSpot Marketing",
+    "score": 34
+   }
+  ]
+ },
+ {
+  "site": "jasper.ai",
+  "members": [
+   {
+    "slug": "jasper-ai",
+    "name": "Jasper AI",
+    "score": 34
+   },
+   {
+    "slug": "jasper",
+    "name": "Jasper",
+    "score": 27
+   }
+  ]
+ },
+ {
+  "site": "kinsta.com",
+  "members": [
+   {
+    "slug": "kinsta",
+    "name": "Kinsta",
+    "score": 74
+   },
+   {
+    "slug": "kinsta-app-hosting",
+    "name": "Kinsta Application Hosting",
+    "score": 8
+   }
+  ]
+ },
+ {
+  "site": "klaviyo.com",
+  "members": [
+   {
+    "slug": "klaviyo",
+    "name": "Klaviyo",
+    "score": 72
+   },
+   {
+    "slug": "klaviyo-sms",
+    "name": "Klaviyo SMS",
+    "score": 32
+   }
+  ]
+ },
+ {
+  "site": "larksuite.com",
+  "members": [
+   {
+    "slug": "lark-suite",
+    "name": "Lark Suite",
+    "score": 26
+   },
+   {
+    "slug": "lark",
+    "name": "Lark",
+    "score": 26
+   }
+  ]
+ },
+ {
+  "site": "linear.app",
+  "members": [
+   {
+    "slug": "linear",
+    "name": "Linear",
+    "score": 70
+   },
+   {
+    "slug": "linear-method",
+    "name": "Linear Method",
+    "score": 12
+   }
+  ]
+ },
+ {
+  "site": "linkedin.com",
+  "members": [
+   {
+    "slug": "linkedin",
+    "name": "LinkedIn",
+    "score": 74
+   },
+   {
+    "slug": "linkedin-learning",
+    "name": "LinkedIn Learning",
+    "score": 19
+   }
+  ]
+ },
+ {
+  "site": "loom.com",
+  "members": [
+   {
+    "slug": "loom",
+    "name": "Loom",
+    "score": 70
+   },
+   {
+    "slug": "loom-ai",
+    "name": "Loom AI",
+    "score": 33
+   }
+  ]
+ },
+ {
+  "site": "mercury.com",
+  "members": [
+   {
+    "slug": "mercury",
+    "name": "Mercury",
+    "score": 33
+   },
+   {
+    "slug": "mercury-bank",
+    "name": "Mercury Bank",
+    "score": 25
+   }
+  ]
+ },
+ {
+  "site": "neon.tech",
+  "members": [
+   {
+    "slug": "neon",
+    "name": "Neon",
+    "score": 26
+   },
+   {
+    "slug": "neon-database",
+    "name": "Neon",
+    "score": 12
+   }
+  ]
+ },
+ {
+  "site": "notion.so",
+  "members": [
+   {
+    "slug": "notion",
+    "name": "Notion",
+    "score": 93
+   },
+   {
+    "slug": "notion-tasks",
+    "name": "Notion Tasks",
+    "score": 33
+   }
+  ]
+ },
+ {
+  "site": "obsidian.md",
+  "members": [
+   {
+    "slug": "obsidian",
+    "name": "Obsidian",
+    "score": 40
+   },
+   {
+    "slug": "obsidian-notes",
+    "name": "Obsidian",
+    "score": 12
+   }
+  ]
+ },
+ {
+  "site": "perplexity.ai",
+  "members": [
+   {
+    "slug": "perplexity",
+    "name": "Perplexity",
+    "score": 64
+   },
+   {
+    "slug": "perplexity-ai",
+    "name": "Perplexity AI",
+    "score": 27
+   },
+   {
+    "slug": "perplexity-pages",
+    "name": "Perplexity Pages",
+    "score": 25
+   }
+  ]
+ },
+ {
+  "site": "pika.art",
+  "members": [
+   {
+    "slug": "pika-labs",
+    "name": "Pika Labs",
+    "score": 34
+   },
+   {
+    "slug": "pika",
+    "name": "Pika",
+    "score": 33
+   }
+  ]
+ },
+ {
+  "site": "poe.com",
+  "members": [
+   {
+    "slug": "poe-ai",
+    "name": "Poe",
+    "score": 27
+   },
+   {
+    "slug": "poe",
+    "name": "Poe",
+    "score": 25
+   }
+  ]
+ },
+ {
+  "site": "prisma.io",
+  "members": [
+   {
+    "slug": "prisma",
+    "name": "Prisma",
+    "score": 25
+   },
+   {
+    "slug": "prisma-orm",
+    "name": "Prisma ORM",
+    "score": 25
+   }
+  ]
+ },
+ {
+  "site": "railway.app",
+  "members": [
+   {
+    "slug": "railway",
+    "name": "Railway",
+    "score": 28
+   },
+   {
+    "slug": "railway-app",
+    "name": "Railway",
+    "score": 11
+   }
+  ]
+ },
+ {
+  "site": "rechargepayments.com",
+  "members": [
+   {
+    "slug": "recharge",
+    "name": "Recharge",
+    "score": 25
+   },
+   {
+    "slug": "recharge-payments",
+    "name": "ReCharge",
+    "score": 24
+   }
+  ]
+ },
+ {
+  "site": "render.com",
+  "members": [
+   {
+    "slug": "render",
+    "name": "Render",
+    "score": 27
+   },
+   {
+    "slug": "render-hosting",
+    "name": "Render",
+    "score": 13
+   }
+  ]
+ },
+ {
+  "site": "riverside.fm",
+  "members": [
+   {
+    "slug": "riverside",
+    "name": "Riverside",
+    "score": 71
+   },
+   {
+    "slug": "riverside-fm",
+    "name": "Riverside.fm",
+    "score": 41
+   }
+  ]
+ },
+ {
+  "site": "runwayml.com",
+  "members": [
+   {
+    "slug": "runway-ml",
+    "name": "Runway ML",
+    "score": 42
+   },
+   {
+    "slug": "runway",
+    "name": "Runway",
+    "score": 34
+   }
+  ]
+ },
+ {
+  "site": "semrush.com",
+  "members": [
+   {
+    "slug": "semrush",
+    "name": "Semrush",
+    "score": 69
+   },
+   {
+    "slug": "semrush-position-tracking",
+    "name": "Semrush Position Tracking",
+    "score": 33
+   },
+   {
+    "slug": "semrush-keyword-magic",
+    "name": "Semrush Keyword Magic Tool",
+    "score": 33
+   }
+  ]
+ },
+ {
+  "site": "slack.com",
+  "members": [
+   {
+    "slug": "slack",
+    "name": "Slack",
+    "score": 85
+   },
+   {
+    "slug": "slack-huddles",
+    "name": "Slack Huddles",
+    "score": 35
+   }
+  ]
+ },
+ {
+  "site": "squarespace.com",
+  "members": [
+   {
+    "slug": "squarespace",
+    "name": "Squarespace",
+    "score": 75
+   },
+   {
+    "slug": "squarespace-commerce",
+    "name": "Squarespace Commerce",
+    "score": 24
+   }
+  ]
+ },
+ {
+  "site": "stability.ai",
+  "members": [
+   {
+    "slug": "stability-ai-api",
+    "name": "Stability AI API",
+    "score": 26
+   },
+   {
+    "slug": "stability-ai",
+    "name": "Stability AI",
+    "score": 19
+   }
+  ]
+ },
+ {
+  "site": "stripe.com",
+  "members": [
+   {
+    "slug": "stripe",
+    "name": "Stripe",
+    "score": 60
+   },
+   {
+    "slug": "stripe-billing",
+    "name": "Stripe Billing",
+    "score": 25
+   },
+   {
+    "slug": "stripe-connect",
+    "name": "Stripe Connect",
+    "score": 25
+   },
+   {
+    "slug": "stripe-atlas",
+    "name": "Stripe Atlas",
+    "score": 19
+   },
+   {
+    "slug": "stripe-treasury",
+    "name": "Stripe Treasury",
+    "score": 17
+   }
+  ]
+ },
+ {
+  "site": "suno.com",
+  "members": [
+   {
+    "slug": "suno-ai",
+    "name": "Suno AI",
+    "score": 35
+   },
+   {
+    "slug": "suno",
+    "name": "Suno",
+    "score": 27
+   }
+  ]
+ },
+ {
+  "site": "supabase.com",
+  "members": [
+   {
+    "slug": "supabase",
+    "name": "Supabase",
+    "score": 86
+   },
+   {
+    "slug": "supabase-auth",
+    "name": "Supabase Auth",
+    "score": 25
+   },
+   {
+    "slug": "supabase-vector",
+    "name": "Supabase Vector",
+    "score": 25
+   }
+  ]
+ },
+ {
+  "site": "tandem.chat",
+  "members": [
+   {
+    "slug": "tandem-app",
+    "name": "Tandem",
+    "score": 10
+   },
+   {
+    "slug": "tandem",
+    "name": "Tandem",
+    "score": 4
+   }
+  ]
+ },
+ {
+  "site": "tome.app",
+  "members": [
+   {
+    "slug": "tome-app",
+    "name": "Tome",
+    "score": 34
+   },
+   {
+    "slug": "tome",
+    "name": "Tome",
+    "score": 19
+   }
+  ]
+ },
+ {
+  "site": "transistor.fm",
+  "members": [
+   {
+    "slug": "transistor-fm",
+    "name": "Transistor.fm",
+    "score": 33
+   },
+   {
+    "slug": "transistor",
+    "name": "Transistor",
+    "score": 33
+   }
+  ]
+ },
+ {
+  "site": "waveapps.com",
+  "members": [
+   {
+    "slug": "wave",
+    "name": "Wave",
+    "score": 67
+   },
+   {
+    "slug": "wave-accounting",
+    "name": "Wave",
+    "score": 25
+   }
+  ]
+ },
+ {
+  "site": "webflow.com",
+  "members": [
+   {
+    "slug": "webflow",
+    "name": "Webflow",
+    "score": 36
+   },
+   {
+    "slug": "webflow-hosting",
+    "name": "Webflow Hosting",
+    "score": 34
+   },
+   {
+    "slug": "webflow-cms",
+    "name": "Webflow CMS",
+    "score": 33
+   }
+  ]
+ },
+ {
+  "site": "wiz.io",
+  "members": [
+   {
+    "slug": "wiz",
+    "name": "Wiz",
+    "score": 18
+   },
+   {
+    "slug": "wiz-security",
+    "name": "Wiz",
+    "score": 18
+   }
+  ]
+ },
+ {
+  "site": "xata.io",
+  "members": [
+   {
+    "slug": "xata",
+    "name": "Xata",
+    "score": 34
+   },
+   {
+    "slug": "xata-database",
+    "name": "Xata",
+    "score": 12
+   }
+  ]
+ }
+]

@@ -60,5 +60,9 @@ for (const { h, grp } of family) md += `- **${h}**: ${grp.map((p) => p.slug).joi
 md += `\n## C. Same vendor, different sites (${vendorOnly.length} vendors) - usually fine\n\n`;
 for (const [d, l] of vendorOnly) md += `- **${d}**: ${l.map((p) => p.slug).join(", ")}\n`;
 writeFileSync("docs/seo/duplicate-tools-report.md", md, "utf8");
+writeFileSync("docs/seo/duplicate-groups.json", JSON.stringify(strong.map(({ h, grp }) => ({
+  site: h,
+  members: [...grp].sort((a, b) => score(b) - score(a) || a.slug.length - b.slug.length).map((p) => ({ slug: p.slug, name: p.name, score: Math.round(score(p)) })),
+})), null, 1), "utf8");
 console.log(`published ${live.length} | A (merge): ${strong.length} groups, ${strong.reduce((n, g) => n + g.grp.length - 1, 0)} redirects | B: ${family.length} | C: ${vendorOnly.length}`);
 await prisma.$disconnect();
