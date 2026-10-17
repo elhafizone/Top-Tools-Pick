@@ -1,0 +1,4 @@
+{
+  "_comment": "Slugs allowed to coexist with another page of the same vendor because the product has its own search demand. Empty until the owner decides. Format: { \"allow\": [\"github-copilot\"] }",
+  "allow": []
+}

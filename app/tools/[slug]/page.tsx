@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { AffiliateCta } from "@/components/affiliate/AffiliateCta";
 import { DecisionBadges } from "@/components/decision/DecisionBadges";
 import { AlternativesSection } from "@/components/product/AlternativesSection";
@@ -11,7 +11,7 @@ import { Rating, ScoreMeter } from "@/components/ui/Rating";
 import { ctaSubline } from "@/lib/affiliate/cta";
 import { getBestAffiliateLink, safeHostname } from "@/lib/affiliate/links";
 import { getAlternatives } from "@/lib/alternatives";
-import { getProductBySlug, getProductSlugsByNames, getRelatedProducts } from "@/lib/products";
+import { getMergedRedirect, getProductBySlug, getProductSlugsByNames, getRelatedProducts } from "@/lib/products";
 import { toBullets } from "@/lib/text";
 import { breadcrumbJsonLd, jsonLd, productMetadata, siteUrl, softwareApplicationJsonLd } from "@/lib/seo";
 
@@ -23,7 +23,11 @@ const INDEXABLE_ALTERNATIVES = 3;
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
-  if (!product) notFound();
+  if (!product) {
+    const merged = await getMergedRedirect(slug);
+    if (merged) permanentRedirect(merged);
+    notFound();
+  }
 
   const integrationPoints = toBullets(product.integrations);
   const [related, alternatives, productNameSlugs] = await Promise.all([

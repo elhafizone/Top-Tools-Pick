@@ -190,6 +190,18 @@ export const getProductBySlug = cache(async (slug: string) => {
   return prisma.product.findFirst({ where: { slug, status: "PUBLISHED", category: { status: "PUBLISHED" } }, include: productContext });
 });
 
+/**
+ * Where an archived duplicate should send visitors. A merged page keeps its row with
+ * status ARCHIVED and canonicalUrl set to the page that replaced it ("/tools/<slug>").
+ * Only same-site /tools/ paths count, so the field can never become an open redirect.
+ */
+export async function getMergedRedirect(slug: string): Promise<string | null> {
+  const row = await prisma.product.findUnique({ where: { slug }, select: { status: true, canonicalUrl: true } });
+  if (!row || row.status !== "ARCHIVED" || !row.canonicalUrl) return null;
+  const path = row.canonicalUrl.replace(/^https?:\/\/(www\.)?toptoolspick\.com/, "");
+  return /^\/tools\/[a-z0-9-]+$/.test(path) ? path : null;
+}
+
 export async function getProductsByCategory(slug: string) {
   return prisma.product.findMany({
     where: { status: "PUBLISHED", category: { slug, status: "PUBLISHED" } },

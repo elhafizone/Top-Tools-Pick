@@ -12,7 +12,7 @@ The reference for adding a tool to TopToolsPick. A tool is only imported when ev
 ## 2. Fields
 | Field | Rule |
 |---|---|
-| name, slug | Official product name; slug lowercase-hyphen, unique, no year |
+| name, slug | Official product name. **One page per tool or vendor**: the slug is the plain name (`kinsta`, not `kinsta-app-hosting`), and that page covers everything the vendor offers. The importer rejects a slug that extends an existing one or a site that is already listed; exceptions go in `docs/tools/slug-exceptions.json` |
 | websiteUrl | Official https URL, no tracking/affiliate params |
 | shortDescription | 12-25 words, says what it is and for whom, no price |
 | description | >= 150 words, 3+ paragraphs separated by a blank line: what it is, who uses it and how, how pricing works, one honest limitation |

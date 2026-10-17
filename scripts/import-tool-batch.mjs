@@ -6,6 +6,9 @@
 import { PrismaClient } from "@prisma/client";
 import { existsSync, readFileSync } from "node:fs";
 
+const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return u; } };
+const allow = new Set(JSON.parse(readFileSync("docs/tools/slug-exceptions.json", "utf8")).allow);
+
 const apply = process.argv.includes("--apply");
 const file = process.argv.find((a) => a.endsWith(".json"));
 const CDN = "https://cdn.jsdelivr.net/gh/elhafizone/Top-Tools-Pick@main/";
@@ -20,9 +23,21 @@ const slugsOf = async (model, wanted) => {
   return new Map(rows.map((r) => [r.slug, r.id]));
 };
 
+const allProducts = await prisma.product.findMany({ select: { slug: true, websiteUrl: true } });
 const plan = [];
 for (const t of tools) {
   const problems = [];
+  // One page per tool or vendor: the slug is the plain name, and a tool whose site is
+  // already listed is added to that page instead of getting a second one.
+  if (!allow.has(t.slug)) {
+    for (const e of allProducts) {
+      if (e.slug === t.slug) continue;
+      if (t.slug.startsWith(e.slug + "-") || e.slug.startsWith(t.slug + "-"))
+        problems.push(`slug "${t.slug}" is a variant of existing "${e.slug}" - extend that page instead`);
+      else if (host(t.websiteUrl) === host(e.websiteUrl))
+        problems.push(`site ${host(t.websiteUrl)} is already listed as "${e.slug}" - extend that page instead`);
+    }
+  }
   const exists = await prisma.product.findUnique({ where: { slug: t.slug }, select: { id: true } });
   if (exists) { plan.push({ t, skip: "slug already exists" }); continue; }
   const [cat] = await prisma.category.findMany({ where: { slug: t.category }, select: { id: true } });
