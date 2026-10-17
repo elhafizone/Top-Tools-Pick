@@ -1,0 +1,1058 @@
+[
+ {
+  "slug": "framer",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=framer.com&sz=128"
+ },
+ {
+  "slug": "freshbooks",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=freshbooks.com&sz=128"
+ },
+ {
+  "slug": "woocommerce",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=woocommerce.com&sz=128"
+ },
+ {
+  "slug": "mailchimp",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=mailchimp.com&sz=128"
+ },
+ {
+  "slug": "riverside",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=riverside.fm&sz=128"
+ },
+ {
+  "slug": "github",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=github.com&sz=128"
+ },
+ {
+  "slug": "wave",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=waveapps.com&sz=128"
+ },
+ {
+  "slug": "bigcommerce",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=bigcommerce.com&sz=128"
+ },
+ {
+  "slug": "capcut",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=capcut.com&sz=128"
+ },
+ {
+  "slug": "teachable",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=teachable.com&sz=128"
+ },
+ {
+  "slug": "coda",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=coda.io&sz=128"
+ },
+ {
+  "slug": "evernote",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=evernote.com&sz=128"
+ },
+ {
+  "slug": "perplexity-labs",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=perplexity.ai&sz=128"
+ },
+ {
+  "slug": "vs-code",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=code.visualstudio.com&sz=128"
+ },
+ {
+  "slug": "firebase",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=firebase.google.com&sz=128"
+ },
+ {
+  "slug": "prisma",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=prisma.io&sz=128"
+ },
+ {
+  "slug": "dalle-3",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=openai.com&sz=128"
+ },
+ {
+  "slug": "maze",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=maze.co&sz=128"
+ },
+ {
+  "slug": "siteground",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=siteground.com&sz=128"
+ },
+ {
+  "slug": "wp-engine",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=wpengine.com&sz=128"
+ },
+ {
+  "slug": "cohere",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=cohere.com&sz=128"
+ },
+ {
+  "slug": "character-ai",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=character.ai&sz=128"
+ },
+ {
+  "slug": "codeium",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=codeium.com&sz=128"
+ },
+ {
+  "slug": "github-copilot",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=github.com&sz=128"
+ },
+ {
+  "slug": "elicit",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=elicit.com&sz=128"
+ },
+ {
+  "slug": "pendo",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=pendo.io&sz=128"
+ },
+ {
+  "slug": "d-id",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=d-id.com&sz=128"
+ },
+ {
+  "slug": "anyword",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=anyword.com&sz=128"
+ },
+ {
+  "slug": "prowritingaid",
+  "logoUrl": null
+ },
+ {
+  "slug": "chatpdf",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=chatpdf.com&sz=128"
+ },
+ {
+  "slug": "fathom",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=fathom.video&sz=128"
+ },
+ {
+  "slug": "avoma",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=avoma.com&sz=128"
+ },
+ {
+  "slug": "grain",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=grain.com&sz=128"
+ },
+ {
+  "slug": "logseq",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=logseq.com&sz=128"
+ },
+ {
+  "slug": "yotpo",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=yotpo.com&sz=128"
+ },
+ {
+  "slug": "tidio",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=tidio.com&sz=128"
+ },
+ {
+  "slug": "runway",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=runwayml.com&sz=128"
+ },
+ {
+  "slug": "gitpod",
+  "logoUrl": null
+ },
+ {
+  "slug": "mural",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=mural.co&sz=128"
+ },
+ {
+  "slug": "google-gemini",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=gemini.google.com&sz=128"
+ },
+ {
+  "slug": "jasper",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=jasper.ai&sz=128"
+ },
+ {
+  "slug": "replit",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=replit.com&sz=128"
+ },
+ {
+  "slug": "mailerlite",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=mailerlite.com&sz=128"
+ },
+ {
+  "slug": "suno",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=suno.com&sz=128"
+ },
+ {
+  "slug": "mullvad-vpn",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=mullvad.net&sz=128"
+ },
+ {
+  "slug": "attentive",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=attentive.com&sz=128"
+ },
+ {
+  "slug": "recharm",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=recharm.com&sz=128"
+ },
+ {
+  "slug": "invideo-ai",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=invideo.io&sz=128"
+ },
+ {
+  "slug": "cursor",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=cursor.sh&sz=128"
+ },
+ {
+  "slug": "bolt-new",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=bolt.new&sz=128"
+ },
+ {
+  "slug": "windsurf",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=windsurf.ai&sz=128"
+ },
+ {
+  "slug": "notebooklm",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=notebooklm.google.com&sz=128"
+ },
+ {
+  "slug": "weights-biases",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=wandb.ai&sz=128"
+ },
+ {
+  "slug": "dify",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=dify.ai&sz=128"
+ },
+ {
+  "slug": "rankmath",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=rankmath.com&sz=128"
+ },
+ {
+  "slug": "yoast-seo",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=yoast.com&sz=128"
+ },
+ {
+  "slug": "sprout-social",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=sproutsocial.com&sz=128"
+ },
+ {
+  "slug": "linktree",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=linktr.ee&sz=128"
+ },
+ {
+  "slug": "sparktoro",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=sparktoro.com&sz=128"
+ },
+ {
+  "slug": "copy-ai",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=copy.ai&sz=128"
+ },
+ {
+  "slug": "notion-ai",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=notion.so&sz=128"
+ },
+ {
+  "slug": "otter-ai",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=otter.ai&sz=128"
+ },
+ {
+  "slug": "postman",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=postman.com&sz=128"
+ },
+ {
+  "slug": "synthesia",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=synthesia.io&sz=128"
+ },
+ {
+  "slug": "wordtune",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=wordtune.com&sz=128"
+ },
+ {
+  "slug": "beautiful-ai",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=beautiful.ai&sz=128"
+ },
+ {
+  "slug": "sketch",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=sketch.com&sz=128"
+ },
+ {
+  "slug": "procreate",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=procreate.com&sz=128"
+ },
+ {
+  "slug": "affinity-designer",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=affinity.serif.com&sz=128"
+ },
+ {
+  "slug": "blender",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=blender.org&sz=128"
+ },
+ {
+  "slug": "activecampaign",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=activecampaign.com&sz=128"
+ },
+ {
+  "slug": "buffer",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=buffer.com&sz=128"
+ },
+ {
+  "slug": "hootsuite",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=hootsuite.com&sz=128"
+ },
+ {
+  "slug": "brevo",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=brevo.com&sz=128"
+ },
+ {
+  "slug": "convertkit",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=convertkit.com&sz=128"
+ },
+ {
+  "slug": "surfer-seo",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=surferseo.com&sz=128"
+ },
+ {
+  "slug": "basecamp",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=basecamp.com&sz=128"
+ },
+ {
+  "slug": "gemini",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=gemini.google.com&sz=128"
+ },
+ {
+  "slug": "retool",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=retool.com&sz=128"
+ },
+ {
+  "slug": "coolify",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=coolify.io&sz=128"
+ },
+ {
+  "slug": "render",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=render.com&sz=128"
+ },
+ {
+  "slug": "planetscale",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=planetscale.com&sz=128"
+ },
+ {
+  "slug": "webflow",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=webflow.com&sz=128"
+ },
+ {
+  "slug": "printful",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=printful.com&sz=128"
+ },
+ {
+  "slug": "paddle",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=paddle.com&sz=128"
+ },
+ {
+  "slug": "dall-e-3",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=openai.com&sz=128"
+ },
+ {
+  "slug": "lemonsqueezy",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=lemonsqueezy.com&sz=128"
+ },
+ {
+  "slug": "kajabi",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=kajabi.com&sz=128"
+ },
+ {
+  "slug": "pluralsight",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=pluralsight.com&sz=128"
+ },
+ {
+  "slug": "help-scout",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=helpscout.com&sz=128"
+ },
+ {
+  "slug": "deel",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=deel.com&sz=128"
+ },
+ {
+  "slug": "rippling",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=rippling.com&sz=128"
+ },
+ {
+  "slug": "notion-calendar",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=notion.so&sz=128"
+ },
+ {
+  "slug": "railway",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=railway.app&sz=128"
+ },
+ {
+  "slug": "fly-io",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=fly.io&sz=128"
+ },
+ {
+  "slug": "upstash",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=upstash.com&sz=128"
+ },
+ {
+  "slug": "resend",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=resend.com&sz=128"
+ },
+ {
+  "slug": "tailscale",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=tailscale.com&sz=128"
+ },
+ {
+  "slug": "ramp",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=ramp.com&sz=128"
+ },
+ {
+  "slug": "expensify",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=expensify.com&sz=128"
+ },
+ {
+  "slug": "divvy",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=getdivvy.com&sz=128"
+ },
+ {
+  "slug": "streamyard",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=streamyard.com&sz=128"
+ },
+ {
+  "slug": "discord",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=discord.com&sz=128"
+ },
+ {
+  "slug": "gather",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=gather.town&sz=128"
+ },
+ {
+  "slug": "digitalocean",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=digitalocean.com&sz=128"
+ },
+ {
+  "slug": "figma-figjam",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=figma.com&sz=128"
+ },
+ {
+  "slug": "oyster-hr",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=oysterhr.com&sz=128"
+ },
+ {
+  "slug": "mercury",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=mercury.com&sz=128"
+ },
+ {
+  "slug": "pilot",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=pilot.com&sz=128"
+ },
+ {
+  "slug": "anthropic-api",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=anthropic.com&sz=128"
+ },
+ {
+  "slug": "groq",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=groq.com&sz=128"
+ },
+ {
+  "slug": "monday-crm",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=monday.com&sz=128"
+ },
+ {
+  "slug": "deno",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=deno.com&sz=128"
+ },
+ {
+  "slug": "bun",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=bun.sh&sz=128"
+ },
+ {
+  "slug": "postmark",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=postmarkapp.com&sz=128"
+ },
+ {
+  "slug": "hunter-io",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=hunter.io&sz=128"
+ },
+ {
+  "slug": "apollo-io",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=apollo.io&sz=128"
+ },
+ {
+  "slug": "instantly-ai",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=instantly.ai&sz=128"
+ },
+ {
+  "slug": "prometheus",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=prometheus.io&sz=128"
+ },
+ {
+  "slug": "hashicorp-vault",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=vaultproject.io&sz=128"
+ },
+ {
+  "slug": "freecodecamp",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=freecodecamp.org&sz=128"
+ },
+ {
+  "slug": "udacity",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=udacity.com&sz=128"
+ },
+ {
+  "slug": "bench-accounting",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=bench.co&sz=128"
+ },
+ {
+  "slug": "omnisend",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=omnisend.com&sz=128"
+ },
+ {
+  "slug": "loox",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=loox.app&sz=128"
+ },
+ {
+  "slug": "chargebee",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=chargebee.com&sz=128"
+ },
+ {
+  "slug": "vidyard",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=vidyard.com&sz=128"
+ },
+ {
+  "slug": "xata",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=xata.io&sz=128"
+ },
+ {
+  "slug": "inngest",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=inngest.com&sz=128"
+ },
+ {
+  "slug": "podbean",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=podbean.com&sz=128"
+ },
+ {
+  "slug": "screenpal",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=screenpal.com&sz=128"
+ },
+ {
+  "slug": "tally",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=tally.so&sz=128"
+ },
+ {
+  "slug": "audiense",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=audiense.com&sz=128"
+ },
+ {
+  "slug": "storyblok",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=storyblok.com&sz=128"
+ },
+ {
+  "slug": "sanity",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=sanity.io&sz=128"
+ },
+ {
+  "slug": "camtasia",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=techsmith.com&sz=128"
+ },
+ {
+  "slug": "fal-ai",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=fal.ai&sz=128"
+ },
+ {
+  "slug": "grok-ai",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=x.ai&sz=128"
+ },
+ {
+  "slug": "lottiefiles",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=lottiefiles.com&sz=128"
+ },
+ {
+  "slug": "visme",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=visme.co&sz=128"
+ },
+ {
+  "slug": "smartsheet",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=smartsheet.com&sz=128"
+ },
+ {
+  "slug": "okendo",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=okendo.io&sz=128"
+ },
+ {
+  "slug": "shogun",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=getshogun.com&sz=128"
+ },
+ {
+  "slug": "together-ai",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=together.ai&sz=128"
+ },
+ {
+  "slug": "hetzner-cloud",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=hetzner.com&sz=128"
+ },
+ {
+  "slug": "taplio",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=taplio.com&sz=128"
+ },
+ {
+  "slug": "tweet-hunter",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=tweethunter.io&sz=128"
+ },
+ {
+  "slug": "phantombuster",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=phantombuster.com&sz=128"
+ },
+ {
+  "slug": "slite",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=slite.com&sz=128"
+ },
+ {
+  "slug": "tettra",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=tettra.com&sz=128"
+ },
+ {
+  "slug": "guru-knowledge",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=getguru.com&sz=128"
+ },
+ {
+  "slug": "tenable",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=tenable.com&sz=128"
+ },
+ {
+  "slug": "mighty-networks",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=mightynetworks.com&sz=128"
+ },
+ {
+  "slug": "podcastle",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=podcastle.ai&sz=128"
+ },
+ {
+  "slug": "plaid",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=plaid.com&sz=128"
+ },
+ {
+  "slug": "hypotenuse-ai",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=hypotenuse.ai&sz=128"
+ },
+ {
+  "slug": "semgrep",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=semgrep.dev&sz=128"
+ },
+ {
+  "slug": "consensus",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=consensus.app&sz=128"
+ },
+ {
+  "slug": "perplexity-api",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=perplexity.ai&sz=128"
+ },
+ {
+  "slug": "roam-research",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=roamresearch.com&sz=128"
+ },
+ {
+  "slug": "reamaze",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=reamaze.com&sz=128"
+ },
+ {
+  "slug": "talentlms",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=talentlms.com&sz=128"
+ },
+ {
+  "slug": "twist-app",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=twist.com&sz=128"
+ },
+ {
+  "slug": "se-ranking",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=seranking.com&sz=128"
+ },
+ {
+  "slug": "keywords-everywhere",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=keywordseverywhere.com&sz=128"
+ },
+ {
+  "slug": "mouseflow",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=mouseflow.com&sz=128"
+ },
+ {
+  "slug": "vwo",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=vwo.com&sz=128"
+ },
+ {
+  "slug": "instapage",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=instapage.com&sz=128"
+ },
+ {
+  "slug": "alsoasked",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=alsoasked.com&sz=128"
+ },
+ {
+  "slug": "udio",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=udio.com&sz=128"
+ },
+ {
+  "slug": "vercel-ai-sdk",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=vercel.com&sz=128"
+ },
+ {
+  "slug": "qdrant",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=qdrant.tech&sz=128"
+ },
+ {
+  "slug": "bugcrowd",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=bugcrowd.com&sz=128"
+ },
+ {
+  "slug": "keeper-security",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=keepersecurity.com&sz=128"
+ },
+ {
+  "slug": "fathom-analytics",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=usefathom.com&sz=128"
+ },
+ {
+  "slug": "motion-app",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=usemotion.com&sz=128"
+ },
+ {
+  "slug": "surveymonkey",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=surveymonkey.com&sz=128"
+ },
+ {
+  "slug": "paperform",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=paperform.co&sz=128"
+ },
+ {
+  "slug": "grok",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=x.ai&sz=128"
+ },
+ {
+  "slug": "appsmith",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=appsmith.com&sz=128"
+ },
+ {
+  "slug": "tooljet",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=tooljet.com&sz=128"
+ },
+ {
+  "slug": "posthog",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=posthog.com&sz=128"
+ },
+ {
+  "slug": "panopto",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=panopto.com&sz=128"
+ },
+ {
+  "slug": "avalara",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=avalara.com&sz=128"
+ },
+ {
+  "slug": "reclaim-ai",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=reclaim.ai&sz=128"
+ },
+ {
+  "slug": "docker",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=docker.com&sz=128"
+ },
+ {
+  "slug": "todoist",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=todoist.com&sz=128"
+ },
+ {
+  "slug": "lottie-files",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=lottiefiles.com&sz=128"
+ },
+ {
+  "slug": "adobe-firefly",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=adobe.com&sz=128"
+ },
+ {
+  "slug": "writesonic",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=writesonic.com&sz=128"
+ },
+ {
+  "slug": "deepl",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=deepl.com&sz=128"
+ },
+ {
+  "slug": "fireflies-ai",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=fireflies.ai&sz=128"
+ },
+ {
+  "slug": "gong",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=gong.io&sz=128"
+ },
+ {
+  "slug": "murf-ai",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=murf.ai&sz=128"
+ },
+ {
+  "slug": "krisp",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=krisp.ai&sz=128"
+ },
+ {
+  "slug": "lemon-squeezy",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=lemonsqueezy.com&sz=128"
+ },
+ {
+  "slug": "wise-business",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=wise.com&sz=128"
+ },
+ {
+  "slug": "remove-bg",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=remove.bg&sz=128"
+ },
+ {
+  "slug": "authy",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=authy.com&sz=128"
+ },
+ {
+  "slug": "vimeo",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=vimeo.com&sz=128"
+ },
+ {
+  "slug": "pika-labs",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=pika.art&sz=128"
+ },
+ {
+  "slug": "seo-writing-assistant",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=semrush.com&sz=128"
+ },
+ {
+  "slug": "gorgias",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=gorgias.com&sz=128"
+ },
+ {
+  "slug": "opus-clip",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=opus.pro&sz=128"
+ },
+ {
+  "slug": "langchain",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=langchain.com&sz=128"
+ },
+ {
+  "slug": "llamaindex",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=llamaindex.ai&sz=128"
+ },
+ {
+  "slug": "roboflow",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=roboflow.com&sz=128"
+ },
+ {
+  "slug": "unbounce",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=unbounce.com&sz=128"
+ },
+ {
+  "slug": "remote-com",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=remote.com&sz=128"
+ },
+ {
+  "slug": "openai-api",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=openai.com&sz=128"
+ },
+ {
+  "slug": "agorapulse",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=agorapulse.com&sz=128"
+ },
+ {
+  "slug": "codecademy",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=codecademy.com&sz=128"
+ },
+ {
+  "slug": "taskade",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=taskade.com&sz=128"
+ },
+ {
+  "slug": "toggl-track",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=toggl.com&sz=128"
+ },
+ {
+  "slug": "rosetta-stone",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=rosettastone.com&sz=128"
+ },
+ {
+  "slug": "burp-suite",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=portswigger.net&sz=128"
+ },
+ {
+  "slug": "substack",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=substack.com&sz=128"
+ },
+ {
+  "slug": "circle-community",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=circle.so&sz=128"
+ },
+ {
+  "slug": "kapwing",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=kapwing.com&sz=128"
+ },
+ {
+  "slug": "answerthepublic",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=answerthepublic.com&sz=128"
+ },
+ {
+  "slug": "hackerone",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=hackerone.com&sz=128"
+ },
+ {
+  "slug": "fibery",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=fibery.io&sz=128"
+ },
+ {
+  "slug": "metabase",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=metabase.com&sz=128"
+ },
+ {
+  "slug": "volusion",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=volusion.com&sz=128"
+ },
+ {
+  "slug": "printify",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=printify.com&sz=128"
+ },
+ {
+  "slug": "kamatera",
+  "logoUrl": "https://logo.clearbit.com/kamatera.com"
+ },
+ {
+  "slug": "porkbun",
+  "logoUrl": "https://logo.clearbit.com/porkbun.com"
+ },
+ {
+  "slug": "affinity-photo",
+  "logoUrl": "https://logo.clearbit.com/affinity.serif.com"
+ },
+ {
+  "slug": "pixlr",
+  "logoUrl": "https://logo.clearbit.com/pixlr.com"
+ },
+ {
+  "slug": "zeplin",
+  "logoUrl": "https://logo.clearbit.com/zeplin.io"
+ },
+ {
+  "slug": "abstract",
+  "logoUrl": "https://logo.clearbit.com/abstract.com"
+ },
+ {
+  "slug": "babbel",
+  "logoUrl": "https://logo.clearbit.com/babbel.com"
+ },
+ {
+  "slug": "brilliant",
+  "logoUrl": "https://logo.clearbit.com/brilliant.org"
+ },
+ {
+  "slug": "anki",
+  "logoUrl": "https://logo.clearbit.com/ankiweb.net"
+ },
+ {
+  "slug": "notion-academy",
+  "logoUrl": "https://logo.clearbit.com/notion.com"
+ },
+ {
+  "slug": "mimo",
+  "logoUrl": "https://logo.clearbit.com/getmimo.com"
+ },
+ {
+  "slug": "365-data-science",
+  "logoUrl": "https://logo.clearbit.com/365datascience.com"
+ },
+ {
+  "slug": "dreamhost",
+  "logoUrl": "https://logo.clearbit.com/dreamhost.com"
+ },
+ {
+  "slug": "a2-hosting",
+  "logoUrl": "https://logo.clearbit.com/a2hosting.com"
+ },
+ {
+  "slug": "malwarebytes",
+  "logoUrl": "https://logo.clearbit.com/malwarebytes.com"
+ },
+ {
+  "slug": "directus",
+  "logoUrl": "https://logo.clearbit.com/directus.io"
+ },
+ {
+  "slug": "webflow-university",
+  "logoUrl": "https://logo.clearbit.com/webflow.com"
+ },
+ {
+  "slug": "umami",
+  "logoUrl": "https://logo.clearbit.com/umami.is"
+ },
+ {
+  "slug": "claap",
+  "logoUrl": "https://logo.clearbit.com/claap.io"
+ },
+ {
+  "slug": "tella",
+  "logoUrl": "https://logo.clearbit.com/tella.tv"
+ },
+ {
+  "slug": "supernova",
+  "logoUrl": "https://logo.clearbit.com/supernova.io"
+ },
+ {
+  "slug": "pitch-presentations",
+  "logoUrl": "https://logo.clearbit.com/pitch.com"
+ },
+ {
+  "slug": "val-town",
+  "logoUrl": "https://logo.clearbit.com/val.town"
+ },
+ {
+  "slug": "tana",
+  "logoUrl": "https://logo.clearbit.com/tana.inc"
+ },
+ {
+  "slug": "plane-pm",
+  "logoUrl": "https://logo.clearbit.com/plane.so"
+ },
+ {
+  "slug": "liveblocks",
+  "logoUrl": "https://logo.clearbit.com/liveblocks.io"
+ },
+ {
+  "slug": "dub-co",
+  "logoUrl": "https://logo.clearbit.com/dub.co"
+ },
+ {
+  "slug": "lago-billing",
+  "logoUrl": "https://logo.clearbit.com/getlago.com"
+ },
+ {
+  "slug": "docuseal",
+  "logoUrl": "https://logo.clearbit.com/docuseal.co"
+ },
+ {
+  "slug": "formbricks",
+  "logoUrl": "https://logo.clearbit.com/formbricks.com"
+ },
+ {
+  "slug": "softr",
+  "logoUrl": "https://logo.clearbit.com/softr.io"
+ },
+ {
+  "slug": "pocketbase",
+  "logoUrl": "https://logo.clearbit.com/pocketbase.io"
+ },
+ {
+  "slug": "appwrite",
+  "logoUrl": "https://logo.clearbit.com/appwrite.io"
+ },
+ {
+  "slug": "knock-notifications",
+  "logoUrl": "https://logo.clearbit.com/knock.app"
+ },
+ {
+  "slug": "whop",
+  "logoUrl": "https://logo.clearbit.com/whop.com"
+ },
+ {
+  "slug": "flutterwave",
+  "logoUrl": "https://logo.clearbit.com/flutterwave.com"
+ },
+ {
+  "slug": "daily-dev",
+  "logoUrl": "https://logo.clearbit.com/daily.dev"
+ },
+ {
+  "slug": "hashnode",
+  "logoUrl": "https://logo.clearbit.com/hashnode.com"
+ },
+ {
+  "slug": "plausible-analytics",
+  "logoUrl": "https://www.google.com/s2/favicons?domain=plausible.io&sz=128"
+ }
+]
