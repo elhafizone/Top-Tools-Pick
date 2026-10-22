@@ -1,8 +1,13 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenAI, Type } from "@google/genai";
 import { prisma } from "@/lib/db/prisma";
 import { recordSystemAudit } from "@/lib/admin/audit";
 
-const MODEL = "claude-sonnet-5-5";
+// Gemini is tried first because it has a genuinely free tier (Google AI Studio,
+// no card required) that comfortably covers one article a day. Anthropic is the
+// fallback for anyone who already has API credits there.
+const GEMINI_MODEL = "gemini-3.8-flash";
+const ANTHROPIC_MODEL = "claude-sonnet-5-5";
 const MIN_WORDS = 400;
 
 type GeneratedArticle = {
@@ -204,12 +209,18 @@ function buildPrompt(topic: Topic): { user: string; allowedSlugs: Set<string> } 
   return { user, allowedSlugs };
 }
 
+const ARTICLE_FIELDS = {
+  required: ["title", "slug", "topic", "excerpt", "seoTitle", "seoDescription", "content", "tools", "sources"],
+  toolItem: { required: ["slug", "rank", "note"] },
+  sourceItem: { required: ["url", "checkedAt"] },
+};
+
 const EMIT_ARTICLE_TOOL = {
   name: "emit_article",
   description: "Return the finished article as structured fields. Call this exactly once.",
   input_schema: {
     type: "object" as const,
-    required: ["title", "slug", "topic", "excerpt", "seoTitle", "seoDescription", "content", "tools", "sources"],
+    required: ARTICLE_FIELDS.required,
     properties: {
       title: { type: "string" },
       slug: { type: "string" },
@@ -222,7 +233,7 @@ const EMIT_ARTICLE_TOOL = {
         type: "array",
         items: {
           type: "object",
-          required: ["slug", "rank", "note"],
+          required: ARTICLE_FIELDS.toolItem.required,
           properties: {
             slug: { type: "string" },
             rank: { type: "integer" },
@@ -234,7 +245,7 @@ const EMIT_ARTICLE_TOOL = {
         type: "array",
         items: {
           type: "object",
-          required: ["url", "checkedAt"],
+          required: ARTICLE_FIELDS.sourceItem.required,
           properties: {
             url: { type: "string" },
             checkedAt: { type: "string" },
@@ -245,27 +256,82 @@ const EMIT_ARTICLE_TOOL = {
   },
 };
 
-async function callModel(user: string, feedback?: string): Promise<GeneratedArticle> {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) throw new Error("ANTHROPIC_API_KEY is not set.");
-  const anthropic = new Anthropic({ apiKey });
+const GEMINI_RESPONSE_SCHEMA = {
+  type: Type.OBJECT,
+  required: ARTICLE_FIELDS.required,
+  properties: {
+    title: { type: Type.STRING },
+    slug: { type: Type.STRING },
+    topic: { type: Type.STRING, format: "enum", enum: ["guides", "comparisons"] },
+    excerpt: { type: Type.STRING },
+    seoTitle: { type: Type.STRING },
+    seoDescription: { type: Type.STRING },
+    content: { type: Type.STRING },
+    tools: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        required: ARTICLE_FIELDS.toolItem.required,
+        properties: {
+          slug: { type: Type.STRING },
+          rank: { type: Type.INTEGER },
+          note: { type: Type.STRING },
+        },
+      },
+    },
+    sources: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        required: ARTICLE_FIELDS.sourceItem.required,
+        properties: {
+          url: { type: Type.STRING },
+          checkedAt: { type: Type.STRING },
+        },
+      },
+    },
+  },
+};
 
-  const prompt = feedback
-    ? `${user}\n\nYour previous attempt failed validation for these reasons:\n${feedback}\nFix every issue and call emit_article again.`
-    : user;
+async function callGemini(prompt: string): Promise<GeneratedArticle> {
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  const response = await ai.models.generateContent({
+    model: GEMINI_MODEL,
+    contents: prompt,
+    config: {
+      systemInstruction: SYSTEM_PROMPT,
+      responseMimeType: "application/json",
+      responseSchema: GEMINI_RESPONSE_SCHEMA,
+    },
+  });
+  if (!response.text) throw new Error("Gemini did not return a structured article.");
+  return JSON.parse(response.text) as GeneratedArticle;
+}
 
+async function callAnthropic(prompt: string): Promise<GeneratedArticle> {
+  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const response = await anthropic.messages.create({
-    model: MODEL,
+    model: ANTHROPIC_MODEL,
     max_tokens: 4096,
     system: SYSTEM_PROMPT,
     tools: [EMIT_ARTICLE_TOOL],
     tool_choice: { type: "tool", name: "emit_article" },
     messages: [{ role: "user", content: prompt }],
   });
-
   const toolUse = response.content.find((block) => block.type === "tool_use");
   if (!toolUse || toolUse.type !== "tool_use") throw new Error("Model did not return a structured article.");
   return toolUse.input as GeneratedArticle;
+}
+
+/** Gemini first - it has a free tier that comfortably covers this volume. Falls back to Anthropic. */
+async function callModel(user: string, feedback?: string): Promise<GeneratedArticle> {
+  const prompt = feedback
+    ? `${user}\n\nYour previous attempt failed validation for these reasons:\n${feedback}\nFix every issue and try again.`
+    : user;
+
+  if (process.env.GEMINI_API_KEY) return callGemini(prompt);
+  if (process.env.ANTHROPIC_API_KEY) return callAnthropic(prompt);
+  throw new Error("No model configured - set GEMINI_API_KEY (free, recommended) or ANTHROPIC_API_KEY.");
 }
 
 const countWords = (text: string) => text.trim().split(/\s+/).filter(Boolean).length;
@@ -311,6 +377,30 @@ export function validateArticle(
   return errors;
 }
 
+/**
+ * A real, licensed photo rather than an AI-generated one - cheaper (Unsplash's free
+ * developer tier needs no card) and fits the site's "no fabricated content" standard
+ * better than an invented image would. Returns null quietly if UNSPLASH_ACCESS_KEY is
+ * unset or the request fails - a missing featured image is never worth failing over.
+ */
+async function fetchFeaturedImage(query: string): Promise<{ url: string; credit: string } | null> {
+  const accessKey = process.env.UNSPLASH_ACCESS_KEY;
+  if (!accessKey) return null;
+  try {
+    const response = await fetch(
+      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape`,
+      { headers: { Authorization: `Client-ID ${accessKey}` } },
+    );
+    if (!response.ok) return null;
+    const data = (await response.json()) as { results?: Array<{ urls: { regular: string }; user: { name: string; links: { html: string } } }> };
+    const photo = data.results?.[0];
+    if (!photo) return null;
+    return { url: photo.urls.regular, credit: `Photo by [${photo.user.name}](${photo.user.links.html}) on [Unsplash](https://unsplash.com/)` };
+  } catch {
+    return null;
+  }
+}
+
 /** Generates, validates (one retry on failure) and writes one article. Never overwrites an existing slug. */
 export async function generateOneArticle(options: { publish?: boolean } = {}): Promise<GenerateResult> {
   const topic = await pickNextTopic();
@@ -336,13 +426,18 @@ export async function generateOneArticle(options: { publish?: boolean } = {}): P
   }
   if (errors.length) return { status: "skipped", errors };
 
+  const imageQuery = topic.kind === "guide" ? topic.product.name : `${topic.a.name} vs ${topic.b.name}`;
+  const image = await fetchFeaturedImage(imageQuery);
+  const content = image ? `${article.content}\n\n*${image.credit}*` : article.content;
+
   const shouldPublish = options.publish ?? process.env.ARTICLE_AUTO_PUBLISH === "true";
   const created = await prisma.article.create({
     data: {
       title: article.title,
       slug: article.slug,
       excerpt: article.excerpt,
-      content: article.content,
+      content,
+      featuredImage: image?.url ?? null,
       topic: article.topic,
       author: "TopToolsPick Editorial (AI draft)",
       seoTitle: article.seoTitle,

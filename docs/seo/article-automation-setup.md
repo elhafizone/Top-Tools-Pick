@@ -6,9 +6,14 @@ What this adds, and the external setup it needs (none of it can be done from ins
 
 - `lib/articles/generate.ts` picks what to write about from real data only: an
   uncovered curated `ProductAlternative` pair (-> `topic: "comparisons"`) first, then
-  a published `Product` with no `topic: "guides"` article yet. It feeds Claude only
+  a published `Product` with no `topic: "guides"` article yet. It feeds the model only
   that product's own DB fields (pricing plan labels, pros/cons, verdict, etc.) and
   forbids inventing facts, prices, or links outside the given product slugs.
+- **Model: free by default.** `GEMINI_API_KEY` is tried first - Google AI Studio
+  (https://aistudio.google.com/apikey) gives a free key in about a minute, no card,
+  no billing setup, and the free tier comfortably covers far more than one article a
+  day. `ANTHROPIC_API_KEY` is only used as a fallback if `GEMINI_API_KEY` is not set
+  (needs a funded Anthropic account - console.anthropic.com/settings/billing).
 - The result is validated against the exact same contract as
   `scripts/import-article-batch.mjs` (word count, SEO field lengths, Quick-answer +
   H2 structure, Sources section, valid `/tools/` links only). A failed validation
@@ -24,9 +29,13 @@ What this adds, and the external setup it needs (none of it can be done from ins
      `https://toptoolspick.com/api/cron/generate-articles?secret=YOUR_CRON_SECRET`
      (hPanel's cron UI can usually call a URL directly - if it only offers to run a
      shell command instead, use `curl` with that same URL).
-  3. Set `ANTHROPIC_API_KEY` and `CRON_SECRET` as environment variables on the
+  3. Set `GEMINI_API_KEY` and `CRON_SECRET` as environment variables on the
      Node.js app in hPanel (Node.js -> your app -> Environment variables), the same
      way `ADMIN_PASSWORD` etc. are already set there.
+- **Featured image (optional, free):** set `UNSPLASH_ACCESS_KEY` to attach a real,
+  licensed photo to each generated article instead of none. Get a free key at
+  unsplash.com/developers -> New Application -> pick the Demo tier (no card, 50
+  requests/hour - plenty for one article a day). Leave it unset to skip images.
 
 ### Draft vs. auto-publish
 
@@ -61,7 +70,13 @@ that from this repo.
 
 ## What was NOT built, on purpose
 
-Automated backlink building (the way Outrank's "backlink exchange" works) needs a
-network of other sites to place links on - that is not something a script in this
-repo can create. Building it would mean either joining a real third-party
-backlink-exchange service, or manual outreach/guest posting.
+- **Automated backlink building** (the way Outrank's "backlink exchange" works)
+  needs a network of other sites to place links on - that is not something a
+  script in this repo can create. Building it would mean either joining a real
+  third-party backlink-exchange service, or manual outreach/guest posting.
+- **Real keyword search-volume research.** There is no good free API for this -
+  Ahrefs/SEMrush are paid, and Google Keyword Planner's actual volume numbers are
+  only shown to Google Ads accounts with real ad spend history. Topic selection
+  here is DB-driven instead (an uncovered product or curated comparison), which
+  needs no external data and cannot show a made-up search-volume number. If you
+  later get one of those paid keys, topic selection could be re-ranked by it.
