@@ -13,10 +13,13 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
-    "db:fill": "tsx prisma/fill-categories.ts"
+    "db:fill": "tsx prisma/fill-categories.ts",
+    "articles:generate": "tsx --env-file=.env.local scripts/generate-articles.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.68.0",
     "@prisma/client": "^6.19.3",
+    "google-auth-library": "^10.5.0",
     "marked": "^18.0.14",
     "next": "16.4.0",
     "react": "19.2.8",
