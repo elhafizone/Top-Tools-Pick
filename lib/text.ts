@@ -9,6 +9,19 @@
 export function toBullets(value: string | null | undefined): string[] {
   if (!value) return [];
 
+  // Handle JSON array format (stored by batch scripts with JSON.stringify)
+  const trimmed = value.trim();
+  if (trimmed.startsWith("[")) {
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (Array.isArray(parsed)) {
+        return parsed.map((s) => String(s).trim()).filter(Boolean);
+      }
+    } catch {
+      // not valid JSON — fall through to text-based splitting
+    }
+  }
+
   const byLine = splitAndClean(value, /\r?\n/);
   if (byLine.length > 1) return byLine;
 
