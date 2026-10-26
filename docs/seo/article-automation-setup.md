@@ -45,33 +45,61 @@ no manual review step. (Default without that env var is `DRAFT`, for anyone who
 does want to review in `/admin/articles` before articles go live - not used here
 since this site's admin login isn't configured on Hostinger.)
 
-## 2. SEO performance tracking
+## 2. SEO + Analytics tracking (Search Console and GA4)
 
-No `/admin/seo` page is used here (it needs the admin login, which this site
+No admin dashboard is used for this (it needs the admin login, which this site
 doesn't have configured on Hostinger - see "What was NOT built" below if that
-changes later). Instead, run `npm run seo:check` from this repo - no Hostinger env
-vars needed, only `GOOGLE_SEARCH_CONSOLE_*` in `.env.local` (below) - whenever you
-want the numbers: clicks, impressions, CTR, average position, top queries, top
-pages (last 28 days). This needs a Google Cloud service account with read access
-to the property; there is no way to grant that from this repo.
+changes later). Instead, run `npm run seo:check` from this repo - whenever you
+ask for the numbers, this gets run: Search Console (clicks, impressions, CTR,
+average position, top queries, top pages) and GA4 (active users, sessions, page
+views, top pages, top channels), both over the last 28 days. **Both env var
+groups below go in `.env.local` on this machine only - never in Hostinger -**
+since this script is run on request, not by the live site.
+
+Both need a Google Cloud **service account**; the same one can be granted access
+to both products, so steps 1-2 are shared:
 
 1. In the [Google Cloud Console](https://console.cloud.google.com/), create (or
-   reuse) a project, then enable the **Google Search Console API**.
-2. Create a **service account** in that project, and create a JSON key for it.
+   reuse) a project, then enable the **Google Search Console API** and the
+   **Google Analytics Data API**.
+2. Create a **service account** in that project (APIs & Services -> Credentials
+   -> Create Credentials -> Service account), then open it -> **Keys** -> **Add
+   key** -> **Create new key** (JSON) to download its key file.
+
+### Search Console
+
 3. In [Search Console](https://search.google.com/search-console), open the
-   `toptoolspick.com` property -> **Settings -> Users and permissions -> Add user**,
-   and add the service account's email as a **Restricted** (read-only) user.
-4. From the downloaded JSON key, set these as environment variables (hPanel, same
-   place as the others):
+   `toptoolspick.com` property -> **Settings -> Users and permissions -> Add
+   user**, and add the service account's email as a **Restricted** (read-only)
+   user.
+4. From the downloaded JSON key, set in `.env.local`:
    - `GOOGLE_SEARCH_CONSOLE_CLIENT_EMAIL` = the key's `client_email`
    - `GOOGLE_SEARCH_CONSOLE_PRIVATE_KEY` = the key's `private_key` (keep the
      `\n` line breaks as-is - the code un-escapes them)
    - `GOOGLE_SEARCH_CONSOLE_SITE_URL` = how the property is verified in Search
      Console - usually `sc-domain:toptoolspick.com` for a domain property, or
      `https://toptoolspick.com/` for a URL-prefix property
-5. Run `npm run seo:check`. Ahrefs-style Domain Rating is a paid third-party
-   metric (Ahrefs API) and is out of scope here - this only covers what Search
-   Console itself reports for free.
+
+### Google Analytics (GA4)
+
+3. In [Google Analytics](https://analytics.google.com), open **Admin** (bottom
+   left) -> under the `toptoolspick.com` **property** column -> **Property Access
+   Management** -> **+** -> **Add users**, and add the same service account email
+   with the **Viewer** role.
+4. Still in Admin -> **Property details** (or **Property Settings**), copy the
+   numeric **Property ID** at the top (not the "G-" measurement ID used in
+   `app/layout.tsx` for the tracking script - a different, numeric id).
+5. Set in `.env.local` (reusing the same `client_email`/`private_key` from the
+   same JSON key, or a fresh key if a second service account was made instead):
+   - `GOOGLE_ANALYTICS_CLIENT_EMAIL`
+   - `GOOGLE_ANALYTICS_PRIVATE_KEY`
+   - `GOOGLE_ANALYTICS_PROPERTY_ID` = the numeric Property ID from step 4
+
+### Then
+
+Run `npm run seo:check`. Ahrefs-style Domain Rating is a paid third-party metric
+(Ahrefs API) and is out of scope here - this only covers what Search Console and
+GA4 themselves report for free.
 
 ## What was NOT built, on purpose
 
