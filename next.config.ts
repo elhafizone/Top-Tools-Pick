@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Limit build-time parallelism so Hostinger's container doesn't hit the
+  // OS thread limit ("Resource temporarily unavailable", SIGABRT).
+  experimental: {
+    cpus: 2,
+  },
+
   // 301: redirect www to the canonical non-www origin.
   // Seobility (and Google) flag it as an error when both www and non-www
   // are reachable without a redirect — server score drops to 0%.
