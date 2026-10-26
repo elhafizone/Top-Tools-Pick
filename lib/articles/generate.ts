@@ -293,19 +293,39 @@ const GEMINI_RESPONSE_SCHEMA = {
   },
 };
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** Gemini's free tier returns a transient 503/UNAVAILABLE under shared-capacity load - observed repeatedly in practice, not a code bug. */
+function isTransientGeminiError(error: unknown) {
+  const message = error instanceof Error ? error.message : String(error);
+  return message.includes("UNAVAILABLE") || message.includes("\"code\":503") || message.includes(" 503 ");
+}
+
 async function callGemini(prompt: string): Promise<GeneratedArticle> {
   const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-  const response = await ai.models.generateContent({
-    model: GEMINI_MODEL,
-    contents: prompt,
-    config: {
-      systemInstruction: SYSTEM_PROMPT,
-      responseMimeType: "application/json",
-      responseSchema: GEMINI_RESPONSE_SCHEMA,
-    },
-  });
-  if (!response.text) throw new Error("Gemini did not return a structured article.");
-  return JSON.parse(response.text) as GeneratedArticle;
+  const RETRY_DELAYS_MS = [2000, 5000, 10000];
+
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt++) {
+    try {
+      const response = await ai.models.generateContent({
+        model: GEMINI_MODEL,
+        contents: prompt,
+        config: {
+          systemInstruction: SYSTEM_PROMPT,
+          responseMimeType: "application/json",
+          responseSchema: GEMINI_RESPONSE_SCHEMA,
+        },
+      });
+      if (!response.text) throw new Error("Gemini did not return a structured article.");
+      return JSON.parse(response.text) as GeneratedArticle;
+    } catch (error) {
+      lastError = error;
+      if (!isTransientGeminiError(error) || attempt === RETRY_DELAYS_MS.length) break;
+      await sleep(RETRY_DELAYS_MS[attempt]);
+    }
+  }
+  throw lastError;
 }
 
 async function callAnthropic(prompt: string): Promise<GeneratedArticle> {
