@@ -29,9 +29,10 @@ What this adds, and the external setup it needs (none of it can be done from ins
      `https://toptoolspick.com/api/cron/generate-articles?secret=YOUR_CRON_SECRET`
      (hPanel's cron UI can usually call a URL directly - if it only offers to run a
      shell command instead, use `curl` with that same URL).
-  3. Set `GEMINI_API_KEY` and `CRON_SECRET` as environment variables on the
-     Node.js app in hPanel (Node.js -> your app -> Environment variables), the same
-     way `ADMIN_PASSWORD` etc. are already set there.
+  3. Set `GEMINI_API_KEY`, `CRON_SECRET` and `ARTICLE_AUTO_PUBLISH=true` as
+     environment variables on the Node.js app in hPanel (Website -> Environment
+     variables). These three are the only ones this feature needs there - no admin
+     login is used for it (see below).
 - **Featured image (optional, free):** set `UNSPLASH_ACCESS_KEY` to attach a real,
   licensed photo to each generated article instead of none. Get a free key at
   unsplash.com/developers -> New Application -> pick the Demo tier (no card, 50
@@ -39,16 +40,20 @@ What this adds, and the external setup it needs (none of it can be done from ins
 
 ### Draft vs. auto-publish
 
-Generated articles are created as `DRAFT` by default - review them in
-`/admin/articles` before they go live. Set `ARTICLE_AUTO_PUBLISH=true` (or pass
-`--publish` to the CLI) once you trust the output, to publish immediately instead.
+`ARTICLE_AUTO_PUBLISH=true` on this site: generated articles publish immediately,
+no manual review step. (Default without that env var is `DRAFT`, for anyone who
+does want to review in `/admin/articles` before articles go live - not used here
+since this site's admin login isn't configured on Hostinger.)
 
-## 2. SEO performance tracking (`/admin/seo`)
+## 2. SEO performance tracking
 
-Reads Google Search Console's Search Analytics API (clicks, impressions, CTR,
-average position, top queries, top pages - last 28 days). This needs a Google
-Cloud service account with read access to the property; there is no way to grant
-that from this repo.
+No `/admin/seo` page is used here (it needs the admin login, which this site
+doesn't have configured on Hostinger - see "What was NOT built" below if that
+changes later). Instead, run `npm run seo:check` from this repo - no Hostinger env
+vars needed, only `GOOGLE_SEARCH_CONSOLE_*` in `.env.local` (below) - whenever you
+want the numbers: clicks, impressions, CTR, average position, top queries, top
+pages (last 28 days). This needs a Google Cloud service account with read access
+to the property; there is no way to grant that from this repo.
 
 1. In the [Google Cloud Console](https://console.cloud.google.com/), create (or
    reuse) a project, then enable the **Google Search Console API**.
@@ -64,11 +69,20 @@ that from this repo.
    - `GOOGLE_SEARCH_CONSOLE_SITE_URL` = how the property is verified in Search
      Console - usually `sc-domain:toptoolspick.com` for a domain property, or
      `https://toptoolspick.com/` for a URL-prefix property
-5. Open `/admin/seo`. Ahrefs-style Domain Rating is a paid third-party metric
-   (Ahrefs API) and is out of scope here - this page only covers what Search
+5. Run `npm run seo:check`. Ahrefs-style Domain Rating is a paid third-party
+   metric (Ahrefs API) and is out of scope here - this only covers what Search
    Console itself reports for free.
 
 ## What was NOT built, on purpose
+
+- **The `/admin` web panel is not set up on Hostinger** (only `DATABASE_URL` is
+  configured there - `ADMIN_USERNAME`/`ADMIN_PASSWORD`/`ADMIN_SESSION_SECRET`/
+  `NEXT_PUBLIC_SITE_URL` are not, so `/admin/login` cannot actually succeed right
+  now). That's fine for this feature - generation, publishing and SEO checks all
+  work without it - but it also means the existing manual single-article admin
+  form and `/admin/seo` page are both currently unreachable on the live site. Add
+  those four env vars in hPanel (same values as `.env.local`) if that panel is
+  ever wanted again.
 
 - **Automated backlink building** (the way Outrank's "backlink exchange" works)
   needs a network of other sites to place links on - that is not something a

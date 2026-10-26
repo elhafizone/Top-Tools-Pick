@@ -14,7 +14,8 @@
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
     "db:fill": "tsx prisma/fill-categories.ts",
-    "articles:generate": "tsx --env-file=.env.local scripts/generate-articles.ts"
+    "articles:generate": "tsx --env-file=.env.local scripts/generate-articles.ts",
+    "seo:check": "tsx --env-file=.env.local scripts/check-seo.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.68.0",
