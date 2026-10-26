@@ -4,11 +4,17 @@ What this adds, and the external setup it needs (none of it can be done from ins
 
 ## 1. Article generation
 
-- `lib/articles/generate.ts` picks what to write about from real data only: an
-  uncovered curated `ProductAlternative` pair (-> `topic: "comparisons"`) first, then
-  a published `Product` with no `topic: "guides"` article yet. It feeds the model only
-  that product's own DB fields (pricing plan labels, pros/cons, verdict, etc.) and
-  forbids inventing facts, prices, or links outside the given product slugs.
+- `lib/articles/generate.ts` picks what to write about from real data only, in
+  priority order: (1) an uncovered curated `ProductAlternative` pair (->
+  `topic: "comparisons"`), (2) a published `EditorialList` ("best of" shortlist,
+  >=3 published items) with no roundup article yet - one `## ` section per tool,
+  in the editor's real rank/award/rationale order, coverage tracked via
+  `Article.source = "editorial-list:<slug>"` since there's no direct FK, (3) a
+  published `Product` with no `topic: "guides"` article yet. It feeds the model
+  only each product's own DB fields (pricing plan labels, pros/cons, verdict,
+  etc.) and forbids inventing facts, prices, rankings, or links outside the
+  given product slugs. Returns nothing once all three pools are exhausted - add
+  more products, `ProductAlternative` rows, or `EditorialList`s to keep it going.
 - **Model: free by default.** `GEMINI_API_KEY` is tried first - Google AI Studio
   (https://aistudio.google.com/apikey) gives a free key in about a minute, no card,
   no billing setup, and the free tier comfortably covers far more than one article a

@@ -41,9 +41,12 @@ type ProductContext = {
   verdict: string | null;
 };
 
+type RoundupItem = { product: ProductContext; rank: number; award: string | null; rationale: string | null };
+
 type Topic =
   | { kind: "guide"; product: ProductContext; related?: ProductContext }
-  | { kind: "comparison"; a: ProductContext; b: ProductContext };
+  | { kind: "comparison"; a: ProductContext; b: ProductContext }
+  | { kind: "roundup"; listSlug: string; title: string; description: string; items: RoundupItem[] };
 
 export type GenerateResult =
   | { status: "created"; slug: string; published: boolean }
@@ -111,8 +114,11 @@ async function fetchProductContext(productId: string): Promise<ProductContext | 
  *   1. A curated `ProductAlternative` pair ("comparisons" topic) with no article yet -
  *      this only ever compares pairs an editor already vouched for, never an invented
  *      head-to-head.
- *   2. A published product with no dedicated "guides" article yet.
- * Returns null once every published product and curated pair already has coverage.
+ *   2. A published `EditorialList` ("best of" shortlist) with no roundup article yet -
+ *      see pickNextRoundup().
+ *   3. A published product with no dedicated "guides" article yet.
+ * Returns null once every published product, curated pair, and editorial list
+ * already has coverage.
  */
 export async function pickNextTopic(): Promise<Topic | null> {
   const comparisonArticles = await prisma.article.findMany({
@@ -143,6 +149,9 @@ export async function pickNextTopic(): Promise<Topic | null> {
     if (a && b) return { kind: "comparison", a, b };
   }
 
+  const roundup = await pickNextRoundup();
+  if (roundup) return roundup;
+
   const guideArticles = await prisma.article.findMany({
     where: { topic: "guides" },
     include: { productLinks: { where: { rank: 1 }, select: { productId: true } } },
@@ -169,6 +178,42 @@ export async function pickNextTopic(): Promise<Topic | null> {
   return { kind: "guide", product, related };
 }
 
+/**
+ * Third tier: a published `EditorialList` (an editor's real ranked shortlist, with
+ * real award/rationale text per item) with no roundup article yet. Coverage is
+ * tracked via `Article.source = "editorial-list:<slug>"`, since there is no direct
+ * FK from Article to EditorialList. Needs >=3 published items to be worth a roundup.
+ */
+async function pickNextRoundup(): Promise<Topic | null> {
+  const coveredSources = new Set(
+    (await prisma.article.findMany({ where: { source: { startsWith: "editorial-list:" } }, select: { source: true } }))
+      .map((a) => a.source!.slice("editorial-list:".length)),
+  );
+
+  const lists = await prisma.editorialList.findMany({
+    where: { status: "PUBLISHED", slug: { notIn: [...coveredSources] } },
+    include: {
+      items: {
+        where: { product: { status: "PUBLISHED" } },
+        orderBy: { rank: "asc" },
+        select: { productId: true, rank: true, award: true, rationale: true },
+      },
+    },
+  });
+  const candidates = lists.filter((list) => list.items.length >= 3);
+  if (candidates.length === 0) return null;
+
+  const list = candidates[Math.floor(Math.random() * candidates.length)];
+  const items: RoundupItem[] = [];
+  for (const item of list.items.slice(0, 6)) {
+    const product = await fetchProductContext(item.productId);
+    if (product) items.push({ product, rank: item.rank, award: item.award, rationale: item.rationale });
+  }
+  if (items.length < 3) return null;
+
+  return { kind: "roundup", listSlug: list.slug, title: list.title, description: list.description, items };
+}
+
 const SYSTEM_PROMPT = `You write editorial content for TopToolsPick, a software discovery and comparison website. You must call the emit_article tool exactly once with the finished article.
 
 Rules you must never break:
@@ -185,6 +230,8 @@ Rules you must never break:
 - Tone: plain and specific. No hype, no superlatives you cannot back with the given facts, no fabricated user quotes or statistics.`;
 
 function buildPrompt(topic: Topic): { user: string; allowedSlugs: Set<string> } {
+  const today = new Date().toISOString().slice(0, 10);
+
   if (topic.kind === "guide") {
     const allowedSlugs = new Set([topic.product.slug, ...(topic.related ? [topic.related.slug] : [])]);
     const toolsHint = topic.related
@@ -194,17 +241,32 @@ function buildPrompt(topic: Topic): { user: string; allowedSlugs: Set<string> } 
       `Write a "guides" topic article about ${topic.product.name} - a practical buyer's guide drawn only from the context below (pricing plans, pros/cons, who it is and is not for).`,
       `Allowed /tools/ slugs: ${[...allowedSlugs].join(", ")}.`,
       `CONTEXT:\n${JSON.stringify({ product: topic.product, relatedProduct: topic.related ?? null }, null, 2)}`,
-      `Set "topic" to "guides". Set ${toolsHint}. Set "sources" to include at least the product's own websiteUrl with "checkedAt" set to today's date (${new Date().toISOString().slice(0, 10)}).`,
+      `Set "topic" to "guides". Set ${toolsHint}. Set "sources" to include at least the product's own websiteUrl with "checkedAt" set to today's date (${today}).`,
     ].join("\n\n");
     return { user, allowedSlugs };
   }
 
-  const allowedSlugs = new Set([topic.a.slug, topic.b.slug]);
+  if (topic.kind === "comparison") {
+    const allowedSlugs = new Set([topic.a.slug, topic.b.slug]);
+    const user = [
+      `Write a "comparisons" topic article comparing ${topic.a.name} and ${topic.b.name} - a neutral head-to-head drawn only from the context below, ending with a clear verdict on who each tool suits.`,
+      `Allowed /tools/ slugs: ${[...allowedSlugs].join(", ")}.`,
+      `CONTEXT:\n${JSON.stringify({ productA: topic.a, productB: topic.b }, null, 2)}`,
+      `Set "topic" to "comparisons". Set "tools" to [{ "slug": "${topic.a.slug}", "rank": 1, "note": "..." }, { "slug": "${topic.b.slug}", "rank": 2, "note": "..." }]. Set "sources" to include both products' websiteUrl with "checkedAt" set to today's date (${today}).`,
+    ].join("\n\n");
+    return { user, allowedSlugs };
+  }
+
+  const allowedSlugs = new Set(topic.items.map((item) => item.product.slug));
+  const toolsHint = topic.items
+    .map((item) => `{ "slug": "${item.product.slug}", "rank": ${item.rank}, "note": "${(item.award ?? item.rationale ?? "").replace(/"/g, "'").slice(0, 80)}" }`)
+    .join(", ");
   const user = [
-    `Write a "comparisons" topic article comparing ${topic.a.name} and ${topic.b.name} - a neutral head-to-head drawn only from the context below, ending with a clear verdict on who each tool suits.`,
+    `Write a "guides" topic roundup article for the real editorial shortlist "${topic.title}" - one section per tool below, in the exact order given (that order and each tool's award/rationale are an editor's real curation; never re-rank or add a tool not listed).`,
+    `List description (for context, do not copy verbatim): ${topic.description}`,
     `Allowed /tools/ slugs: ${[...allowedSlugs].join(", ")}.`,
-    `CONTEXT:\n${JSON.stringify({ productA: topic.a, productB: topic.b }, null, 2)}`,
-    `Set "topic" to "comparisons". Set "tools" to [{ "slug": "${topic.a.slug}", "rank": 1, "note": "..." }, { "slug": "${topic.b.slug}", "rank": 2, "note": "..." }]. Set "sources" to include both products' websiteUrl with "checkedAt" set to today's date (${new Date().toISOString().slice(0, 10)}).`,
+    `CONTEXT (ordered list - items[0] is the top pick):\n${JSON.stringify({ items: topic.items.map((item) => ({ ...item.product, award: item.award, rationale: item.rationale })) }, null, 2)}`,
+    `Set "topic" to "guides". Give each tool its own "## " section using its real award/rationale/pros/verdict. Set "tools" to [${toolsHint}]. Set "sources" to include every tool's websiteUrl with "checkedAt" set to today's date (${today}). This has ${topic.items.length} tools, so ignore the usual 650-900 word target and write roughly ${150 * topic.items.length}-${220 * topic.items.length} words total so every tool gets fair coverage.`,
   ].join("\n\n");
   return { user, allowedSlugs };
 }
@@ -446,7 +508,7 @@ export async function generateOneArticle(options: { publish?: boolean } = {}): P
   }
   if (errors.length) return { status: "skipped", errors };
 
-  const imageQuery = topic.kind === "guide" ? topic.product.name : `${topic.a.name} vs ${topic.b.name}`;
+  const imageQuery = topic.kind === "guide" ? topic.product.name : topic.kind === "comparison" ? `${topic.a.name} vs ${topic.b.name}` : topic.title;
   const image = await fetchFeaturedImage(imageQuery);
   const content = image ? `${article.content}\n\n*${image.credit}*` : article.content;
 
@@ -459,6 +521,7 @@ export async function generateOneArticle(options: { publish?: boolean } = {}): P
       content,
       featuredImage: image?.url ?? null,
       topic: article.topic,
+      source: topic.kind === "roundup" ? `editorial-list:${topic.listSlug}` : null,
       author: "TopToolsPick Editorial (AI draft)",
       seoTitle: article.seoTitle,
       seoDescription: article.seoDescription,
