@@ -2,6 +2,24 @@
 
 What this adds, and the external setup it needs (none of it can be done from inside this repo).
 
+## 0. Growing `ProductAlternative` (feeds the "comparisons" pool above)
+
+`npm run alternatives:generate` (flag: `--count=15`, default 15) judges that many
+published products (highest `editorialScore` first) against up to 5 same-category
+peers and creates a `ProductAlternative` **only when Gemini judges one a genuine
+substitute** - same core job, not just the same broad category. A first pass that
+grouped purely by category (no AI) produced nonsense pairs (Zoom -> Miro, Trello ->
+Things 3) because the 12 categories are too broad and `subcategory`/tags are barely
+populated (0% / ~4%) - so this always goes through the AI judgment step, never a
+plain category match. Products with no genuine match get marked via `AuditLog`
+(`entityType: "ProductAlternativeJudgment"`) so they are not re-asked every run,
+without needing a schema change.
+
+Paced at 15/day **on purpose** - it shares the same `GEMINI_API_KEY` and its 20
+requests/day free-tier quota with article generation (`npm run articles:generate`
+uses 1-2 a day). Run it manually whenever asked, or daily via the same Hostinger
+Cron Jobs mechanism as the article generator below.
+
 ## 1. Article generation
 
 - `lib/articles/generate.ts` picks what to write about from real data only, in
