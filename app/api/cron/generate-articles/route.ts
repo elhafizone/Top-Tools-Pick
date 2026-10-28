@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { generateOneArticle } from "@/lib/articles/generate";
+import { prisma } from "@/lib/db/prisma";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +20,12 @@ function isAuthorized(request: Request) {
 
 export async function GET(request: Request) {
   if (!isAuthorized(request)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  // Rule: never keep "(AI draft)" in author attribution
+  await prisma.article.updateMany({
+    where: { author: { contains: "(AI draft)" } },
+    data: { author: "TopToolsPick Editorial" },
+  }).catch(() => {});
 
   const requested = Number(new URL(request.url).searchParams.get("count")) || 1;
   const count = Math.min(Math.max(requested, 1), 3);

@@ -462,25 +462,30 @@ export function validateArticle(
 /**
  * A real, licensed photo rather than an AI-generated one - cheaper (Unsplash's free
  * developer tier needs no card) and fits the site's "no fabricated content" standard
- * better than an invented image would. Returns null quietly if UNSPLASH_ACCESS_KEY is
- * unset or the request fails - a missing featured image is never worth failing over.
+ * better than an invented image would. Tries queries in order until one returns a photo,
+ * gracefully falling back to category and software terms if a specific brand name has no photos.
  */
-async function fetchFeaturedImage(query: string): Promise<{ url: string; credit: string } | null> {
+async function fetchFeaturedImage(queries: string[]): Promise<{ url: string; credit: string } | null> {
   const accessKey = process.env.UNSPLASH_ACCESS_KEY;
   if (!accessKey) return null;
-  try {
-    const response = await fetch(
-      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape`,
-      { headers: { Authorization: `Client-ID ${accessKey}` } },
-    );
-    if (!response.ok) return null;
-    const data = (await response.json()) as { results?: Array<{ urls: { regular: string }; user: { name: string; links: { html: string } } }> };
-    const photo = data.results?.[0];
-    if (!photo) return null;
-    return { url: photo.urls.regular, credit: `Photo by [${photo.user.name}](${photo.user.links.html}) on [Unsplash](https://unsplash.com/)` };
-  } catch {
-    return null;
+  for (const query of queries) {
+    if (!query) continue;
+    try {
+      const response = await fetch(
+        `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape`,
+        { headers: { Authorization: `Client-ID ${accessKey}` } },
+      );
+      if (!response.ok) continue;
+      const data = (await response.json()) as { results?: Array<{ urls: { regular: string }; user: { name: string; links: { html: string } } }> };
+      const photo = data.results?.[0];
+      if (photo) {
+        return { url: photo.urls.regular, credit: `Photo by [${photo.user.name}](${photo.user.links.html}) on [Unsplash](https://unsplash.com/)` };
+      }
+    } catch {
+      // try next fallback query
+    }
   }
+  return null;
 }
 
 /** Generates, validates (one retry on failure) and writes one article. Never overwrites an existing slug. */
@@ -508,8 +513,13 @@ export async function generateOneArticle(options: { publish?: boolean } = {}): P
   }
   if (errors.length) return { status: "skipped", errors };
 
-  const imageQuery = topic.kind === "guide" ? topic.product.name : topic.kind === "comparison" ? `${topic.a.name} vs ${topic.b.name}` : topic.title;
-  const image = await fetchFeaturedImage(imageQuery);
+  const imageQueries =
+    topic.kind === "guide"
+      ? [topic.product.name, `${topic.product.name} software`, `${topic.product.categoryName} software`, topic.product.categoryName, "business software"]
+      : topic.kind === "comparison"
+        ? [`${topic.a.name} vs ${topic.b.name}`, topic.a.name, topic.b.name, `${topic.a.categoryName} software`, topic.a.categoryName, "business software"]
+        : [topic.title, `${topic.items[0]?.product.categoryName} software`, "productivity software"];
+  const image = await fetchFeaturedImage(imageQueries);
   const content = image ? `${article.content}\n\n*${image.credit}*` : article.content;
 
   const shouldPublish = options.publish ?? process.env.ARTICLE_AUTO_PUBLISH === "true";
@@ -522,7 +532,7 @@ export async function generateOneArticle(options: { publish?: boolean } = {}): P
       featuredImage: image?.url ?? null,
       topic: article.topic,
       source: topic.kind === "roundup" ? `editorial-list:${topic.listSlug}` : null,
-      author: "TopToolsPick Editorial (AI draft)",
+      author: "TopToolsPick Editorial",
       seoTitle: article.seoTitle,
       seoDescription: article.seoDescription,
       status: shouldPublish ? "PUBLISHED" : "DRAFT",

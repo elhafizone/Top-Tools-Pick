@@ -51,7 +51,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     mainEntityOfPage: `${siteUrl}/articles/${article.slug}`,
     datePublished: article.publishedAt?.toISOString(),
     dateModified: article.updatedAt.toISOString(),
-    ...(article.author ? { author: { "@type": "Person", name: article.author } } : {}),
+    ...(article.author ? { author: { "@type": "Person", name: article.author.replace(/\s*\(AI draft\)/gi, "").trim() } } : {}),
     ...(article.featuredImage ? { image: [article.featuredImage] } : {}),
     publisher: { "@type": "Organization", name: "TopToolsPick" },
   };
@@ -69,7 +69,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <h1 className="section-heading mt-3">{article.title}</h1>
             {article.excerpt && <p className="lede mt-5">{article.excerpt}</p>}
             <div className="metadata mt-6 flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-[var(--line)] pt-5">
-              {article.author && <span className="font-semibold text-[var(--ink)]">By {article.author}</span>}
+              {article.author && <span className="font-semibold text-[var(--ink)]">By {article.author.replace(/\s*\(AI draft\)/gi, "").trim()}</span>}
               {publishedDate && <time dateTime={article.publishedAt?.toISOString()}>{publishedDate}</time>}
               <span>{readingMinutes(article.content)} min read</span>
             </div>
@@ -80,9 +80,17 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       {article.featuredImage && (
         <div className="shell mt-10">
           <div className="mx-auto max-w-5xl overflow-hidden rounded-[var(--radius-surface)] border border-[var(--line)] bg-[var(--surface-sunken)]">
-            {/* CMS images may use arbitrary trusted media hosts. */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={article.featuredImage} alt={article.title} loading="eager" className="max-h-[32rem] w-full object-cover" />
+            <a
+              href={article.featuredImage}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block cursor-pointer transition duration-300 hover:opacity-95"
+              title="View full-size image"
+            >
+              {/* CMS images may use arbitrary trusted media hosts. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={article.featuredImage} alt={article.title} loading="eager" className="max-h-[32rem] w-full object-cover transition duration-300 hover:scale-[1.01]" />
+            </a>
           </div>
         </div>
       )}
@@ -155,7 +163,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: "article",
       ...(article.featuredImage ? { images: [article.featuredImage] } : {}),
       publishedTime: article.publishedAt?.toISOString(),
-      authors: article.author ? [article.author] : undefined,
+      authors: article.author ? [article.author.replace(/\s*\(AI draft\)/gi, "").trim()] : undefined,
     },
   };
 }

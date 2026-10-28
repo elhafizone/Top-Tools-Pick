@@ -62,35 +62,42 @@ function FeaturedArticle({ article }: { article: ArticleListItem }) {
   // broken layout, where a full-width text lead reads as a deliberate editorial choice.
   const hasImage = Boolean(article.featuredImage);
   return (
-    <Link
-      href={`/articles/${article.slug}`}
+    <div
       className={`group grid gap-8 border-b border-[var(--line)] pb-10 ${hasImage ? "md:grid-cols-[1.05fr_.95fr] md:items-center" : ""}`}
     >
       {hasImage && (
         <div className="min-w-0 md:order-2">
-          <ArticleImage article={article} featured />
+          <Link href={`/articles/${article.slug}`} className="block overflow-hidden cursor-pointer" title={article.title}>
+            <ArticleImage article={article} featured />
+          </Link>
         </div>
       )}
       <div className="min-w-0 md:order-1">
         <p className="eyebrow">{kickerFor(article.topic)} &middot; Featured</p>
-        <h2 className="section-heading mt-4 max-w-3xl group-hover:text-[var(--accent-deep)]">
-          {article.title}
+        <h2 className="section-heading mt-4 max-w-3xl">
+          <Link href={`/articles/${article.slug}`} className="group-hover:text-[var(--accent-deep)] hover:underline">
+            {article.title}
+          </Link>
         </h2>
         {article.excerpt && <p className="mt-4 max-w-xl leading-7 text-[var(--muted)]">{article.excerpt}</p>}
         <ArticleMeta article={article} />
       </div>
-    </Link>
+    </div>
   );
 }
 
 function ArticleCard({ article }: { article: ArticleListItem }) {
   return (
     <article className="group flex h-full flex-col border-b border-[var(--line)] py-7">
-      {article.featuredImage && <ArticleImage article={article} />}
+      {article.featuredImage && (
+        <Link href={`/articles/${article.slug}`} className="block overflow-hidden cursor-pointer" title={article.title}>
+          <ArticleImage article={article} />
+        </Link>
+      )}
       <div className={`flex flex-1 flex-col ${article.featuredImage ? "pt-5" : ""}`}>
         <p className="eyebrow">{kickerFor(article.topic)}</p>
         <h2 className="mt-3 text-lg font-bold leading-snug tracking-[-0.02em]">
-          <Link href={`/articles/${article.slug}`} className="group-hover:text-[var(--accent-deep)]">{article.title}</Link>
+          <Link href={`/articles/${article.slug}`} className="group-hover:text-[var(--accent-deep)] hover:underline">{article.title}</Link>
         </h2>
         {article.excerpt && <p className="mt-2 flex-1 text-sm leading-6 text-[var(--muted)]">{article.excerpt}</p>}
         <ArticleMeta article={article} />
@@ -109,16 +116,17 @@ function ArticleImage({ article, featured = false }: { article: { title: string;
         src={article.featuredImage}
         alt={article.title}
         loading={featured ? "eager" : "lazy"}
-        className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+        className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03] cursor-pointer"
       />
     </div>
   );
 }
 
 function ArticleMeta({ article }: { article: { author: string | null; publishedAt: Date | null } }) {
+  const displayAuthor = article.author?.replace(/\s*\(AI draft\)/gi, "").trim();
   return (
     <div className="metadata mt-5 flex flex-wrap gap-x-4 gap-y-1">
-      {article.author && <span>By {article.author}</span>}
+      {displayAuthor && <span>By {displayAuthor}</span>}
       {article.publishedAt && <time dateTime={article.publishedAt.toISOString()}>{formatDate(article.publishedAt)}</time>}
     </div>
   );
