@@ -151,6 +151,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const title = storedTitle ?? article.title;
   const description = article.seoDescription ?? articleDescription(article);
   const canonical = article.canonicalUrl ?? `${siteUrl}/articles/${article.slug}`;
+  const ogImageUrl = article.featuredImage ?? new URL("/og-default.png", siteUrl).toString();
   return {
     title: storedTitle ? { absolute: storedTitle } : title,
     description,
@@ -160,10 +161,25 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description,
       url: canonical,
       siteName: "TopToolsPick",
+      locale: "en_US",
       type: "article",
-      ...(article.featuredImage ? { images: [article.featuredImage] } : {}),
+      images: [
+        {
+          url: ogImageUrl,
+          secureUrl: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
       publishedTime: article.publishedAt?.toISOString(),
       authors: article.author ? [article.author.replace(/\s*\(AI draft\)/gi, "").trim()] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImageUrl],
     },
   };
 }

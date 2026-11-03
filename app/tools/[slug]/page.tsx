@@ -523,8 +523,22 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     description,
     alternates: { canonical },
     openGraph: {
-      title, description, url: canonical, siteName: "TopToolsPick", type: "website",
-      images: [{ url: new URL("/og-default.png", siteUrl).toString(), width: 1200, height: 630, alt: title }],
+      title,
+      description,
+      url: canonical,
+      siteName: "TopToolsPick",
+      locale: "en_US",
+      type: "website",
+      images: [
+        {
+          url: new URL("/og-default.png", siteUrl).toString(),
+          secureUrl: new URL("/og-default.png", siteUrl).toString(),
+          width: 1200,
+          height: 630,
+          alt: title,
+          type: "image/png",
+        },
+      ],
     },
     twitter: { card: "summary_large_image", title, description, images: [new URL("/og-default.png", siteUrl).toString()] },
   };

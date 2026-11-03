@@ -30,8 +30,30 @@ export const metadata: Metadata = {
   title: { default: DEFAULT_TITLE, template: `%s | ${siteName}` },
   description: DEFAULT_DESCRIPTION,
   alternates: { canonical: siteUrl },
-  openGraph: { title: DEFAULT_TITLE, description: DEFAULT_DESCRIPTION, url: siteUrl, siteName, type: "website" },
-  twitter: { card: "summary_large_image", title: DEFAULT_TITLE, description: DEFAULT_DESCRIPTION },
+  openGraph: {
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    url: siteUrl,
+    siteName,
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/og-default.png",
+        secureUrl: `${siteUrl}/og-default.png`,
+        width: 1200,
+        height: 630,
+        alt: siteName,
+        type: "image/png",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    images: ["/og-default.png"],
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

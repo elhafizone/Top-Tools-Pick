@@ -182,6 +182,5 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
     category.seoDescription ??
     category.description ??
     `Compare the best ${category.name.toLowerCase()} tools. Independent expert reviews, pricing breakdowns, feature comparisons and ranked shortlists — updated ${year}.`;
-  const metadata = buildMetadata(title, description, `/categories/${slug}`, { absolute: Boolean(storedTitle) });
-  return { ...metadata, openGraph: { title, description, url: new URL(`/categories/${slug}`, siteUrl).toString(), siteName: "TopToolsPick", type: "website" } };
+  return buildMetadata(title, description, `/categories/${slug}`, { absolute: Boolean(storedTitle) });
 }

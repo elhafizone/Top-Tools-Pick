@@ -8,7 +8,7 @@ import { ProductLogo } from "@/components/product/ProductLogo";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { getAlternatives } from "@/lib/alternatives";
 import { getProductBySlug } from "@/lib/products";
-import { breadcrumbJsonLd, jsonLd, siteUrl } from "@/lib/seo";
+import { breadcrumbJsonLd, buildMetadata, jsonLd, siteUrl } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -101,15 +101,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const alternatives = await getAlternatives(product.id);
   const title = `${product.name} alternatives`;
   const description = `${alternatives.length} alternatives to ${product.name}, with the reason to pick each one instead.`;
-  const canonical = new URL(`/tools/${slug}/alternatives`, siteUrl).toString();
-
-  return {
-    title,
-    description,
-    alternates: { canonical },
-    openGraph: { title, description, url: canonical, siteName: "TopToolsPick", type: "website" },
-    twitter: { card: "summary_large_image", title, description },
-    // Follow, so link equity still reaches the alternatives; index only once it is substantial.
+  return buildMetadata(title, description, `/tools/${slug}/alternatives`, {
     ...(alternatives.length >= INDEXABLE_ALTERNATIVES ? {} : { robots: { index: false, follow: true } }),
-  };
+  });
 }

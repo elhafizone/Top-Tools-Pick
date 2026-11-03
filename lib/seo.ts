@@ -23,6 +23,7 @@ type BuildOptions = {
 
 export function buildMetadata(title: string, description: string, path = "/", options: BuildOptions = {}): Metadata {
   const canonical = options.canonicalOverride ?? new URL(path, siteUrl).toString();
+  const ogImageUrl = new URL("/og-default.png", siteUrl).toString();
   return {
     title: options.absolute ? { absolute: title } : title,
     description,
@@ -30,10 +31,29 @@ export function buildMetadata(title: string, description: string, path = "/", op
     // openGraph.title is not templated by Next, so it carries siteName separately
     // rather than repeating the suffix inside the title string.
     openGraph: {
-      title, description, url: canonical, siteName, type: "website",
-      images: [{ url: new URL("/og-default.png", siteUrl).toString(), width: 1200, height: 630, alt: siteName }],
+      title,
+      description,
+      url: canonical,
+      siteName,
+      locale: "en_US",
+      type: "website",
+      images: [
+        {
+          url: ogImageUrl,
+          secureUrl: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: title || siteName,
+          type: "image/png",
+        },
+      ],
     },
-    twitter: { card: "summary_large_image", title, description, images: [new URL("/og-default.png", siteUrl).toString()] },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImageUrl],
+    },
     ...(options.robots ? { robots: options.robots } : {}),
   };
 }
