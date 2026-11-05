@@ -6,7 +6,9 @@ import { recordSystemAudit } from "@/lib/admin/audit";
 // Gemini is tried first because it has a genuinely free tier (Google AI Studio,
 // no card required) that comfortably covers one article a day. Anthropic is the
 // fallback for anyone who already has API credits there.
-const GEMINI_MODEL = "gemini-3.8-flash";
+const GEMINI_MODELS = Array.from(
+  new Set([process.env.GEMINI_MODEL, "gemini-3.5-flash", "gemini-3.8-flash"].filter(Boolean) as string[]),
+);
 const ANTHROPIC_MODEL = "claude-sonnet-5-5";
 const MIN_WORDS = 400;
 
@@ -363,28 +365,39 @@ function isTransientGeminiError(error: unknown) {
   return message.includes("UNAVAILABLE") || message.includes("\"code\":503") || message.includes(" 503 ");
 }
 
+function isQuotaGeminiError(error: unknown) {
+  const message = error instanceof Error ? error.message : String(error);
+  return message.includes("RESOURCE_EXHAUSTED") || message.includes("429");
+}
+
 async function callGemini(prompt: string): Promise<GeneratedArticle> {
   const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
   const RETRY_DELAYS_MS = [2000, 5000, 10000];
 
   let lastError: unknown;
-  for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt++) {
-    try {
-      const response = await ai.models.generateContent({
-        model: GEMINI_MODEL,
-        contents: prompt,
-        config: {
-          systemInstruction: SYSTEM_PROMPT,
-          responseMimeType: "application/json",
-          responseSchema: GEMINI_RESPONSE_SCHEMA,
-        },
-      });
-      if (!response.text) throw new Error("Gemini did not return a structured article.");
-      return JSON.parse(response.text) as GeneratedArticle;
-    } catch (error) {
-      lastError = error;
-      if (!isTransientGeminiError(error) || attempt === RETRY_DELAYS_MS.length) break;
-      await sleep(RETRY_DELAYS_MS[attempt]);
+  for (const model of GEMINI_MODELS) {
+    for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt++) {
+      try {
+        const response = await ai.models.generateContent({
+          model,
+          contents: prompt,
+          config: {
+            systemInstruction: SYSTEM_PROMPT,
+            responseMimeType: "application/json",
+            responseSchema: GEMINI_RESPONSE_SCHEMA,
+          },
+        });
+        if (!response.text) throw new Error("Gemini did not return a structured article.");
+        return JSON.parse(response.text) as GeneratedArticle;
+      } catch (error) {
+        lastError = error;
+        if (isQuotaGeminiError(error)) {
+          // If this model's quota is exhausted, move to next candidate Gemini model
+          break;
+        }
+        if (!isTransientGeminiError(error) || attempt === RETRY_DELAYS_MS.length) break;
+        await sleep(RETRY_DELAYS_MS[attempt]);
+      }
     }
   }
   throw lastError;
@@ -411,7 +424,14 @@ async function callModel(user: string, feedback?: string): Promise<GeneratedArti
     ? `${user}\n\nYour previous attempt failed validation for these reasons:\n${feedback}\nFix every issue and try again.`
     : user;
 
-  if (process.env.GEMINI_API_KEY) return callGemini(prompt);
+  if (process.env.GEMINI_API_KEY) {
+    try {
+      return await callGemini(prompt);
+    } catch (error) {
+      if (!process.env.ANTHROPIC_API_KEY) throw error;
+      console.warn("Gemini call failed, falling back to Anthropic:", error instanceof Error ? error.message : error);
+    }
+  }
   if (process.env.ANTHROPIC_API_KEY) return callAnthropic(prompt);
   throw new Error("No model configured - set GEMINI_API_KEY (free, recommended) or ANTHROPIC_API_KEY.");
 }
